@@ -1,0 +1,160 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/global.css' %}" />
+  <script src="https://kit.fontawesome.com/bcac893939.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body class="h-full">
+  <!-- Este es el contenedor principal del sitio web -->
+  <div class="container mx-auto">
+    <!-- Navbar: Esta es la barra de navegación que aparece en la parte superior del sitio -->
+    <header class="header sticky top-0 flex items-center justify-between px-8 py-02">
+      <!-- Logo: Este es el logotipo de la librería -->
+      <h1 class="w-3/12">
+        <a href="">
+          <h1>Libreria Imagina</h1>
+        </a>
+      </h1>
+
+      <!-- Navegación: Este es el menú de navegación con enlaces a las diferentes secciones del sitio -->
+      <nav class="nav font-semibold text-lg">
+        <ul class="flex items-center">
+          <li
+            class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer active">
+            <a href="">Inicio</a>
+          </li>
+          <li
+            class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer">
+            <a href="">Catálogo</a>
+          </li>
+          <li
+            class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer">
+            <a href="">Soporte</a>
+          </li>
+          <li
+            class="p-4 border-b-2 border-green-500 border-opacity-0 hover:border-opacity-100 hover:text-green-500 duration-200 cursor-pointer">
+            <a href="">Contacto</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Botones: Estos son los botones de búsqueda y de carrito de compras -->
+      <div class="w-3/12 flex justify-end">
+        <div class="flex items-center border-b border-black bg-transparent">
+          <button class="px-2 py-1 mr-2">
+            <i class="fa fa-search text-black"></i>
+          </button>
+          <input type="text" class="outline-none w-full" placeholder="Buscar..."
+            style="background-color: transparent" />
+        </div>
+        <a href="">
+          <button class="px-2 py-1 ml-2">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </button>
+        </a>
+      </div>
+    </header>
+
+    {% block content %} {% endblock %}
+  </div>
+  <!-- Footer -->
+  <div class="footer fixed bottom-0 w-full py-4 text-white">
+    <footer class="w-full text-white-700 body-font">
+      <div
+        class="container flex flex-col flex-wrap px-5 py-24 mx-auto md:items-center lg:items-start md:flex-row md:flex-no-wrap">
+        <div class="flex-shrink-0 w-64 mx-auto text-center md:mx-0 md:text-left">
+          <a class="flex items-center justify-center font-medium -900 title-font md:justify-start">
+          </a>
+          <p class="mt-2 text-sm -500">LOGO</p>
+        </div>
+        <div class="flex flex-wrap flex-grow mt-10 -mb-10 text-center md:pl-20 md:mt-0 md:text-left">
+          <div class="w-full px-4 lg:w-1/4 md:w-1/2">
+            <h2 class="mb-3 text-sm font-medium tracking-widest -900 uppercase title-font">
+              Popular
+            </h2>
+            <nav class="mb-10 list-none">
+              <li class="mt-3">
+                <a class="-500 cursor-pointer hover:-900">Programación</a>
+              </li>
+              <li class="mt-3">
+                <a class="-500 cursor-pointer hover:-900">Libros Infantiles</a>
+              </li>
+              <li class="mt-3">
+                <a class="-500 cursor-pointer hover:-900">Psicología</a>
+              </li>
+              <li class="mt-3">
+                <a class="-500 cursor-pointer hover:-900">Negocios</a>
+              </li>
+            </nav>
+          </div>
+          <div class="w-full px-4 lg:w-1/4 md:w-1/2">
+            <h2 class="mb-3 text-sm font-medium tracking-widest -900 uppercase title-font">
+              Información
+            </h2>
+            <nav class="mb-10 list-none">
+              <li class="mt-3">
+                <a class="-500 cursor-pointer hover:-900">Despacho</a>
+              </li>
+              <li class="mt-3">
+                <a class="-500 cursor-pointer hover:-900">Medios de pago</a>
+              </li>
+              <li class="mt-3">
+                <a class="-500 cursor-pointer hover:-900">Sobre la tienda</a>
+              </li>
+            </nav>
+          </div>
+          <div class="w-full px-4 lg:w-1/4 md:w-1/2">
+            <h2 class="mb-3 text-sm font-medium tracking-widest -900 uppercase title-font">
+              Ayuda
+            </h2>
+            <nav class="mb-10 list-none">
+              <li class="mt-3">
+                <a class="-500 cursor-pointer hover:-900">Contacto</a>
+              </li>
+              <li class="mt-3">
+                <a class="-500 cursor-pointer hover:-900">Devolución de mercancías/a>
+              </li>
+              <li class="mt-3">
+                <a class="-500 cursor-pointer hover:-900">Ayuda al cliente</a>
+              </li>
+            </nav>
+          </div>
+          <div class="w-full px-4 lg:w-1/4 md:w-1/2">
+            <h2 class="mb-3 text-sm text-center font-bold tracking-widest -900 uppercase title-font">
+              <span class="block text-lg font-bold">+56 9 2339-3324</span>
+              <span class="block text-center p-4 border-2 border-blue-400 text-blue-400">Solicitar una llamada</span>
+            </h2>
+          </div>
+          
+        </div>
+      </div>
+      <div>
+        <div class="container px-5 py-4 mx-auto">
+          <div class="grid grid-cols-2 gap-4 xl:flex xl:justify-center">
+            <p class="text-sm -700 capitalize xl:text-center" id="footer-text"></p>
+            <p class="text-sm -700 capitalize xl:text-center">Condiciones de uso | Política de privacidad</p>
+          </div>
+        </div>
+        
+      </div>
+    </footer>
+  </div>
+  <script src="{% static 'js/index.js' %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+pillow
+django-admin-interface
+django-crispy-forms
+cx_oracle
+requests
+django-cors-headers
+python-decouple
+django-admin
