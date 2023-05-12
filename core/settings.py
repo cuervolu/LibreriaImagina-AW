@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
-    'crispy_forms',
+    "crispy_forms",
+    "crispy_bootstrap5",
     "corsheaders",
     "colorfield",
     "autoslug",
@@ -150,3 +151,8 @@ STATICFILES_DIRS = [BASE_DIR / "libreria_imagina/static"]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CURRENCY_SYMBOL = 'CLP'
+
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
