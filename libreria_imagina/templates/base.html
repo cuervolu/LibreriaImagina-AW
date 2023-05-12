@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -43,17 +44,18 @@
 <body>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container d-flex justify-content-between align-items-center">
+  <nav class="navbar navbar-expand-lg mt-4">
+    <div class="container d-flex justify-content-between align-items-center" style="font-size: 14px;">
       <!-- Brand -->
-      <a class="navbar-brand me-5" href="#"><img src="{% static 'img/brand.png' %}" alt="Librería Imagina"></a>
+      <a class="navbar-brand me-5" href="#"><img src="{% static 'img/brand.png' %}" alt="Librería Imagina"
+          style="max-width: 210px; height: auto;"></a>
       <!-- Toggler -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      
+      <button class="navbar-toggler" type="button" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-5">
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-5 gap-3">
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="/">Inicio</a>
           </li>
@@ -71,11 +73,12 @@
           </li>
         </ul>
         <form class="d-flex" role="search">
-          <div class="input-group border-bottom border-black me-5 ">
+          <div class="input-group border-bottom border-black me-5" style="width: 200px;">
             <div class="input-group-prepend">
               <span class="input-group-text bg-transparent border-0"><i class="fas fa-search"></i></span>
             </div>
-            <input class="form-control bg-transparent border-0" type="search" placeholder="Buscar" aria-label="Buscar">
+            <input class="form-control bg-transparent border-0" style="font-size: 14px;" type="search"
+              placeholder="Buscar" aria-label="Buscar">
           </div>
         </form>
         <ul class="navbar-nav">
@@ -99,6 +102,40 @@
     </div>
   </nav>
 
+  <!-- Overlay Hamburger Menu -->
+  <div id="hamburgerMenuOverlay" class="overlay">
+    <div class="overlay-content">
+      <button class="cancel-btn">&#10005;</button>
+      <form class="d-flex mx-3" role="search">
+        <div class="input-group border-bottom border-white align-items-center justify-content-start"
+          style="max-width: 100%;">
+          <div class="input-group-prepend">
+            <span class="input-group-text bg-transparent border-0"><i class="fas fa-search"></i></span>
+          </div>
+          <input class="form-control bg-transparent border-0 search-input"
+            style="font-size: 20px; text-align: left; color: white;" type="search" placeholder="Buscar"
+            aria-label="Buscar">
+        </div>
+      </form>
+      <ul class="navbar-nav justify-content-end">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Catálogo</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link">Soporte</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link">Iniciar Sesión</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link">Regístrate</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 
   <div class="container mt-5">
 
@@ -109,19 +146,20 @@
   <!-- Footer -->
   <footer class="footer text-center text-lg-start text-white">
     <section class="pt-5">
-      <div class="container-fluid text-center mt-5">
+      <div class="container-fluid mt-5">
         <!-- Grid row -->
-        <div class="row justify-content-center mt-3 ms-5">
+        <div class="row justify-content-center mt-3 mx-5 px-5">
           <!-- Grid column -->
           <div class="col-md-auto col-lg-auto col-xl-auto mx-auto mb-4 d-flex align-items-center">
             <!-- Brand -->
-            <a class="navbar-brand me-5" href="#"><img src="{% static 'img/white-brand.png' %}" alt="Librería Imagina" style="width: 200px; height: 40px;"></a>
+            <a class="navbar-brand me-5" href="#"><img src="{% static 'img/white-brand.png' %}" alt="Librería Imagina"
+                style="max-width: 210px; height: auto;"></a>
           </div>
           <!-- Links -->
           <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-            <h6 class="fw-bold mb-4">
-              Popular
-            </h6>
+            <h5 class="mb-4">
+              Popular:
+            </h5>
             <p>
               <a href="#!" class="text-reset text-decoration-none">Programación</a>
             </p>
@@ -136,9 +174,9 @@
             </p>
           </div>
           <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-            <h6 class="fw-bold mb-4">
-              Información
-            </h6>
+            <h5 class="mb-4">
+              Información:
+            </h5>
             <p>
               <a href="#!" class="text-reset text-decoration-none">Entrega</a>
             </p>
@@ -150,9 +188,9 @@
             </p>
           </div>
           <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-            <h6 class="fw-bold mb-4">
-              Ayuda
-            </h6>
+            <h5 class="mb-4">
+              Ayuda:
+            </h5>
             <p>
               <a href="#!" class="text-reset text-decoration-none">Contacto</a>
             </p>
@@ -164,7 +202,7 @@
             </p>
           </div>
           <!-- Solicitar llamada -->
-          <div class="col-md-12 col-lg-12 col-xl-3 d-flex align-items-center justify-content-center">
+          <div class="col-md-auto col-lg-auto col-xl-auto d-flex align-items-center justify-content-center">
             <div class="text-center">
               <h6 class="fw-bold mb-4">
                 +56 9 2339-3324
@@ -175,16 +213,15 @@
             </div>
           </div>
         </div>
-      </div
-    </section>  
-    <!-- Copyright -->
-    <div class="text-center fw-lighter p-4">
-<p id="footer-text" class="me-5" style="display: inline"></p>
-      <a href="#" class="text-reset text-decoration-none" style="display: inline;">Condiciones de uso</a> | 
-      <a href="#" class="text-reset text-decoration-none" style="display: inline;">Política de privacidad</a>
-      
-    </div>
-    <!-- Copyright -->
+      </div </section>
+      <!-- Copyright -->
+      <div class="text-center fw-lighter p-4">
+        <p id="footer-text" class="me-5" style="display: inline"></p>
+        <a href="#" class="text-reset text-decoration-none" style="display: inline;">Condiciones de uso</a> |
+        <a href="#" class="text-reset text-decoration-none" style="display: inline;">Política de privacidad</a>
+
+      </div>
+      <!-- Copyright -->
   </footer>
   <!-- Footer -->
 
@@ -197,6 +234,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
   <script src="{% static 'js/index.js' %}"></script>
+  <script src="{% static 'js/overlay.js' %}"></script>
 
   {% block script_final %}
   {% endblock script_final %}

@@ -20,7 +20,7 @@
         </strong>
         <p class="text-break">En nuestra tienda encontrará un libro para cada gusto. Una gran selección.
             Precios agradables. Historias interesantes.</p>
-        <a class="btn btn-custom btn-lg fw-bold shadow" href="#" role="button">Ir al catálogo</a>
+        <a class="btn btn-custom btn-lg fw-bold" href="#" role="button">Ir al catálogo</a>
     </div>
 
     <div class="col-md-6 text-white">
@@ -28,9 +28,9 @@
             <img src="{% static 'img/Fondo_Libros_Index.png' %}" alt="" style="max-width: 100%; height: auto;">
             <div class="position-absolute top-50 start-50 translate-middle">
                 <img src="{% static 'img/Libros_Fondo_Index.png' %}" alt="" style="max-width: 180%; height: auto; position: relative; right: 200px; top: 15px;">
-                <div style="max-width: 270px; position: relative; left: 40px; font-size: 14px; top: 20px;">
-                    <p style="font-weight: 900;">Conjuntos libros de Mark Manson</p>
-                    <p style="display: inline-block; font-weight: 400; line-height: 96%;">EL SUTIL ARTE DE ESCABULLIRSE.
+                <div style="max-width: 270px; position: relative; left: 40px; font-size: 14px; top: 25px;">
+                    <p style="font-weight: 900;" class="my-0">Conjuntos libros de Mark Manson</p>
+                    <p style="display: inline-block; font-weight: 400; line-height: 96%;" class="my-0">EL SUTIL ARTE DE ESCABULLIRSE.
                         TODO ES UNA GILIPOLLEZ. REGLAS DE HOMBRES.</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <p style="font-weight: 900;">$ 22.480</p>
@@ -43,14 +43,14 @@
 </div>
 
 <!-- Recién llegados -->
-<div class="row pt-5">
-    <div class="col-12 col-md-6">
+<div class="row pt-5 justify-content-between">
+    <div class="col-auto col-md-auto">
         <strong>
             <p class="fw-bolder" style="font-size: 25px;">Recién llegados</p>
         </strong>
     </div>
-    <div class="col-12 col-md-6">
-        <div class="d-flex gap-3 flex-wrap" style="font-size: 14px;">
+    <div class="col-auto col-md-auto">
+        <div class="d-flex gap-5 flex-wrap" style="font-size: 14px;">
             <p class="flex-shrink-0">Fantasía</p>
             <p class="flex-shrink-0">Auto-desarrollo</p>
             <p class="flex-shrink-0">Detectives</p>
@@ -61,73 +61,132 @@
     </div>
 </div>
 
+<!-- Carrousel -->
 
-
-<!-- Carrousel: Recién Llegados -->
-<div id="libro-slider" class="owl-carousel owl-theme">
+<div id="libro-slider" class="owl-carousel owl-theme my-5">
     {% for libro in libros %}
     <div class="item mx-auto">
-        <div class="card p-4 h-100">
+        <div class="card p-4 h-100" style="border-radius: 0%; border: none ; box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);">
             <img src="{{libro.portada}}" alt="{{ libro.nombre_libro }}" class="card-img-top" style="object-fit: cover;">
             <div class="card-body">
                 <p class="card-text" style="font-size: 22px; font-weight: bold;">${{libro.precio_unitario }}</p>
                 <h5 class="card-title" style="font-size: 15px; font-weight: bold;">
                     {{libro.nombre_libro|truncatechars:20}}</h5>
-                <p class="card-text" style="font-size: 15px;">{{libro.autor}}</p>
-                <button class="btn btn-sm mt-4" style="font-weight: bolder; background-color: #82C2CB; color:white;">AL
-                    CARRITO</button>
+                <p class="card-text" style="font-size: 15px; margin-top: -10px;">{{libro.autor}}</p>
+                <button class="btn btn-sm mt-1" style="font-weight: bolder; background-color: #82C2CB; color:white; box-shadow: 0px 3px 8px rgba(225, 106, 0, 0.19);
+                border-radius: 3px;">AL CARRITO</button>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
 
-
-<!-- TODO: EN VENTA -->
-
-
-<!-- Catálogo -->
-<div class="row text-center py-5">
-    <div class="col-12 pb-5">
-        <h2 class="fw-bolder">Catálogo</h2>
-    </div>
-    <div class="row">
-        <div class="col-4 mb-3">
-            <button type="button" class="btn btn-light btn-lg border shadow">Libros</button>
-        </div>
-        <div class="col-4 mb-2">
-            <button type="button" class="btn btn-light btn-lg border shadow">Libros electrónicos</button>
-        </div>
-        <div class="col-4 mb-2">
-            <button type="button" class="btn btn-light btn-lg border shadow">Audiolibros</button>
+<div class="container my-5 py-3">
+    <div class="row justify-content-center mb-3">
+        <div class="col-auto">
+            <strong>
+                <p class="fw-bolder" style="font-size: 25px;">Catálogo</p>
+            </strong>
         </div>
     </div>
-    <div class="row mb-3">
-        <div class="col-4 mb-2">
-            <button type="button" class="btn btn-light btn-lg border shadow">Juguetes, creatividad</button>
+    <div class="row justify-content-center">
+        <div class="col-auto col-md-auto">
+            <button class="btn-categoria"><span>Libro</span></button>
         </div>
-        <div class="col-4 mb-2">
-            <button type="button" class="btn btn-light btn-lg border shadow">Accesorios Para Libros</button>
+        <div class="col-auto col-md-auto">
+            <button class="btn-categoria"><span>Libros electrónicos</span></button>
         </div>
-        <div class="col-4 mb-2">
-            <button type="button" class="btn btn-light btn-lg border shadow">Cuadernos</button>
+        <div class="col-auto col-md-auto">
+            <button class="btn-categoria"><span>Audiolibros</span></button>
         </div>
     </div>
-    <div class="row mb-3">
-        <div class="col-4 mb-2">
-            <button type="button" class="btn btn-light btn-lg border shadow">Juegos de mesa</button>
+    <div class="row justify-content-center">
+        <div class="col-auto col-md-auto">
+            <button class="btn-categoria"><span>Juguetes, creatividad</span></button>
         </div>
-        <div class="col-4 mb-2">
-            <button type="button" class="btn btn-light btn-lg border shadow">Regalos</button>
+        <div class="col-auto col-md-auto">
+            <button class="btn-categoria"><span>Accesorios para libros</span></button>
         </div>
-        <div class="col-4 mb-2">
-            <button type="button" class="btn btn-light btn-lg border shadow">Acciones</button>
+        <div class="col-auto col-md-auto">
+            <button class="btn-categoria"><span>Cuadernos</span></button>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-auto col-md-auto">
+            <button class="btn-categoria"><span>Juegos de mesa</span></button>
+        </div>
+        <div class="col-auto col-md-auto">
+            <button class="btn-categoria"><span>Regalos</span></button>
+        </div>
+        <div class="col-auto col-md-auto">
+            <button class="btn-categoria"><span>Acciones</span></button>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5 py-3">
+    <div class="row justify-content-center mb-3">
+        <div class="col-auto">
+            <strong>
+                <p class="fw-bolder" style="font-size: 25px;">Acerca de la tienda</p>
+            </strong>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-auto col-md-auto d-flex align-items-center">
+            <span style="font-size: 50px; font-weight: 900;">35</span>
+            <span class="mx-3" style="font-size: 13px; font-weight: 400;">Sucursales en todo el país</span>
+        </div>
+        <div class="col-auto col-md-auto d-flex align-items-center">
+            <span style="font-size: 50px; font-weight: 900;">898</span>
+            <span class="mx-3" style="font-size: 13px; font-weight: 400;">Productos del catálogo</span>
+        </div>
+        <div class="col-auto col-md-auto d-flex align-items-center">
+            <span style="font-size: 50px; font-weight: 900;">8659</span>
+            <span class="mx-3" style="font-size: 13px; font-weight: 400;">Compradores</span>
+        </div>
+        <div class="col-auto col-md-auto d-flex align-items-center">
+            <span style="font-size: 50px; font-weight: 900;">172</span>
+            <span class="mx-3" style="font-size: 13px; font-weight: 400;">Entregas a domicilio por toda la ciudad</span>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5 py-3">
+    <div class="row justify-content-center mb-4">
+        <div class="col-auto">
+            <strong>
+                <p class="fw-bolder" style="font-size: 25px;">Envíos</p>
+            </strong>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-auto col-md-auto text-center">
+            <span style="font-size: 12px; font-weight: 400;">¡Trabajamos sin festivos ni fines de semana! Los residentes de Santiago pueden recibir su pedido el mismo día de la entrega. Los clientes de otras Regiones pueden recibir su pedido en un plazo de 1 a 5 días, dependiendo de la ubicación del asentamiento y del método de entrega elegido. Los pedidos superiores a 7.000 pesos se entregan gratis*. Métodos disponibles, el tiempo exacto y el costo de la entrega se puede ver durante el pago en el carrito de compras, después de seleccionar la ciudad de entrega.</span>
+            <br>
+            <span style="font-size: 12px; font-weight: 700;">Leer más.</span>
         </div>
     </div>
 </div>
 
 
-
+<div class="container my-5 py-3">
+    <div class="row justify-content-center mb-4">
+        <div class="col-auto">
+            <strong>
+                <p class="fw-bolder" style="font-size: 25px;">Síguenos en las redes sociales</p>
+            </strong>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-auto col-md-auto d-flex align-items-center">
+            <img src="{% static 'img/facebook.png' %}" alt="" width="63px" class="mx-2">
+            <img src="{% static 'img/twitter.png' %}" alt="" width="63px" class="mx-2">
+            <img src="{% static 'img/instagram.png' %}" alt="" width="63px" class="mx-2">
+            <img src="{% static 'img/youtube.png' %}" alt="" width="63px" class="mx-2">
+        </div>
+    </div>
+</div>
 
 
 

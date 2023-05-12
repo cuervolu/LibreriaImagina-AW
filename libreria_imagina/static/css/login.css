@@ -1,0 +1,35 @@
+.btn-gradient {
+    background: linear-gradient(to right, #146E89, #64B4CD);
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.title{
+    color: #0E4A67;
+    font-weight: 900;
+}
+
+.text{
+    color: #37677E;
+}
+
+.signup{
+    color: #2195A1;
+    text-decoration: none;
+}
+
+.forgot-password{
+    color: #207198;
+    text-decoration: none;
+}
+
+.form-label{
+    color: #207198;
+    font-size: 0.7rem;
+}
+
+.input-border{
+    border: 3px solid #207198;
+    border-radius: 20px;
+}

@@ -12,7 +12,7 @@ body {
     color: #64B4CD;
     border-color: #64B4CD;
 }
- 
+
 .btn-outline-primary:hover {
     color: white;
     border-color: #35869C;
@@ -28,4 +28,108 @@ body {
 .btn-custom:hover {
     color: white;
     background-color: #4D939D;
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler:not(:disabled):not(.disabled):active:focus {
+    outline: none;
+    /* Elimina el efecto de border radius activado */
+    box-shadow: none;
+    /* Elimina el efecto de sombra activada */
+}
+
+
+/* Overlay Hamburger Menu */
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(107, 155, 167, 0.9);
+    z-index: 9999;
+    display: none;
+}
+
+.overlay-content {
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    height: 100%;
+    padding-top: 120px;
+    padding-right: 50px;
+}
+
+.overlay-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: end;
+}
+
+.overlay-content ul li {
+    margin-bottom: 20px;
+}
+
+.overlay-content ul li a {
+    color: #fff;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.overlay-content ul li a:hover {
+    color: #82C2CB;
+}
+
+.overlay-content form {
+    margin-bottom: 20px;
+}
+
+.overlay-content form .input-group-text {
+    color: #fff;
+}
+
+.overlay-content form .form-control::placeholder {
+    color: white;
+    font-size: 20px;
+    text-align: left;
+}
+
+.overlay-content .dropdown-menu {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.overlay-content .dropdown-item {
+    color: #fff;
+}
+
+.overlay-content .dropdown-item:hover {
+    color: #82C2CB;
+}
+
+.overlay-content .cancel-btn {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    font-size: 24px;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.overlay-content .search-input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    background-color: white;
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23777'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>");
+    background-size: 20px 20px;
+    height: 20px;
+    width: 20px;
 }

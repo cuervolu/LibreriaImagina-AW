@@ -9,16 +9,22 @@ $(document).ready(function () {
         responsiveClass: true,
         items: 5,
         autoplay: true,
-        autoplayTimeout: 1000,
+        autoplayTimeout: 3000,
         autoplayHoverPause: true,
         responsive: {
             0: {
                 items: 1,
             },
-            600: {
+            580: {
                 items: 2, // Cambiar de 3 a 2
             },
+            780: {
+                items: 3, // Cambiar de 3 a 2
+            },
             1000: {
+                items: 4, // Cambiar de 3 a 2
+            },
+            1200: {
                 items: 5,
             }
         }
