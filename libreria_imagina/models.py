@@ -285,12 +285,11 @@ class UsuarioManager(BaseUserManager):
             raise ValueError("El usuario debe tener un rut válido")
 
         usuario = self.model(
-            rut=rut,
+            rut=self.formatear_rut(rut),
             nombre=nombre,
             apellido=apellido,
             username=username,
-            correo=correo,
-            email=self.normalize_email(correo),  # normaliza el email
+            correo=self.normalize_email(correo),  # normaliza el email
             telefono=telefono,
             tipo_usuario=tipo_usuario,
         )
@@ -311,7 +310,7 @@ class UsuarioManager(BaseUserManager):
         tipo_usuario=TipoUsuario.ADMIN.value,
     ):
         usuario = self.create_user(
-            rut=rut,
+            rut=self.formatear_rut(rut),
             nombre=nombre,
             apellido=apellido,
             username=username,
@@ -326,17 +325,28 @@ class UsuarioManager(BaseUserManager):
         usuario.save(using=self._db)
         return usuario
 
-    def normalize_email(self, email):
+    def formatear_rut(self,rut):
+        rut = rut.replace(".", "").replace("-", "")  # Eliminar puntos y guiones
+        dv = rut[-1]  # Extraer el dígito verificador
+        rut = rut[:-1]  # Quitar el dígito verificador del RUT
+        rut = rut[::-1]  # Invertir el RUT
+        rut = ".".join([rut[i:i+3] for i in range(0, len(rut), 3)])  # Agrupar el RUT en bloques de tres dígitos separados por puntos
+        rut = rut[::-1]  # Invertir nuevamente el RUT
+        rut = f"{rut}-{dv}"  # Agregar el dígito verificador separado por un guion
+        return rut
+
+
+    def normalize_email(self, correo):
         """
         Normaliza el correo electrónico.
         """
-        return email.lower().strip()
+        return correo.lower().strip()
 
     def get_by_natural_key(self, username):
         """
         Retorna el usuario que coincida con el username (rut o email).
         """
-        return self.get(Q(username=username) | Q(email=self.normalize_email(username)))
+        return self.get(Q(username=username) | Q(correo=self.normalize_email(username)))
 
     def authenticate(self, request, username=None, password=None, **kwargs):
         """
@@ -361,7 +371,7 @@ class UsuarioManager(BaseUserManager):
 
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
-    rut = models.CharField(unique=True, max_length=10)
+    rut = models.CharField(unique=True, max_length=12)
     nombre = models.CharField(max_length=50)
     apellido = models.CharField(max_length=50)
     username = models.CharField(unique=True, max_length=30)
@@ -377,7 +387,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'username'  # se mantiene el campo 'username' como campo de inicio de sesión
-    REQUIRED_FIELDS = ['nombre', 'apellido', 'correo', 'telefono']
+    REQUIRED_FIELDS = ['rut','nombre', 'apellido', 'correo', 'telefono']
 
     objects = UsuarioManager()
 
