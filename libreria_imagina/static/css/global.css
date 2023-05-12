@@ -1,18 +1,31 @@
-html,
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #fffaf5;
-    font-family: 'Montserrat', sans-serif;
+    background-color: #fffaf5 !important;
+    font-family: 'Montserrat', sans-serif !important;
 }
 
-.header {
-    background-color: #fffaf5;
+
+.footer{
+    background-color: #146E89 !important;
 }
 
-.footer {
-    background-color: #146e89;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+.btn-outline-primary {
+    color: #64B4CD;
+    border-color: #64B4CD;
+}
+ 
+.btn-outline-primary:hover {
+    color: white;
+    border-color: #35869C;
+    background-color: #35869C;
+}
+
+.btn-custom{
+    color: white;
+    background-color: #82C2CB;
+    border-radius: 0;
+}
+
+.btn-custom:hover {
+    color: white;
+    background-color: #4D939D;
 }

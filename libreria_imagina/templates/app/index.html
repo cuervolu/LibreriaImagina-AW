@@ -1,7 +1,138 @@
 {% extends 'base.html' %}
 
-{% block title %}Librería Imagina{% endblock %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}" />
+{% endblock %}
+
+{% block title %}Inicio{% endblock title %}
+{% load humanize %}
+
+
 
 {% block content %}
-    <h1>Hola</h1>
+<!-- Hero -->
+<div class="row align-items-center d-flex justify-content-between">
+    <div class="col-md-4">
+        <strong>
+            <p style="font-size: 35px" class="fw-bolder">Libros de la A a la Z</p>
+        </strong>
+        <p class="text-break">En nuestra tienda encontrará un libro para cada gusto. Una gran selección.
+            Precios agradables. Historias interesantes.</p>
+        <a class="btn btn-custom btn-lg fw-bold shadow" href="#" role="button">Ir al catálogo</a>
+    </div>
+
+    <div class="col-md-6 text-white">
+        <div class="position-relative">
+            <img src="{% static 'img/Fondo_Libros_Index.png' %}" alt="" style="max-width: 100%; height: auto;">
+            <div class="position-absolute top-50 start-50 translate-middle">
+                <img src="{% static 'img/Libros_Fondo_Index.png' %}" alt="" style="max-width: 180%; height: auto; position: relative; right: 200px; top: 15px;">
+                <div style="max-width: 270px; position: relative; left: 40px; font-size: 14px; top: 20px;">
+                    <p style="font-weight: 900;">Conjuntos libros de Mark Manson</p>
+                    <p style="display: inline-block; font-weight: 400; line-height: 96%;">EL SUTIL ARTE DE ESCABULLIRSE.
+                        TODO ES UNA GILIPOLLEZ. REGLAS DE HOMBRES.</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p style="font-weight: 900;">$ 22.480</p>
+                        <i class="fas fa-arrow-right fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recién llegados -->
+<div class="row pt-5">
+    <div class="col-12 col-md-6">
+        <strong>
+            <p class="fw-bolder" style="font-size: 25px;">Recién llegados</p>
+        </strong>
+    </div>
+    <div class="col-12 col-md-6">
+        <div class="d-flex gap-3 flex-wrap" style="font-size: 14px;">
+            <p class="flex-shrink-0">Fantasía</p>
+            <p class="flex-shrink-0">Auto-desarrollo</p>
+            <p class="flex-shrink-0">Detectives</p>
+            <p class="flex-shrink-0">Infantil</p>
+            <p class="flex-shrink-0">Audiolibros</p>
+            <p class="flex-shrink-0">Otros</p>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Carrousel: Recién Llegados -->
+<div id="libro-slider" class="owl-carousel owl-theme">
+    {% for libro in libros %}
+    <div class="item mx-auto">
+        <div class="card p-4 h-100">
+            <img src="{{libro.portada}}" alt="{{ libro.nombre_libro }}" class="card-img-top" style="object-fit: cover;">
+            <div class="card-body">
+                <p class="card-text" style="font-size: 22px; font-weight: bold;">${{libro.precio_unitario }}</p>
+                <h5 class="card-title" style="font-size: 15px; font-weight: bold;">
+                    {{libro.nombre_libro|truncatechars:20}}</h5>
+                <p class="card-text" style="font-size: 15px;">{{libro.autor}}</p>
+                <button class="btn btn-sm mt-4" style="font-weight: bolder; background-color: #82C2CB; color:white;">AL
+                    CARRITO</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+<!-- TODO: EN VENTA -->
+
+
+<!-- Catálogo -->
+<div class="row text-center py-5">
+    <div class="col-12 pb-5">
+        <h2 class="fw-bolder">Catálogo</h2>
+    </div>
+    <div class="row">
+        <div class="col-4 mb-3">
+            <button type="button" class="btn btn-light btn-lg border shadow">Libros</button>
+        </div>
+        <div class="col-4 mb-2">
+            <button type="button" class="btn btn-light btn-lg border shadow">Libros electrónicos</button>
+        </div>
+        <div class="col-4 mb-2">
+            <button type="button" class="btn btn-light btn-lg border shadow">Audiolibros</button>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-4 mb-2">
+            <button type="button" class="btn btn-light btn-lg border shadow">Juguetes, creatividad</button>
+        </div>
+        <div class="col-4 mb-2">
+            <button type="button" class="btn btn-light btn-lg border shadow">Accesorios Para Libros</button>
+        </div>
+        <div class="col-4 mb-2">
+            <button type="button" class="btn btn-light btn-lg border shadow">Cuadernos</button>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-4 mb-2">
+            <button type="button" class="btn btn-light btn-lg border shadow">Juegos de mesa</button>
+        </div>
+        <div class="col-4 mb-2">
+            <button type="button" class="btn btn-light btn-lg border shadow">Regalos</button>
+        </div>
+        <div class="col-4 mb-2">
+            <button type="button" class="btn btn-light btn-lg border shadow">Acciones</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}
+{% block script_final%}
+<script src="{% static 'js/slider.js' %}"></script>
 {% endblock %}

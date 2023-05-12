@@ -19,6 +19,7 @@ class LibroAdmin(admin.ModelAdmin):
     list_display = ('id_libro', 'nombre_libro', 'autor','editorial', 'precio_unitario', 'categoria')
     search_fields = ['id_libro', 'nombre_libro', 'autor','editorial', 'precio_unitario']
     list_filter = ['categoria']
+    
 
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(DetallePedido)

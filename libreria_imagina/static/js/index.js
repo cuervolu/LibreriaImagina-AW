@@ -1,5 +1,4 @@
 function footerText() {
-    console.log('footerText() called');
     const footerText = document.getElementById('footer-text');
     if (footerText) {
       const currentYear = new Date().getFullYear();
