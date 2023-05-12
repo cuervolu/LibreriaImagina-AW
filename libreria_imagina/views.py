@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.contrib.humanize.templatetags.humanize import intcomma
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm
 from .models import *
-
+from .forms import LoginForm
+from crispy_forms.helper import FormHelper
 
 # Create your views here.
 def index(request):
@@ -20,5 +23,18 @@ AUTH
 """
 
 def login_view(request):
-    return render(request, "auth/login.html")
+    if request.method == 'POST':
+        form = LoginForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                # Redireccionar a la página deseada después del inicio de sesión exitoso
+                return redirect('index')
+    else:
+        form = LoginForm(request)
+    return render(request, "auth/login.html", {'form': form})
+
 
