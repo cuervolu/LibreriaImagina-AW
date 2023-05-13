@@ -7,7 +7,7 @@
 {% block title %}Iniciar sesión{% endblock title %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/login.css' %}" />
+<link rel="stylesheet" href="{% static 'css/auth.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -22,7 +22,7 @@
         <form action="" method="POST" class="my-4">
             {% csrf_token %}
             <h3 class="mb-4 fw-bolder fs-1 title">Iniciar Sesión</h3>
-            <p class="text">¿No tienes una cuenta? <a href="#" class="signup">¡Regístrate ahora!</a></p>
+            <p class="text">¿No tienes una cuenta? <a href="/auth/signup" class="signup">¡Regístrate ahora!</a></p>
             <div class="mb-3">
                 {{ form.username|as_crispy_field }}
             </div>
@@ -36,3 +36,15 @@
 </div>
 
 {% endblock %}
+
+{% block script_final %}
+{% if errors %}
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        html: '{% for error in errors %}<p>{{ error|safe }}</p>{% endfor %}'
+    });
+</script>
+{% endif %}
+{% endblock script_final %}

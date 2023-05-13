@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Regístrate{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+<div class="row py-5 needs-validation" novalidate>
+    <div class="col-md-6 background-column">
+        <!-- Imagen -->
+        <img src="{% static 'img/signup.svg' %}" class="img-fluid" alt="Imagen">
+    </div>
+
+    <div class="col-md-6">
+        <form method="POST" class="my-4" id="signup-form">
+            {% csrf_token %}
+            <h3 class="mb-4 fw-bolder fs-1 title">Regístrate</h3>
+            <p class="text">¿Ya tienes una cuenta? <a href="/auth/login" class="signup">Inicia sesión</a></p>
+            {% csrf_token %}
+            {% crispy form %}
+            <!-- Mostrar errores de validación -->
+            {% for field in form %}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <div class="invalid-feedback">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </form>
+        <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script_final %}
+<script src="{% static 'js/jquery.rut.js'%}"></script>
+<script>
+    //Activar JQuery Rut
+    $(document).ready(function () {
+        $('#id_rut').rut({
+            formatOn: 'keyup',
+            validateOn: 'change'
+        });
+    });
+
+    //Revisar validación de formulario
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('#signup-form');
+        const submitBtn = document.querySelector('#submit-btn');
+
+        // Agrega un event listener al formulario para detectar cambios en los campos
+        form.addEventListener('input', function () {
+            if (form.checkValidity()) {
+                submitBtn.disabled = false; // Habilita el botón de envío si todos los campos son válidos
+            } else {
+                submitBtn.disabled = true; // Deshabilita el botón de envío si hay campos inválidos
+            }
+        });
+
+        // Agrega un event listener al formulario para detectar el envío
+        form.addEventListener('submit', function () {
+            submitBtn.disabled = true; // Deshabilita el botón de envío al enviar el formulario para evitar envíos duplicados
+        });
+    });
+</script>
+
+{% endblock script_final %}
