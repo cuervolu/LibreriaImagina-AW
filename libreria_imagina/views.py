@@ -1,12 +1,12 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.contrib.humanize.templatetags.humanize import intcomma
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse
-from .models import *
 from django.utils.html import escapejs
 
+from .models import *
 from .forms import SignupForm
 
 
@@ -67,3 +67,8 @@ def signup_view(request):
 
     # Renderiza la plantilla 'signup.html' con el formulario como contexto
     return render(request, "auth/signup.html", {"form": form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')  # Redireccionar a la página principal si se accede a la vista por GET
