@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render,get_object_or_404
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -20,6 +20,31 @@ def index(request):
     context = {"libros": libros}
     # Se renderiza la plantilla 'index.html' con el contexto creado
     return render(request, "app/index.html", context)
+
+def agregar_al_carrito(request, id_libro, cantidad=1):
+    libro = get_object_or_404(Libro, id_libro=id_libro)
+
+    # Obtener el carrito del usuario actual
+    carrito, created = Carrito.objects.get_or_create(usuario=request.user)
+    
+     # Incrementar la cantidad de libros en el carrito
+    carrito.cantidad += cantidad
+    
+     # Actualizar el total a pagar en el carrito
+    carrito.total_pagar += libro.precio_unitario
+    
+    carrito.total_pagar += libro.precio_unitario
+
+    # Guardar los cambios en el carrito
+    carrito.save()
+
+
+    return redirect('carrito')  # Redirigir a la página del carrito
+
+def carrito(request):
+    carrito = Carrito.objects.get(usuario=request.user)
+    
+    return render(request, "app/carrito.html", {"carrito": carrito})
 
 
 """
@@ -71,4 +96,6 @@ def signup_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('index')  # Redireccionar a la página principal si se accede a la vista por GET
+    return redirect(
+        "index"
+    )  # Redireccionar a la página principal si se accede a la vista por GET

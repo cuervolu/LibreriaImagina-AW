@@ -33,9 +33,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
-    <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css" integrity="sha256-aUL5sUzmON2yonFVjFCojGULVNIOaPxlH648oUtA/ng=" crossorigin="anonymous">
-
   <!-- Global CSS -->
   <link rel="stylesheet" href="{% static 'css/global.css' %}" />
 
@@ -48,39 +45,51 @@
 
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg mt-4">
-    <div class="container d-flex justify-content-between align-items-center" style="font-size: 14px;">
+    <div class="container d-flex align-items-center" style="font-size: 14px;">
       <!-- Brand -->
-      <a class="navbar-brand me-5" href="/"><img src="{% static 'img/brand.png' %}" alt="Librería Imagina"
+      <a class="navbar-brand" href="#"><img src="{% static 'img/brand.png' %}" alt="Librería Imagina"
           style="max-width: 210px; height: auto;"></a>
       <!-- Toggler -->
-      
-      <button class="navbar-toggler" type="button" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-5 gap-3">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Catálogo</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link">Soporte</a>
-          </li>
-          <li class="nav-item">
-            <a href="/auth/login" class="nav-link">Iniciar Sesión</a>
-          </li>
-          <li class="nav-item">
-            <a href="/auth/signup" class="nav-link">Regístrate</a>
-          </li>
-        </ul>
-        <form class="d-flex" role="search">
+      <ul class="navbar-nav gap-3 d-lg-flex d-none">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Catálogo</a>
+        </li>
+        <!-- Navbar para usuarios logueados -->
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">Mis Compras</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link">Soporte</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">Perfil</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/logout">Cerrar Sesión</a>
+        </li>
+        {% else %}
+        <!-- Navbar para usuarios logueados -->
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/login">Iniciar Sesión</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/signup">Regístrate</a>
+        </li>
+        {% endif %}
+      </ul>
+      <div class="d-flex align-items-center">
+        <form class="d-none d-lg-flex" role="search">
           <div class="input-group border-bottom border-black me-5" style="width: 200px;">
             <div class="input-group-prepend">
               <span class="input-group-text bg-transparent border-0"><i class="fas fa-search"></i></span>
             </div>
-            <input class="form-control bg-transparent border-0" style="font-size: 14px;" type="search"
+            <input class="form-control bg-transparent border-0 shadow-none" style="font-size: 14px;" type="search"
               placeholder="Buscar" aria-label="Buscar">
           </div>
         </form>
@@ -88,19 +97,22 @@
           <li class="nav-item dropdown ms-5">
             <a class="nav-link dropdown-toggle" href="#" id="cartDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
-              <i class="fa-solid fa-cart-shopping fa-xl" style="color: #82C2CB;"></i>
+              <img src="{% static 'img/carrito.png' %}" alt="" style="max-width: 37px;">
             </a>
-            <ul class="dropdown-menu" aria-labelledby="cartDropdown">
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cartDropdown">
               <!--TODO:agregar los elementos del dropdown menu del carrito -->
               <li><a class="dropdown-item" href="#">Producto 1</a></li>
               <li><a class="dropdown-item" href="#">Producto 2</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
-              <li><a class="dropdown-item" href="#">Ver carrito</a></li>
+              <li><a class="dropdown-item" href="/carrito">Ver carrito</a></li>
             </ul>
           </li>
         </ul>
+        <button class="navbar-toggler" type="button">
+          <span class="navbar-toggler-icon"></span>
+        </button>
       </div>
     </div>
   </nav>
@@ -110,12 +122,12 @@
     <div class="overlay-content">
       <button class="cancel-btn">&#10005;</button>
       <form class="d-flex mx-3" role="search">
-        <div class="input-group border-bottom border-white align-items-center justify-content-start"
+        <div class="input-group border-bottom border-grey align-items-center justify-content-start"
           style="max-width: 100%;">
           <div class="input-group-prepend">
             <span class="input-group-text bg-transparent border-0"><i class="fas fa-search"></i></span>
           </div>
-          <input class="form-control bg-transparent border-0 search-input"
+          <input class="form-control bg-transparent border-0 search-input shadow-none"
             style="font-size: 20px; text-align: left; color: white;" type="search" placeholder="Buscar"
             aria-label="Buscar">
         </div>
@@ -148,18 +160,18 @@
 
   <!-- Footer -->
   <footer class="footer text-center text-lg-start text-white">
-    <section class="pt-5">
-      <div class="container-fluid mt-5">
-        <!-- Grid row -->
-        <div class="row justify-content-center mt-3 mx-5 px-5">
-          <!-- Grid column -->
-          <div class="col-md-auto col-lg-auto col-xl-auto mx-auto mb-4 d-flex align-items-center">
-            <!-- Brand -->
-            <a class="navbar-brand me-5" href="#"><img src="{% static 'img/white-brand.png' %}" alt="Librería Imagina"
-                style="max-width: 210px; height: auto;"></a>
-          </div>
-          <!-- Links -->
-          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+    <div class="container-fluid">
+      <!-- Grid row -->
+      <div class="row justify-content-center" style="padding-top: 4rem;">
+        <!-- Grid column -->
+        <div class="col-md-auto col-lg-auto col-xl-auto mb-5 d-flex align-items-center">
+          <!-- Brand -->
+          <a class="navbar-brand me-5" href="#"><img src="{% static 'img/white-brand.png' %}" alt="Librería Imagina"
+              style="max-width: 210px; height: auto;"></a>
+        </div>
+        <!-- Links -->
+        <div class="d-flex col-md-auto col-lg-auto col-xl-auto" style="text-align: left;">
+          <div class="col-md-auto col-lg-auto col-xl-auto mx-5 ml-0 mb-4">
             <h5 class="mb-4">
               Popular:
             </h5>
@@ -176,7 +188,7 @@
               <a href="#!" class="text-reset text-decoration-none">Negocios</a>
             </p>
           </div>
-          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+          <div class="col-md-auto col-lg-auto col-xl-auto mx-5 mb-4">
             <h5 class="mb-4">
               Información:
             </h5>
@@ -190,7 +202,7 @@
               <a href="#!" class="text-reset text-decoration-none">Sobre la Tienda</a>
             </p>
           </div>
-          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+          <div class="col-md-auto col-lg-auto col-xl-auto mx-5 mb-4">
             <h5 class="mb-4">
               Ayuda:
             </h5>
@@ -204,27 +216,29 @@
               <a href="#!" class="text-reset text-decoration-none">Ayuda al cliente</a>
             </p>
           </div>
-          <!-- Solicitar llamada -->
-          <div class="col-md-auto col-lg-auto col-xl-auto d-flex align-items-center justify-content-center">
-            <div class="text-center">
-              <h6 class="fw-bold mb-4">
-                +56 9 2339-3324
-              </h6>
-              <button type="button" class="btn btn-outline-primary round-0" style="border-radius: 0;">
-                Solicitar una llamada
-              </button>
-            </div>
+        </div>
+        <!-- Solicitar llamada -->
+        <div class="col-md-auto col-lg-auto col-xl-auto d-flex align-items-center justify-content-center">
+          <div class="text-center">
+            <h6 class="fw-bold mb-4">
+              +56 9 2339-3324
+            </h6>
+            <button type="button" class="btn btn-outline-primary round-0" style="border-radius: 0;">
+              Solicitar una llamada
+            </button>
           </div>
         </div>
-      </div </section>
-      <!-- Copyright -->
-      <div class="text-center fw-lighter p-4">
-        <p id="footer-text" class="me-5" style="display: inline"></p>
-        <a href="#" class="text-reset text-decoration-none" style="display: inline;">Condiciones de uso</a> |
-        <a href="#" class="text-reset text-decoration-none" style="display: inline;">Política de privacidad</a>
-
       </div>
-      <!-- Copyright -->
+
+    </div>
+    <!-- Copyright -->
+    <div class="text-center fw-lighter p-4">
+      <p id="footer-text" class="me-5" style="display: inline"></p>
+      <a href="#" class="text-reset text-decoration-none" style="display: inline;">Condiciones de uso</a> |
+      <a href="#" class="text-reset text-decoration-none" style="display: inline;">Política de privacidad</a>
+
+    </div>
+    <!-- Copyright -->
   </footer>
   <!-- Footer -->
 
@@ -235,8 +249,6 @@
   <!-- Cargar jQuery y Owl Carousel -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-  <!-- SweetAlert 2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
 
   <script src="{% static 'js/index.js' %}"></script>
   <script src="{% static 'js/overlay.js' %}"></script>

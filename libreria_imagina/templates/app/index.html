@@ -27,10 +27,12 @@
         <div class="position-relative">
             <img src="{% static 'img/Fondo_Libros_Index.png' %}" alt="" style="max-width: 100%; height: auto;">
             <div class="position-absolute top-50 start-50 translate-middle">
-                <img src="{% static 'img/Libros_Fondo_Index.png' %}" alt="" style="max-width: 180%; height: auto; position: relative; right: 200px; top: 15px;">
+                <img src="{% static 'img/Libros_Fondo_Index.png' %}" alt=""
+                    style="max-width: 180%; height: auto; position: relative; right: 200px; top: 15px;">
                 <div style="max-width: 270px; position: relative; left: 40px; font-size: 14px; top: 25px;">
                     <p style="font-weight: 900;" class="my-0">Conjuntos libros de Mark Manson</p>
-                    <p style="display: inline-block; font-weight: 400; line-height: 96%;" class="my-0">EL SUTIL ARTE DE ESCABULLIRSE.
+                    <p style="display: inline-block; font-weight: 400; line-height: 96%;" class="my-0">EL SUTIL ARTE DE
+                        ESCABULLIRSE.
                         TODO ES UNA GILIPOLLEZ. REGLAS DE HOMBRES.</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <p style="font-weight: 900;">$ 22.480</p>
@@ -66,15 +68,24 @@
 <div id="libro-slider" class="owl-carousel owl-theme my-5">
     {% for libro in libros %}
     <div class="item mx-auto">
-        <div class="card p-4 h-100" style="border-radius: 0%; border: none ; box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);">
+        <div class="card p-4 h-100"
+            style="border-radius: 0%; border: none ; box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);">
             <img src="{{libro.portada}}" alt="{{ libro.nombre_libro }}" class="card-img-top" style="object-fit: cover;">
             <div class="card-body">
                 <p class="card-text" style="font-size: 22px; font-weight: bold;">${{libro.precio_unitario }}</p>
                 <h5 class="card-title" style="font-size: 15px; font-weight: bold;">
                     {{libro.nombre_libro|truncatechars:20}}</h5>
                 <p class="card-text" style="font-size: 15px; margin-top: -10px;">{{libro.autor}}</p>
-                <button class="btn btn-sm mt-1" style="font-weight: bolder; background-color: #82C2CB; color:white; box-shadow: 0px 3px 8px rgba(225, 106, 0, 0.19);
-                border-radius: 3px;">AL CARRITO</button>
+                <div class="d-flex align-items-center">
+                    <form method="POST" action="{% url 'agregar_al_carrito' libro.id_libro %}?cantidad={{ cantidad }}">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <button class="btn btn-sm mt-1" style="font-weight: bolder; background-color: #82C2CB; color:white; box-shadow: 0px 3px 8px rgba(225, 106, 0, 0.19); border-radius: 3px;">AL CARRITO</button>
+                            <input type="number" style="max-width: 45px; height: 45px;" name="cantidad" id="cantidad" class="count mx-3" min="1" max="{{ libro.cantidad_disponible }}" value="1">
+                        </div>
+                    </form>
+                    
+                </div>
             </div>
         </div>
     </div>
@@ -162,7 +173,12 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-auto col-md-auto text-center">
-            <span style="font-size: 12px; font-weight: 400;">¡Trabajamos sin festivos ni fines de semana! Los residentes de Santiago pueden recibir su pedido el mismo día de la entrega. Los clientes de otras Regiones pueden recibir su pedido en un plazo de 1 a 5 días, dependiendo de la ubicación del asentamiento y del método de entrega elegido. Los pedidos superiores a 7.000 pesos se entregan gratis*. Métodos disponibles, el tiempo exacto y el costo de la entrega se puede ver durante el pago en el carrito de compras, después de seleccionar la ciudad de entrega.</span>
+            <span style="font-size: 12px; font-weight: 400;">¡Trabajamos sin festivos ni fines de semana! Los residentes
+                de Santiago pueden recibir su pedido el mismo día de la entrega. Los clientes de otras Regiones pueden
+                recibir su pedido en un plazo de 1 a 5 días, dependiendo de la ubicación del asentamiento y del método
+                de entrega elegido. Los pedidos superiores a 7.000 pesos se entregan gratis*. Métodos disponibles, el
+                tiempo exacto y el costo de la entrega se puede ver durante el pago en el carrito de compras, después de
+                seleccionar la ciudad de entrega.</span>
             <br>
             <span style="font-size: 12px; font-weight: 700;">Leer más.</span>
         </div>
