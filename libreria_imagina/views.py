@@ -34,7 +34,8 @@ def agregar_al_carrito(request, id_libro, cantidad=1):
     carrito.total_pagar += libro.precio_unitario
     
     carrito.total_pagar += libro.precio_unitario
-
+    # Agregar el libro al carrito
+    carrito.libros_en_carrito.add(libro)
     # Guardar los cambios en el carrito
     carrito.save()
 
