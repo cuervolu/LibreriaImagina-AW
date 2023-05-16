@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render,get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -21,31 +21,63 @@ def index(request):
     # Se renderiza la plantilla 'index.html' con el contexto creado
     return render(request, "app/index.html", context)
 
+
+# Detalle libro
+
+
+def book_detail(request, slug):
+    libro = get_object_or_404(Libro, slug=slug)
+    
+    libro.precio_unitario = format(libro.precio_unitario, ",.0f")
+    
+    return render(request, "app/book_detail.html", {"libro": libro})
+
+
 def agregar_al_carrito(request, id_libro, cantidad=1):
     libro = get_object_or_404(Libro, id_libro=id_libro)
 
     # Obtener el carrito del usuario actual
     carrito, created = Carrito.objects.get_or_create(usuario=request.user)
-    
-     # Incrementar la cantidad de libros en el carrito
+
+    # Incrementar la cantidad de libros en el carrito
     carrito.cantidad += cantidad
-    
-     # Actualizar el total a pagar en el carrito
+
+    # Actualizar el total a pagar en el carrito
     carrito.total_pagar += libro.precio_unitario
-    
+
     carrito.total_pagar += libro.precio_unitario
     # Agregar el libro al carrito
     carrito.libros_en_carrito.add(libro)
     # Guardar los cambios en el carrito
     carrito.save()
 
+    return redirect("carrito")  # Redirigir a la página del carrito
 
-    return redirect('carrito')  # Redirigir a la página del carrito
 
 def carrito(request):
+    envio = 3200
     carrito = Carrito.objects.get(usuario=request.user)
-    
-    return render(request, "app/carrito.html", {"carrito": carrito})
+
+    libros_en_carrito = carrito.libros_en_carrito.filter(carrito__usuario=request.user)
+
+    libros_filtrados = Libro.objects.filter(id_libro__in=libros_en_carrito)
+
+    for libro in libros_filtrados:
+        libro.precio_unitario = format(libro.precio_unitario, ",.0f")
+
+    total = carrito.total_pagar + envio
+
+    carrito.total_pagar = format(carrito.total_pagar, ",.0f")
+
+    context = {
+        "carrito": carrito,
+        "libros_en_carrito": libros_en_carrito,
+        "libros_filtrados": libros_filtrados,
+        "total": format(total, ",.0f"),
+        "envio": format(envio, ",.0f"),
+    }
+
+    return render(request, "app/carrito.html", context)
 
 
 """

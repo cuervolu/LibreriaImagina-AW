@@ -3,11 +3,83 @@
 {% load static %}
 
 {% block css %}
-
+<link rel="stylesheet" href="{% static 'css/carrito.css' %}" />
 {% endblock %}
 
 {% block title %}Carrito{% endblock title %}
 
 {% block content %}
+<div class="row pb-5">
+    <div class="col-md-6 ">
+        <a href="/" class="fs-3 fw-bold text-decoration-none text-dark"><i class="fas fa-chevron-left fs-6 "></i> &nbsp; Seguir Comprando</a>
+        <hr>
+
+        <h1 class="fs-3 fw-bold">Carrito</h1>
+        <p>Tienes {{carrito.cantidad}} productos en el carro</p>
+
+        {% for libro in libros_filtrados %}
+        <div class="card rounded shadow-lg mb-3 py-4 custom-card d-flex flex-column align-items-center me-5" style="width: 48rem;">
+            <div class="row g-0">
+                <div class="col-md-2 px-2">
+                    <img src="{{libro.portada}}" alt="{{libro.nombre_libro}}" class="img-fluid">
+                </div>
+                <div class="col-md-4">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">{{libro.nombre_libro|truncatechars:20}}</h5>
+                        <p class="card-text">{{libro.autor}}</p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group custom-input-group">
+                        <input type="number" class="form-control text-center custom-input" value="1" min="1"
+                            id="quantity-input" readonly>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text custom-arrow" id="decrease-btn">
+                                <i class="fas fa-chevron-up"></i>
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-2 ">
+                    <p class="card-text fw-bold">${{libro.precio_unitario }}</p>
+                </div>
+                <div class="col-md-2">
+                    <i class="fas fa-trash" style="font-size: 1.8rem;"></i>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="col-md-6 d-flex align-items-center justify-content-center">
+        <div class="card glass-card" style="background-color: #146E89;">
+            <div class="card-body">
+                <h5 class="card-title text-white fw-bold">Resumen Compra</h5>
+                <ul class="list-group list-group-flush list-group-transparent">
+                    <li class="list-group-item d-flex justify-content-between align-items-center text-white">
+                        Subtotal
+                        <span class="text-white">${{carrito.total_pagar}}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center text-white">
+                        Envío
+                        <span class="text-white">{{envio}}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center text-white">
+                        Total
+                        <span class="text-white">${{total}}</span>
+                    </li>
+                </ul>
+                <div class="d-grid mt-3">
+                    <button class="btn btn-gradient" type="button">${{total}} Continuar Compra <i
+                            class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 {% endblock %}

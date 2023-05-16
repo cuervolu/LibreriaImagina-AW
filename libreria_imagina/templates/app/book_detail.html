@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/book_detail.css'%}">
+{% endblock %}
+
+{% block title %}{{ libro.nombre_libro }}{% endblock title %}
+
+
+{% block content %}
+<div class="row pb-5">
+    <div class="col-md-6">
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/" class="text-decoration-none" style="color: #0E4A67;">Inicio</a></li>
+              <li class="breadcrumb-item active" aria-current="page">{{ libro.nombre_libro }}</li>
+            </ol>
+          </nav>
+        <img src="{{ libro.portada }}" class="img-fluid py-5" alt="{{ libro.nombre_libro }}">
+    </div>
+    <div class="col-md-6">
+        <h1 class="fw-bolder">{{ libro.nombre_libro }}</h1>
+        <h4 class="fs-6">{{ libro.autor }}</h4>
+        <div class="isbn" style="font-size: 0.8rem;">
+            <span><strong style="color: #2195A1;">ISBN: </strong>{{ libro.isbn }} | <strong
+                    style="color: #2195A1;">Editorial:</strong> {{ libro.editorial }}</span>
+        </div>
+        <p><strong style="color: #2195A1;">Cantidad disponible:</strong> {{ libro.cantidad_disponible }}</p>
+        <p><strong style="color: #2195A1;">Fecha de publicación:</strong> {{ libro.fecha_publicacion }}</p>
+        <p><strong style="color: #2195A1;">Categoría:</strong> {{ libro.get_categoria_display }}</p>
+        <strong style="color: #2195A1;">Precio:</strong><h2> ${{ libro.precio_unitario }}</h2>
+
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header custom-bg-color">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        <strong style="color: #2195A1;">Reseña</strong> 
+                    </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <p class="lh-lg text-justify" style="font-size: 0.7rem;">{{ libro.descripcion }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</div>
+{% endblock %}
