@@ -11,8 +11,7 @@ from autoslug import AutoSlugField
 from core import settings
 from django.db.models import Q
 
-
-
+from encrypted_field import fields
 # Create your models here.
 
 
@@ -139,11 +138,13 @@ class Libro(models.Model):
 
 
 class Oferta(models.Model):
-    id = models.BigAutoField(primary_key=True)
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
     descuento = models.DecimalField(max_digits=5, decimal_places=2)
     fecha_inicio = models.DateTimeField()
     fecha_fin = models.DateTimeField()
+    
+    class Meta:
+        db_table = 'oferta'
 
 
 class TipoMantenimiento(models.TextChoices):
@@ -409,6 +410,27 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     class Meta:
         db_table = "usuario"
 
+
+class MetodoPago(models.Model):
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='metodos_pago')
+    metodo_nombre = models.CharField(max_length=100)
+    tarjeta_numero = fields.EncryptedField(max_length=16)
+    tarjeta_nombre_titular = fields.EncryptedField(max_length=255)
+    fecha_vencimiento = models.DateField()
+    creado_en = models.DateTimeField(auto_now_add=True)
+    actualizado_en = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.metodo_nombre
+
+    def get_tarjeta_numero_desencriptada(self):
+        return self.tarjeta_numero.decrypt() if self.tarjeta_numero else ""
+
+    def get_tarjeta_nombre_titular_desencriptada(self):
+        return self.tarjeta_nombre_titular.decrypt() if self.tarjeta_nombre_titular else ""
+    
+    class Meta:
+        db_table = 'metodo_pago'
 
 class Carrito(models.Model):
     id_carrito = models.BigAutoField(
