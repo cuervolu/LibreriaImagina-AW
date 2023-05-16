@@ -14,32 +14,7 @@ from django.db.models import Q
 
 
 # Create your models here.
-class DetallePedido(models.Model):
-    id_detalle_pedido = models.BigAutoField(
-        primary_key=True,
-        db_column="id_detalle_pedido",
-        verbose_name="ID Detalle Pedido",
-    )
-    pedido = models.ForeignKey("Pedido", on_delete=models.CASCADE)
-    carrito = models.ForeignKey("Carrito", on_delete=models.CASCADE)
-    libro = models.ForeignKey("Libro", on_delete=models.CASCADE)
-    cantidad = models.IntegerField(null=False)
-    precio_unitario = models.IntegerField(null=False)
-    subtotal = models.IntegerField(null=True)
 
-    class Meta:
-        db_table = "detalle_pedido"
-
-
-        """
-        Al utilizar el método super().save(*args, **kwargs) se garantiza que se realice el proceso de guardado estándar después de calcular el subtotal. De esta manera, siempre que se guarde un objeto de la clase DetallePedido, se calculará el subtotal y se guardará automáticamente.
-        """
-    def save(self, *args, **kwargs):
-        self.subtotal = self.cantidad * self.precio_unitario
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return str(self.id_detalle_pedido)
 
 
 
@@ -236,7 +211,8 @@ class Pedido(models.Model):
         db_table = "pedido"
 
     def __str__(self):
-        return self.id_pedido
+        return str(self.id_pedido)
+
 
     def validate_cliente(self):
         if self.cliente.tipo_usuario != TipoUsuario.CLIENTE.value:
@@ -246,6 +222,27 @@ class Pedido(models.Model):
         super().clean()
         self.validate_cliente()
 
+class DetallePedido(models.Model):
+    id_detalle_pedido = models.BigAutoField(
+        primary_key=True,
+        db_column="id_detalle_pedido",
+        verbose_name="ID Detalle Pedido",
+    )
+    pedido = models.ForeignKey("Pedido", on_delete=models.CASCADE)
+    libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
+    cantidad = models.IntegerField(null=False)
+    precio_unitario = models.IntegerField(null=False)
+    subtotal = models.IntegerField(null=True)
+
+    class Meta:
+        db_table = "detalle_pedido"
+
+    def save(self, *args, **kwargs):
+        self.subtotal = self.cantidad * self.precio_unitario
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.id_detalle_pedido)
 
 class TipoUsuario(models.TextChoices):
     ADMIN = "Admin"
@@ -417,11 +414,12 @@ class Carrito(models.Model):
     id_carrito = models.BigAutoField(
         primary_key=True, db_column="ID_CARRITO", verbose_name="ID Carrito"
     )
-    libros_en_carrito = models.ManyToManyField(Libro, through='DetallePedido')
+    libros_en_carrito = models.ManyToManyField(Libro)
     cantidad = models.IntegerField(default=0)
     total_pagar = models.IntegerField(default=0)
-    usuario  = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_modificacion = models.DateField(auto_now=True)
 
     class Meta:
         db_table = "carrito"
