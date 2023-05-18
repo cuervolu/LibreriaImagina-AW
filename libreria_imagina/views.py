@@ -47,7 +47,7 @@ def book_detail(request, slug):
 
 
 
-
+@login_required(login_url='auth/login')
 def agregar_al_carrito(request, id_libro):
     libro = get_object_or_404(Libro, id_libro=id_libro)
 
