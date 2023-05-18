@@ -11,6 +11,8 @@ from decimal import Decimal
 # importar una librería decoradora , permite evitar el ingreso de usuarios a la página web
 from django.contrib.auth.decorators import login_required, permission_required
 
+from django.core.paginator import Paginator
+
 from .models import *
 from .forms import SignupForm
 
@@ -26,21 +28,32 @@ def index(request):
     # Se renderiza la plantilla 'index.html' con el contexto creado
     return render(request, "app/index.html", context)
 
+
 def catalogue(request):
     libros = Libro.objects.all()
-    context = {"libros": libros}
-    
-    return render(request, "app/catalogue.html", context)
 
+    for libro in libros:
+        libro.precio_unitario = format(libro.precio_unitario, ",.0f")
 
+    # Crear un objeto Paginator con la lista de libros y el número de libros por página
+    paginator = Paginator(libros, 10)
+
+    # Obtener el número de página solicitado de la consulta GET
+    pagina_num = request.GET.get("pagina")
+
+    # Obtener la página correspondiente al número de página solicitado
+    pagina_libros = paginator.get_page(pagina_num)
+
+    return render(request, "app/catalogue.html", {"libros": pagina_libros})
 
 
 # Detalle libro
 
+
 def book_detail(request, slug):
     libro = get_object_or_404(Libro, slug=slug)
-    
-    #Actualizar http a https
+
+    # Actualizar http a https
     libros = Libro.objects.filter(portada__startswith="http://")
 
     for libro in libros:
@@ -50,17 +63,16 @@ def book_detail(request, slug):
         libro.save()
 
     libro.precio_unitario = format(libro.precio_unitario, ",.0f")
-    
+
     return render(request, "app/book_detail.html", {"libro": libro})
 
 
-
-@login_required(login_url='auth/login')
+@login_required(login_url="auth/login")
 def agregar_al_carrito(request, id_libro):
     libro = get_object_or_404(Libro, id_libro=id_libro)
 
-    if request.method =='POST':
-        cantidad = int(request.POST.get('cantidad'))
+    if request.method == "POST":
+        cantidad = int(request.POST.get("cantidad"))
 
     # Obtener el carrito del usuario actual
     carrito, created = Carrito.objects.get_or_create(usuario=request.user)
@@ -72,10 +84,7 @@ def agregar_al_carrito(request, id_libro):
     detalle_carrito, created = DetalleCarrito.objects.get_or_create(
         carrito=carrito,
         libro=libro,
-        defaults={
-            'cantidad': cantidad,
-            'precio_total': precio_total
-        }
+        defaults={"cantidad": cantidad, "precio_total": precio_total},
     )
 
     # Si el libro ya está en el carrito, incrementar la cantidad y actualizar el precio total
@@ -91,31 +100,28 @@ def agregar_al_carrito(request, id_libro):
 
     # Actualizar el total a pagar en el carrito
     carrito.total_pagar = DetalleCarrito.objects.filter(carrito=carrito).aggregate(
-        total=Sum('precio_total')
-    )['total'] or Decimal(0)
+        total=Sum("precio_total")
+    )["total"] or Decimal(0)
     carrito.save()
 
     return redirect("cart")  # Redirigir a la página del carrito
 
 
-
-@login_required(login_url='auth/login')
+@login_required(login_url="auth/login")
 def cart(request):
     envio = 3200
     carrito = Carrito.objects.get(usuario=request.user)
 
     detalle_carrito = carrito.detallecarrito_set.all()
-    
 
     libros_filtrados = Libro.objects.filter(detallecarrito__carrito=carrito)
 
     for libro in libros_filtrados:
         libro.precio_unitario = format(libro.precio_unitario, ",.0f")
         print(libro.cantidad_disponible)
-    
+
     for detalle in detalle_carrito:
         detalle.precio_total = format(detalle.precio_total, ",.0f")
-
 
     total = carrito.total_pagar + envio
 
@@ -131,22 +137,21 @@ def cart(request):
 
     return render(request, "app/cart.html", context)
 
+
 # **********************
 # *       LEGAL        *
 # **********************
 def terms_and_conditions(request):
-    return render(request,"app/legal/terms_and_conditions.html" )
+    return render(request, "app/legal/terms_and_conditions.html")
+
 
 def privacy(request):
-    return render(request,"app/legal/privacy.html" )
-
-
+    return render(request, "app/legal/privacy.html")
 
 
 # **********************
 # *       AUTH       *
 # **********************
-
 
 
 def login_view(request):
