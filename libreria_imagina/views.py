@@ -5,6 +5,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse
 from django.utils.html import escapejs
+from django.db.models import Sum
+from decimal import Decimal
+
+# importar una librería decoradora , permite evitar el ingreso de usuarios a la página web
+from django.contrib.auth.decorators import login_required, permission_required
 
 from .models import *
 from .forms import SignupForm
@@ -24,46 +29,84 @@ def index(request):
 
 # Detalle libro
 
-
 def book_detail(request, slug):
     libro = get_object_or_404(Libro, slug=slug)
     
+    #Actualizar http a https
+    libros = Libro.objects.filter(portada__startswith="http://")
+
+    for libro in libros:
+        portada_url = libro.portada
+        updated_url = portada_url.replace("http://", "https://")
+        libro.portada = updated_url
+        libro.save()
+
     libro.precio_unitario = format(libro.precio_unitario, ",.0f")
     
     return render(request, "app/book_detail.html", {"libro": libro})
 
 
-def agregar_al_carrito(request, id_libro, cantidad=1):
+
+
+def agregar_al_carrito(request, id_libro):
     libro = get_object_or_404(Libro, id_libro=id_libro)
+
+    if request.method =='POST':
+        cantidad = int(request.POST.get('cantidad'))
 
     # Obtener el carrito del usuario actual
     carrito, created = Carrito.objects.get_or_create(usuario=request.user)
 
+    # Calcular el precio total
+    precio_total = libro.precio_unitario * cantidad
+
+    # Verificar si el libro ya está en el carrito
+    detalle_carrito, created = DetalleCarrito.objects.get_or_create(
+        carrito=carrito,
+        libro=libro,
+        defaults={
+            'cantidad': cantidad,
+            'precio_total': precio_total
+        }
+    )
+
+    # Si el libro ya está en el carrito, incrementar la cantidad y actualizar el precio total
+    if not created:
+        detalle_carrito.cantidad += cantidad
+        detalle_carrito.precio_total = libro.precio_unitario * detalle_carrito.cantidad
+        detalle_carrito.save()
+
     # Incrementar la cantidad de libros en el carrito
     carrito.cantidad += cantidad
+    libro.cantidad_disponible -= cantidad
+    libro.save()
 
     # Actualizar el total a pagar en el carrito
-    carrito.total_pagar += libro.precio_unitario
-
-    carrito.total_pagar += libro.precio_unitario
-    # Agregar el libro al carrito
-    carrito.libros_en_carrito.add(libro)
-    # Guardar los cambios en el carrito
+    carrito.total_pagar = DetalleCarrito.objects.filter(carrito=carrito).aggregate(
+        total=Sum('precio_total')
+    )['total'] or Decimal(0)
     carrito.save()
 
     return redirect("carrito")  # Redirigir a la página del carrito
 
 
+
+@login_required(login_url='auth/login')
 def carrito(request):
     envio = 3200
     carrito = Carrito.objects.get(usuario=request.user)
 
-    libros_en_carrito = carrito.libros_en_carrito.filter(carrito__usuario=request.user)
+    detalle_carrito = carrito.detallecarrito_set.all()
+    
 
-    libros_filtrados = Libro.objects.filter(id_libro__in=libros_en_carrito)
+    libros_filtrados = Libro.objects.filter(detallecarrito__carrito=carrito)
 
     for libro in libros_filtrados:
         libro.precio_unitario = format(libro.precio_unitario, ",.0f")
+    
+    for detalle in detalle_carrito:
+        detalle.precio_total = format(detalle.precio_total, ",.0f")
+
 
     total = carrito.total_pagar + envio
 
@@ -71,7 +114,7 @@ def carrito(request):
 
     context = {
         "carrito": carrito,
-        "libros_en_carrito": libros_en_carrito,
+        "detalle_carrito": detalle_carrito,
         "libros_filtrados": libros_filtrados,
         "total": format(total, ",.0f"),
         "envio": format(envio, ",.0f"),

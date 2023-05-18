@@ -120,7 +120,8 @@ class Libro(models.Model):
     editorial = models.CharField(max_length=100, null=False)
     precio_unitario = models.DecimalField(max_digits=8, decimal_places=2)
     cantidad_disponible = models.BigIntegerField(null=False)
-    portada = models.URLField()
+    thumbnail = models.URLField()
+    portada = models.URLField(max_length=300)
     fecha_publicacion = models.DateField(null=True)
     categoria = models.CharField(
         max_length=200,
@@ -436,7 +437,7 @@ class Carrito(models.Model):
     id_carrito = models.BigAutoField(
         primary_key=True, db_column="ID_CARRITO", verbose_name="ID Carrito"
     )
-    libros_en_carrito = models.ManyToManyField(Libro)
+    libros_en_carrito = models.ManyToManyField(Libro, through="DetalleCarrito")
     cantidad = models.IntegerField(default=0)
     total_pagar = models.IntegerField(default=0)
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -448,3 +449,11 @@ class Carrito(models.Model):
 
     def __str__(self):
         return str(self.id_carrito)
+
+class DetalleCarrito(models.Model):
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE)
+    libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
+    cantidad = models.IntegerField(default=1)
+    precio_total = models.DecimalField(max_digits=10, decimal_places=2)
+    class Meta:
+        db_table = 'detalle_carrito'

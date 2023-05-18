@@ -5,81 +5,127 @@
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/carrito.css' %}" />
 {% endblock %}
-
+{% load humanize %}
 {% block title %}Carrito{% endblock title %}
 
 {% block content %}
-<div class="row pb-5">
-    <div class="col-md-6 ">
-        <a href="/" class="fs-3 fw-bold text-decoration-none text-dark"><i class="fas fa-chevron-left fs-6 "></i> &nbsp; Seguir Comprando</a>
-        <hr>
-
-        <h1 class="fs-3 fw-bold">Carrito</h1>
-        <p>Tienes {{carrito.cantidad}} productos en el carro</p>
-
-        {% for libro in libros_filtrados %}
-        <div class="card rounded shadow-lg mb-3 py-4 custom-card d-flex flex-column align-items-center me-5" style="width: 48rem;">
-            <div class="row g-0">
-                <div class="col-md-2 px-2">
-                    <img src="{{libro.portada}}" alt="{{libro.nombre_libro}}" class="img-fluid">
+<div class="container-fluid my-5 py-3">
+    <div class="row justify-content-between pb-5">
+        <div class="col-auto col-md-auto col-lg-auto">
+            <div class="d-flex align-items-center">
+                <i class="fa-solid fa-chevron-left fa-lg"></i>
+                <p style="font-size: 20px; font-weight: 600; margin-bottom: 0px; margin-left: 10px;">Seguir Comprando
+                </p>
+            </div>
+            <hr>
+            <p style="font-size: 36px; font-weight: 600; margin-bottom: -5px;">Carrito</p>
+            <p style="font-size: 20px; font-weight: 500;">Tienes {{ carrito.cantidad }} productos en el carro</p>
+            {% for libro in libros_filtrados %}
+            {% for detalle_carrito in libro.detallecarrito_set.all %}
+            <div class="d-flex align-items-center justify-content-between mt-4"
+                style="background: white; max-width: auto; height: auto; border-radius: 15px;filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1));">
+                <div class="m-5">
+                    <img src="{{libro.thumbnail}}" alt="{{libro.nombre_libro}}" style="max-width: 72px; height: auto;">
                 </div>
-                <div class="col-md-4">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold">{{libro.nombre_libro|truncatechars:20}}</h5>
-                        <p class="card-text">{{libro.autor}}</p>
-                    </div>
+                <div class="mx-auto">
+                    <p style="font-size: 25px; font-weight: 600; margin-bottom: 0px;">
+                        {{libro.nombre_libro|truncatechars:20}}</p>
+                    <p style="font-size: 17px; font-weight: 500; margin-bottom: 0px">{{libro.autor}}</p>
                 </div>
-                <div class="col-md-2">
-                    <div class="input-group custom-input-group">
-                        <input type="number" class="form-control text-center custom-input" value="1" min="1"
-                            id="quantity-input" readonly>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text custom-arrow" id="decrease-btn">
-                                <i class="fas fa-chevron-up"></i>
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
+                <div class="mx-auto">
+                    <div class="input-group">
+                        <input type="number"
+                            style="max-width: 45px; height: 45px; font-size: 22px; font-weight: 500; border: none; outline: none;"
+                            class="count text-end mx-3" min="1" max="{{ libro.cantidad_disponible }}"
+                            value="{{ detalle_carrito.cantidad }}" readonly name="cantidad">
+                    
+                        <div class="mx-4">
+                            <div class="input-group-prepend" style="margin-bottom: -9px;">
+                                <a href="#" type="button" class="incrementButton"><i class="fa-solid fa-caret-up fa-2xl"
+                                        style="color: black;"></i></a>
+                            </div>
+                            <div class="input-group-append" style="margin-top: -9px;">
+                                <a href="#" type="button" class="decrementButton"><i class="fa-solid fa-caret-down fa-2xl"
+                                        style="color: black;"></i></a>
+                            </div>
                         </div>
-
                     </div>
                 </div>
-                <div class="col-md-2 ">
-                    <p class="card-text fw-bold">${{libro.precio_unitario }}</p>
-                </div>
-                <div class="col-md-2">
-                    <i class="fas fa-trash" style="font-size: 1.8rem;"></i>
+                <div class="mx-4">
+                    <p style="font-size: 23px; font-weight: 600; margin-bottom: 0;">${{ detalle_carrito.precio_total|floatformat:0|intcomma }}
 
+                    </p>
+                </div>
+                <div class="mx-4">
+                    <a href="#">
+                        <svg width="37" height="35" viewBox="0 0 37 35" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <rect x="0.272949" y="0.661377" width="36.3162" height="33.4677" fill="url(#pattern0)" />
+                            <defs>
+                                <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                    <use xlink:href="#image0_287_810"
+                                        transform="matrix(0.00921565 0 0 0.01 0.0392177 0)" />
+                                </pattern>
+                                <image id="image0_287_810" width="100" height="100"
+                                    xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAABmJLR0QA/wD/AP+gvaeTAAADHklEQVR4nO3dzUobYRjF8fOkEzdtBRfNolVwHzdtCCHmDkTwBuyurSK9jt5BbSWUQtsr6Ae9ABeZEOOmTbeKWlw32o0h83SjEIKFdvJOctTzAyHvMHnmlT8TMC4GEBERSccmvYG/KRaLU9PT088ArAJYAHB7xJG/3f2bmX3odrv1TqdzNvouw6MMUqvV7idJ8hnAw4wusRtF0fL29vZxRvNTy016A8OKxeJUxjEA4FG/3/9UKpXyGV4jFbog5x9TWcYAALh7KZ/PP8n6Ov8rmvQGLrE6tP4CYK3RaPwcZWilUpk1sy0zW7o4ZmaPAbwaZW5odHcIgOLgIkmS9VFjAECz2Tzq9/vrQ4cXRp0bGmOQO4OLZrN5FGpwq9U6HDp0N9TsUBiD3GgKQkZByKT+w7BWqy0lSfISwHzA/VwH++6+Ecfx1zRvTn2HuPtrKMZl5s2snvbN+sgikzpIkiRrAPYC7uW62AOQ+huAYF8uVqtVH1w3Gg3KLy5Dyer31UcWGQUhoyBkFISMgpBREDIKQkZByCgIGbr/qS8uLq64ex2Au/vTOI4/TvL8caO7Q9x9E8A9AAUz25z0+eNGFwTA/YHXDwjOHyvGIDeagpBREDIKQkZByCgIGQUhoyBkFISMgpBREDIKQkZByCgIGQUhoyBkFISMgpBREDIKQkZByCgIGQUhoyBkFISMgpBREDIKQkZByCgIGQUhoyBkFISMgpBREDIKQkZByCgIGQUhoyBkFISMgpBREDIKQkZByCgIGQUhoyBkFIQMY5D9gdf/8jiMrM8fK7og7r4B4Oj8Z2PS54+bnh+Skp4fckMoCBkFIaMgZBSEjIKQURAyIYOcDC4qlcpswNlUyuXy3NChk0tPTCFkkB+DCzPbuo5RyuXyXBRFW0OHv4eaH/L5Ie8BVC4WZrZkZofVajXgJTi5+7tQs4LdId1utw5gN9S8K6TV6/XehBoWLEin0zmLomjZzNqhZl4BO1EUrbTb7V6ogbdCDQKAg4OD00Kh8DaXyx2b2QyAGQBTIa9B4BTAjru/6PV6z+M4/jXpDYmIiADAH5sq34HRT4luAAAAAElFTkSuQmCC" />
+                            </defs>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="col-auto col-md-auto col-lg-auto d-flex align-items-start mt-5 pt-5">
+            <div class="p-4"
+                style="background: #146E89; max-width: auto; height: auto; border-radius: 20px; filter: drop-shadow(0px 22px 75px rgba(0, 0, 0, 0.25));">
+                <div style="margin-bottom: 30px;">
+                    <p class="text-start" style="font-size: 23px; font-weight: 500; color: white; margin-bottom: 0px;">
+                        Resumen Compra</p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="text-start" style="font-size: 14px; font-weight: 500; color: white;">Subtotal</p>
+                    <p class="text-start" style="font-size: 14px; font-weight: 500; color: white;">
+                        ${{carrito.total_pagar}}</p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="text-start" style="font-size: 14px; font-weight: 500; color: white;">Envío</p>
+                    <p class="text-start" style="font-size: 14px; font-weight: 500; color: white;">${{envio}}</p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="text-start" style="font-size: 14px; font-weight: 500; color: white;">Total</p>
+                    <p class="text-start" style="font-size: 14px; font-weight: 500; color: white;">${{total}}</p>
+                </div>
+                <div>
+                    <button
+                        style="max-width: auto; height: 72px; background: linear-gradient(271.15deg, #64B4CD 7.64%, #146E89 90.68%); border: 1px solid white; border-radius: 14px;">
+                        <div class="d-flex justify-content-between mx-4">
+                            <div class="mx-3">
+                                <p class="text-start"
+                                    style="font-size: 16px; font-weight: 500; color: white; margin-bottom: 0px">
+                                    ${{total}}
+                                </p>
+                            </div>
+                            <div class="mx-3 d-flex align-items-center">
+                                <p class="text-start"
+                                    style="font-size: 16px; font-weight: 500; color: white; margin-bottom: 0px; margin-right: 6px;">
+                                    Continuar
+                                    Compra</p>
+                                <i class="fa-solid fa-arrow-right" style="color: #ffffff;"></i>
+
+                            </div>
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>
-        {% endfor %}
-    </div>
-
-    <div class="col-md-6 d-flex align-items-center justify-content-center">
-        <div class="card glass-card" style="background-color: #146E89;">
-            <div class="card-body">
-                <h5 class="card-title text-white fw-bold">Resumen Compra</h5>
-                <ul class="list-group list-group-flush list-group-transparent">
-                    <li class="list-group-item d-flex justify-content-between align-items-center text-white">
-                        Subtotal
-                        <span class="text-white">${{carrito.total_pagar}}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center text-white">
-                        Envío
-                        <span class="text-white">{{envio}}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center text-white">
-                        Total
-                        <span class="text-white">${{total}}</span>
-                    </li>
-                </ul>
-                <div class="d-grid mt-3">
-                    <button class="btn btn-gradient" type="button">${{total}} Continuar Compra <i
-                            class="fa-solid fa-arrow-right"></i></button>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
 
+
 {% endblock %}
+
+
+{% block script_final %}
+<script src="{% static 'js/inputNumber.js' %}"></script>
+{% endblock script_final %}
