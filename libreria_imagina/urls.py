@@ -11,6 +11,7 @@ urlpatterns = [
         name="agregar_al_carrito",
     ),
     path("carrito", carrito, name="carrito"),
+    path("catalogue", catalogue, name="catalogue"),
     path("books/<slug:slug>/", book_detail, name="book_detail"),
     # Incluir las URLs de autenticación desde auth.urls
     path("auth/", include(auth_urls, namespace="auth")),

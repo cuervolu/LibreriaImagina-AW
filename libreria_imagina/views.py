@@ -26,6 +26,14 @@ def index(request):
     # Se renderiza la plantilla 'index.html' con el contexto creado
     return render(request, "app/index.html", context)
 
+def catalogue(request):
+    libros = Libro.objects.all()
+    context = {"libros": libros}
+    
+    return render(request, "app/catalogue.html", context)
+
+
+
 
 # Detalle libro
 
