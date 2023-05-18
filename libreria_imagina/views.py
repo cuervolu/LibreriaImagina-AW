@@ -123,7 +123,14 @@ def carrito(request):
 
     return render(request, "app/carrito.html", context)
 
+# **********************
+# *       LEGAL        *
+# **********************
+def terms_and_conditions(request):
+    return render(request,"app/legal/terms_and_conditions.html" )
 
+def privacy(request):
+    return render(request,"app/legal/privacy.html" )
 
 
 

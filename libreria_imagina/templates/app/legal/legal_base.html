@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/legal.css' %}">
+{% endblock %}
+
+{% block title %}{% endblock title %}
+
+{% block content %}
+<article class="mb-5 card">
+    <div class="card-header">
+        <h1 class="fw-bolder title">{% block article_title %}{% endblock article_title %}</h1>
+    </div>
+    <div class="card-body lh-base  px-3">
+        <p class="lead card-title fw-bold">{% block card_title %}{% endblock card_title %}</p>
+
+        {% block card_text %} {% endblock card_text %}
+        
+    </div>
+</article>
+
+{% endblock %}

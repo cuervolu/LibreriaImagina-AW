@@ -14,4 +14,7 @@ urlpatterns = [
     path("books/<slug:slug>/", book_detail, name="book_detail"),
     # Incluir las URLs de autenticación desde auth.urls
     path("auth/", include(auth_urls, namespace="auth")),
+    # Páginas Legales
+    path("legal/terms_and_conditions",terms_and_conditions, name="terms_and_conditions"),
+    path("legal/privacy",privacy, name="privacy")
 ]
