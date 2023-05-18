@@ -103,6 +103,7 @@ def carrito(request):
 
     for libro in libros_filtrados:
         libro.precio_unitario = format(libro.precio_unitario, ",.0f")
+        print(libro.cantidad_disponible)
     
     for detalle in detalle_carrito:
         detalle.precio_total = format(detalle.precio_total, ",.0f")
@@ -123,10 +124,14 @@ def carrito(request):
     return render(request, "app/carrito.html", context)
 
 
-"""
-AUTH
 
-"""
+
+
+
+# **********************
+# *       AUTH       *
+# **********************
+
 
 
 def login_view(request):
