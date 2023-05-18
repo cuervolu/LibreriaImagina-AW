@@ -10,7 +10,7 @@ urlpatterns = [
         agregar_al_carrito,
         name="agregar_al_carrito",
     ),
-    path("carrito", carrito, name="carrito"),
+    path("cart", cart, name="cart"),
     path("catalogue", catalogue, name="catalogue"),
     path("books/<slug:slug>/", book_detail, name="book_detail"),
     # Incluir las URLs de autenticación desde auth.urls

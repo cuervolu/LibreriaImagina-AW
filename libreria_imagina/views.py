@@ -95,12 +95,12 @@ def agregar_al_carrito(request, id_libro):
     )['total'] or Decimal(0)
     carrito.save()
 
-    return redirect("carrito")  # Redirigir a la página del carrito
+    return redirect("cart")  # Redirigir a la página del carrito
 
 
 
 @login_required(login_url='auth/login')
-def carrito(request):
+def cart(request):
     envio = 3200
     carrito = Carrito.objects.get(usuario=request.user)
 
@@ -129,7 +129,7 @@ def carrito(request):
         "envio": format(envio, ",.0f"),
     }
 
-    return render(request, "app/carrito.html", context)
+    return render(request, "app/cart.html", context)
 
 # **********************
 # *       LEGAL        *
