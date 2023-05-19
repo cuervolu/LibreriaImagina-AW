@@ -20,7 +20,22 @@
         </div>
     </div>
     <div class="row">
+        <form method="GET" class="my-3">
+            <div class="input-group">
+                <label class="input-group-text" for="categoria">Categoría</label>
+                <select class="form-select" id="categoria" name="categoria">
+                    <option value="">Todas</option>
+                    {% for categoria in categorias %}
+                    <option value="{{ categoria }}">{{ categoria }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </div>
+        </form>
+
         {% for libro in libros %}
+        {% if not categoria_filtrada or libro.categoria == categoria_filtrada %}
+       
         <div class="col-md-6 col-lg-4 col-xl-3">
             <div id="product" class="single-product card mb-3"
                 style="border-radius: 0%; border: none ; box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);">
@@ -59,13 +74,15 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         {% endfor %}
         <!-- Mostrar la paginación -->
         <nav aria-label="Paginación">
             <ul class="pagination justify-content-center">
                 {% if libros.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?pagina={{ libros.previous_page_number }}" aria-label="Previous">&laquo;</a>
+                    <a class="page-link" href="?pagina={{ libros.previous_page_number }}"
+                        aria-label="Previous">&laquo;</a>
                 </li>
                 {% endif %}
 
@@ -83,7 +100,7 @@
 
                 {% if libros.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?pagina={{ libros.next_page_number }}"  aria-label="Next">&raquo;</a>
+                    <a class="page-link" href="?pagina={{ libros.next_page_number }}" aria-label="Next">&raquo;</a>
                 </li>
                 {% endif %}
             </ul>

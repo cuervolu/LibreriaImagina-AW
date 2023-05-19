@@ -16,6 +16,9 @@ from django.core.paginator import Paginator
 from .models import *
 from .forms import SignupForm
 
+# **********************
+# *       APP          *
+# **********************
 
 # Create your views here.
 def index(request):
@@ -31,9 +34,17 @@ def index(request):
 
 def catalogue(request):
     libros = Libro.objects.all()
-
+    
+    categorias = Libro.objects.values_list('categoria', flat=True).distinct()
+    
     for libro in libros:
         libro.precio_unitario = format(libro.precio_unitario, ",.0f")
+    categoria_filtrada = request.GET.get("categoria")
+    if categoria_filtrada:
+        libros = libros.filter(categoria=categoria_filtrada)
+        for libro in libros:
+            libro.precio_unitario = format(libro.precio_unitario, ",.0f")
+
 
     # Crear un objeto Paginator con la lista de libros y el número de libros por página
     paginator = Paginator(libros, 10)
@@ -44,7 +55,7 @@ def catalogue(request):
     # Obtener la página correspondiente al número de página solicitado
     pagina_libros = paginator.get_page(pagina_num)
 
-    return render(request, "app/catalogue.html", {"libros": pagina_libros})
+    return render(request, "app/catalogue.html", {"libros": pagina_libros,"categorias": categorias})
 
 
 # Detalle libro
@@ -66,6 +77,10 @@ def book_detail(request, slug):
 
     return render(request, "app/book_detail.html", {"libro": libro})
 
+
+# **********************
+# *       CARRITO      *
+# **********************
 
 @login_required(login_url="auth/login")
 def agregar_al_carrito(request, id_libro):
@@ -189,7 +204,7 @@ def signup_view(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             # Realiza las acciones correspondientes al registro del usuario
-            user = form.save() # Guarda los datos del formulario y obtén el usuario registrado
+            user = form.save()
             login(request, user)  # Autentica al usuario
             return HttpResponseRedirect(
                 reverse("index")
