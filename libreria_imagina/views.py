@@ -110,7 +110,10 @@ def agregar_al_carrito(request, id_libro):
 @login_required(login_url="auth/login")
 def cart(request):
     envio = 3200
-    carrito = Carrito.objects.get(usuario=request.user)
+    try:
+        carrito = Carrito.objects.get(usuario=request.user)
+    except Carrito.DoesNotExist:
+        carrito = Carrito.objects.create(usuario=request.user)
 
     detalle_carrito = carrito.detallecarrito_set.all()
 
@@ -186,7 +189,8 @@ def signup_view(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             # Realiza las acciones correspondientes al registro del usuario
-            form.save()
+            user = form.save() # Guarda los datos del formulario y obtén el usuario registrado
+            login(request, user)  # Autentica al usuario
             return HttpResponseRedirect(
                 reverse("index")
             )  # Redireccionar a la página de registro exitoso
