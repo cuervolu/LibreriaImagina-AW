@@ -13,6 +13,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 from django.core.paginator import Paginator
 
+from libreria_imagina.utils import format_book_prices
+
 from .models import *
 from .forms import SignupForm
 
@@ -24,8 +26,7 @@ from .forms import SignupForm
 def index(request):
     # Se obtienen 10 libros aleatorios de la base de datos
     libros = list(Libro.objects.order_by("nombre_libro", "fecha_publicacion")[:10])
-    for libro in libros:
-        libro.precio_unitario = format(libro.precio_unitario, ",.0f")
+    libros = format_book_prices(libros) 
     # Se crea un diccionario con los libros obtenidos para pasarlo al contexto
     context = {"libros": libros}
     # Se renderiza la plantilla 'index.html' con el contexto creado
@@ -37,14 +38,11 @@ def catalogue(request):
     
     categorias = Libro.objects.values_list('categoria', flat=True).distinct()
     
-    for libro in libros:
-        libro.precio_unitario = format(libro.precio_unitario, ",.0f")
     categoria_filtrada = request.GET.get("categoria")
     if categoria_filtrada:
         libros = libros.filter(categoria=categoria_filtrada)
-        for libro in libros:
-            libro.precio_unitario = format(libro.precio_unitario, ",.0f")
 
+    libros = format_book_prices(libros)  # Formatear los precios de los libros
 
     # Crear un objeto Paginator con la lista de libros y el número de libros por página
     paginator = Paginator(libros, 10)
@@ -73,7 +71,7 @@ def book_detail(request, slug):
         libro.portada = updated_url
         libro.save()
 
-    libro.precio_unitario = format(libro.precio_unitario, ",.0f")
+    libro = format_book_prices(libro)
 
     return render(request, "app/book_detail.html", {"libro": libro})
 
@@ -134,9 +132,7 @@ def cart(request):
 
     libros_filtrados = Libro.objects.filter(detallecarrito__carrito=carrito)
 
-    for libro in libros_filtrados:
-        libro.precio_unitario = format(libro.precio_unitario, ",.0f")
-        print(libro.cantidad_disponible)
+    libros_filtrados = format_book_prices(libros_filtrados)
 
     for detalle in detalle_carrito:
         detalle.precio_total = format(detalle.precio_total, ",.0f")
