@@ -22,11 +22,12 @@ from .forms import SignupForm
 # *       APP          *
 # **********************
 
+
 # Create your views here.
 def index(request):
     # Se obtienen 10 libros aleatorios de la base de datos
     libros = list(Libro.objects.order_by("nombre_libro", "fecha_publicacion")[:10])
-    libros = format_book_prices(libros) 
+    libros = format_book_prices(libros)
     # Se crea un diccionario con los libros obtenidos para pasarlo al contexto
     context = {"libros": libros}
     # Se renderiza la plantilla 'index.html' con el contexto creado
@@ -35,9 +36,9 @@ def index(request):
 
 def catalogue(request):
     libros = Libro.objects.all()
-    
-    categorias = Libro.objects.values_list('categoria', flat=True).distinct()
-    
+
+    categorias = Libro.objects.values_list("categoria", flat=True).distinct()
+
     categoria_filtrada = request.GET.get("categoria")
     if categoria_filtrada:
         libros = libros.filter(categoria=categoria_filtrada)
@@ -53,7 +54,11 @@ def catalogue(request):
     # Obtener la página correspondiente al número de página solicitado
     pagina_libros = paginator.get_page(pagina_num)
 
-    return render(request, "app/catalogue.html", {"libros": pagina_libros,"categorias": categorias})
+    return render(
+        request,
+        "app/catalogue.html",
+        {"libros": pagina_libros, "categorias": categorias},
+    )
 
 
 # Detalle libro
@@ -80,6 +85,7 @@ def book_detail(request, slug):
 # *       CARRITO      *
 # **********************
 
+
 @login_required(login_url="auth/login")
 def agregar_al_carrito(request, id_libro):
     libro = get_object_or_404(Libro, id_libro=id_libro)
@@ -87,25 +93,28 @@ def agregar_al_carrito(request, id_libro):
     # Obtener el carrito del usuario actual
     carrito, created = Carrito.objects.get_or_create(usuario=request.user)
 
+    # Obtener la cantidad del formulario POST
+    cantidad = int(request.POST.get("cantidad", 1))
+
     # Calcular el precio total
-    precio_total = libro.precio_unitario 
+    precio_total = libro.precio_unitario * cantidad
 
     # Verificar si el libro ya está en el carrito
     detalle_carrito, created = DetalleCarrito.objects.get_or_create(
         carrito=carrito,
         libro=libro,
-        defaults={"cantidad": 1, "precio_total": precio_total},
+        defaults={"cantidad": cantidad, "precio_total": precio_total},
     )
 
     # Si el libro ya está en el carrito, incrementar la cantidad y actualizar el precio total
     if not created:
-        detalle_carrito.cantidad += 1
+        detalle_carrito.cantidad += cantidad
         detalle_carrito.precio_total = libro.precio_unitario * detalle_carrito.cantidad
         detalle_carrito.save()
 
-    # Incrementar la cantidad de libros en el carrito
-    carrito.cantidad += 1
-    libro.cantidad_disponible -= 1
+    # Incrementar la cantidad de libros en el carrito y reducir la cantidad disponible del libro
+    carrito.cantidad += cantidad
+    libro.cantidad_disponible -= cantidad
     libro.save()
 
     # Actualizar el total a pagar en el carrito
@@ -148,6 +157,7 @@ def cart(request):
 
     return render(request, "app/cart.html", context)
 
+
 @login_required(login_url="auth/login")
 def eliminar_producto_carrito(request, detalle_carrito_id):
     try:
@@ -168,7 +178,8 @@ def eliminar_producto_carrito(request, detalle_carrito_id):
     except DetalleCarrito.DoesNotExist:
         pass
 
-    return redirect('cart')
+    return redirect("cart")
+
 
 @login_required(login_url="auth/login")
 def aumentar_cantidad(request, detalle_carrito_id):
@@ -179,7 +190,9 @@ def aumentar_cantidad(request, detalle_carrito_id):
         if detalle_carrito.cantidad < libro.cantidad_disponible:
             detalle_carrito.cantidad += 1
             libro.cantidad_disponible -= 1
-            detalle_carrito.precio_total = detalle_carrito.cantidad * libro.precio_unitario
+            detalle_carrito.precio_total = (
+                detalle_carrito.cantidad * libro.precio_unitario
+            )
             detalle_carrito.save()
             libro.save()
 
@@ -192,7 +205,8 @@ def aumentar_cantidad(request, detalle_carrito_id):
     except DetalleCarrito.DoesNotExist:
         pass
 
-    return redirect('cart')
+    return redirect("cart")
+
 
 @login_required(login_url="auth/login")
 def disminuir_cantidad(request, detalle_carrito_id):
@@ -203,7 +217,9 @@ def disminuir_cantidad(request, detalle_carrito_id):
         if detalle_carrito.cantidad > 1:
             detalle_carrito.cantidad -= 1
             libro.cantidad_disponible += 1
-            detalle_carrito.precio_total = detalle_carrito.cantidad * libro.precio_unitario
+            detalle_carrito.precio_total = (
+                detalle_carrito.cantidad * libro.precio_unitario
+            )
             detalle_carrito.save()
             libro.save()
 
@@ -216,7 +232,7 @@ def disminuir_cantidad(request, detalle_carrito_id):
     except DetalleCarrito.DoesNotExist:
         pass
 
-    return redirect('cart')
+    return redirect("cart")
 
 
 # **********************

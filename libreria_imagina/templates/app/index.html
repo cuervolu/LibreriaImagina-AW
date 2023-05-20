@@ -81,7 +81,7 @@
                     {{libro.nombre_libro|truncatechars:20}}</h5>
                 <p class="card-text" style="font-size: 15px; margin-top: -10px;">{{libro.autor}}</p>
                 <div class="d-flex align-items-center">
-                    <form method="POST" action="{% url 'agregar_al_carrito' libro.id_libro %}?cantidad={{ cantidad }}">
+                    <form method="POST" action="{% url 'agregar_al_carrito' libro.id_libro %}">
                         {% csrf_token %}
                         <div class="input-group">
                             <button class="btn btn-sm mt-1"
