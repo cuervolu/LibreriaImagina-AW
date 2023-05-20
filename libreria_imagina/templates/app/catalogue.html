@@ -22,7 +22,7 @@
     <div class="row">
         <ul class="navbar-nav mb-3">
             <li class="nav-item dropdown">
-                <button class="btn btn-dark dropdown-toggle transparent-dropdown" data-bs-toggle="dropdown"
+                <button class="btn dropdown-toggle transparent-dropdown" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     <img src="{% static 'img/filtro.svg' %}" alt="Filtrar"> Filtrar
                 </button>
@@ -81,30 +81,30 @@
             <ul class="pagination justify-content-center">
                 {% if libros.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?pagina={{ libros.previous_page_number }}"
-                        aria-label="Previous">&laquo;</a>
+                    <a class="page-link" href="?pagina={{ libros.previous_page_number }}" aria-label="Previous" style="color: #2195A1;">&laquo;</a>
                 </li>
                 {% endif %}
-
+        
                 {% for num in libros.paginator.page_range %}
                 {% if libros.number == num %}
                 <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="?pagina={{ num }}">{{ num }}</a>
+                    <a class="page-link" href="?pagina={{ num }}" style="background-color: #2195A1; border-color: #2195A1; color: white;">{{ num }}</a>
                 </li>
                 {% else %}
                 <li class="page-item">
-                    <a class="page-link" href="?pagina={{ num }}">{{ num }}</a>
+                    <a class="page-link" href="?pagina={{ num }}" style="color: #2195A1;">{{ num }}</a>
                 </li>
                 {% endif %}
                 {% endfor %}
-
+        
                 {% if libros.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?pagina={{ libros.next_page_number }}" aria-label="Next">&raquo;</a>
+                    <a class="page-link" href="?pagina={{ libros.next_page_number }}" aria-label="Next" style="color: #2195A1;">&raquo;</a>
                 </li>
                 {% endif %}
             </ul>
         </nav>
+        
     </div>
 </section>
 
