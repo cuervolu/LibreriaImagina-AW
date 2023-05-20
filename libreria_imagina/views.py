@@ -57,8 +57,9 @@ def catalogue(request):
     return render(
         request,
         "app/catalogue.html",
-        {"libros": pagina_libros, "categorias": categorias},
+        {"libros": pagina_libros, "categorias": categorias, "categoria_filtrada": categoria_filtrada},
     )
+
 
 
 # Detalle libro

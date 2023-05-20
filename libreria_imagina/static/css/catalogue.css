@@ -4,6 +4,13 @@ a:hover {
     color: inherit;
 }
 
+.transparent-dropdown {
+    background-color: transparent;
+    border: none;
+    color: #202020;
+  }
+  
+
 .section-products {
     padding: 80px 0 54px;
 }
