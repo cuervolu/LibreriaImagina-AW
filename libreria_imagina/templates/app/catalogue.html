@@ -14,7 +14,7 @@
     <div class="row justify-content-center text-center">
         <div class="col-md-8 col-lg-6">
             <div class="header">
-                <h3>Producto destacados</h3>
+                <h3>Productos destacados</h3>
                 <h2>Catálogo</h2>
             </div>
         </div>
@@ -32,10 +32,8 @@
                 <button type="submit" class="btn btn-primary">Filtrar</button>
             </div>
         </form>
-
         {% for libro in libros %}
         {% if not categoria_filtrada or libro.categoria == categoria_filtrada %}
-       
         <div class="col-md-6 col-lg-4 col-xl-3">
             <div id="product" class="single-product card mb-3"
                 style="border-radius: 0%; border: none ; box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);">
@@ -45,29 +43,28 @@
                         method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="cantidad" class="cantidad" value="1"
-                            data-disponible="{{ libro.cantidad_disponible }}"">
+                            data-disponible="{{ libro.cantidad_disponible }}">
                         <ul>
                             <li>
                                 <a>
                                     <i class=" fas fa-shopping-cart agregar-carrito-icon"></i>
-                        </a>
-                        </li>
-                        <li>
-                            <a class="aumentar-cantidad">
-                                <i class="fas fa-plus"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/books/{{ libro.slug }}/">
-                                <i class="fas fa-expand"></i>
-                            </a>
-                        </li>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/books/{{ libro.slug }}/">
+                                    <i class="fas fa-expand"></i>
+                                </a>
+                            </li>
                         </ul>
                     </form>
                 </div>
                 <div class="part-2 card-body text-center">
-                    <h3 class="card-text product-title fw-bold">{{libro.nombre_libro}}</h3>
+                    <h3 class="card-text product-title fw-bold">{{libro.nombre_libro|truncatechars:50}}</h3>
+                    {% if libro.autor == "a/d" %}
+                    <p class="card-text">Sin autor registrado</p>
+                    {% else %}
                     <p class="card-text">{{libro.autor}}</p>
+                    {% endif %}
                     <!-- TODO: Agregar ofertas -->
                     <!-- <h4 class="card-text product-old-price">$79.99</h4> -->
                     <h4 class="card-text product-price">${{libro.precio_unitario }}</h4>

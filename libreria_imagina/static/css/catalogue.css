@@ -14,14 +14,14 @@ a:hover {
 
 .section-products .header h3 {
     font-size: 1rem;
-    color: #fe302f;
+    color: #2195A1;
     font-weight: 500;
 }
 
 .section-products .header h2 {
     font-size: 2.2rem;
-    font-weight: 400;
-    color: #444444;
+    font-weight: 600;
+    color: #202020;
 }
 
 .section-products .single-product {
@@ -62,7 +62,7 @@ a:hover {
     top: 15px;
     left: 20px;
     color: #ffffff;
-    background-color: #fe302f;
+    background-color: #2195A1;
     padding: 2px 8px;
     text-transform: uppercase;
     font-size: 0.85rem;
@@ -107,7 +107,7 @@ a:hover {
 }
 
 .section-products .single-product .part-1 ul li a:hover {
-    color: #fe302f;
+    color: #2195A1;
 }
 
 .section-products .single-product .part-2 .product-title {

@@ -18,7 +18,7 @@
               <li class="breadcrumb-item active" aria-current="page">{{ libro.nombre_libro }}</li>
             </ol>
           </nav>
-        <img src="{{ libro.portada }}" class="img-fluid py-5" alt="{{ libro.nombre_libro }}">
+          <img src="{{ libro.portada }}" class="img-fluid py-5" style="max-width: auto; height: 800px;" alt="{{ libro.nombre_libro }}">
     </div>
     <div class="col-md-6">
         <h1 class="fw-bolder">{{ libro.nombre_libro }}</h1>
@@ -30,7 +30,11 @@
         <p><strong style="color: #2195A1;">Cantidad disponible:</strong> {{ libro.cantidad_disponible }}</p>
         <p><strong style="color: #2195A1;">Fecha de publicación:</strong> {{ libro.fecha_publicacion }}</p>
         <p><strong style="color: #2195A1;">Categoría:</strong> {{ libro.get_categoria_display }}</p>
-        <strong style="color: #2195A1;">Precio:</strong><h2> ${{ libro.precio_unitario }}</h2>
+        <strong style="color: #2195A1;">Precio:</strong>
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h1 class="fw-bold"> ${{ libro.precio_unitario }}</h1>
+            <button class="btn btn-lg mt-1" style="font-weight: bolder; background-color: #82C2CB; color:white; box-shadow: 0px 3px 8px rgba(225, 106, 0, 0.19); border-radius: 3px;">AL CARRITO</button>
+        </div>
 
         <div class="accordion accordion-flush" id="accordionFlushExample">
             <div class="accordion-item">

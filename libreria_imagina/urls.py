@@ -17,5 +17,8 @@ urlpatterns = [
     path("auth/", include(auth_urls, namespace="auth")),
     # Páginas Legales
     path("legal/terms_and_conditions",terms_and_conditions, name="terms_and_conditions"),
-    path("legal/privacy",privacy, name="privacy")
+    path("legal/privacy",privacy, name="privacy"),
+    path('cart/eliminar/<int:detalle_carrito_id>/', eliminar_producto_carrito, name='eliminar_producto_carrito'),
+    path('aumentar_cantidad/<int:detalle_carrito_id>/', aumentar_cantidad, name='aumentar_cantidad'),
+    path('disminuir_cantidad/<int:detalle_carrito_id>/', disminuir_cantidad, name='disminuir_cantidad'),
 ]
