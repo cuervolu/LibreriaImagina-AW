@@ -94,20 +94,14 @@
           </div>
         </form>
         <ul class="navbar-nav">
-          <li class="nav-item dropdown ms-5">
-            <a class="nav-link dropdown-toggle" href="#" id="cartDropdown" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
+          <li class="nav-item">
+            <a class="nav-link position-relative" href="/cart"  role="button">
+              <span class="position-absolute start-100 translate-middle badge rounded-pill" style="top: 10px; background: #2195A1;">
+                {{ cantidad_carrito }}
+              <span class="visually-hidden">unread messages</span>
+              </span>
               <img src="{% static 'img/carrito.png' %}" alt="" style="max-width: 37px;">
             </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cartDropdown">
-              <!--TODO:agregar los elementos del dropdown menu del carrito -->
-              <li><a class="dropdown-item" href="#">Producto 1</a></li>
-              <li><a class="dropdown-item" href="#">Producto 2</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="/cart">Ver carrito</a></li>
-            </ul>
           </li>
         </ul>
         <button class="navbar-toggler" type="button">
