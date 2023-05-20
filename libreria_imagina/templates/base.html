@@ -95,11 +95,14 @@
         </form>
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link position-relative" href="/cart"  role="button">
-              <span class="position-absolute start-100 translate-middle badge rounded-pill" style="top: 10px; background: #2195A1;">
+            <a class="nav-link position-relative" href="/cart" role="button">
+              {% if cantidad_carrito > 0 %}
+              <span class="position-absolute start-100 translate-middle badge rounded-pill"
+                style="top: 10px; background: #2195A1;">
                 {{ cantidad_carrito }}
-              <span class="visually-hidden">unread messages</span>
+                <span class="visually-hidden">unread messages</span>
               </span>
+              {% endif %}
               <img src="{% static 'img/carrito.png' %}" alt="" style="max-width: 37px;">
             </a>
           </li>
@@ -228,8 +231,10 @@
     <!-- Copyright -->
     <div class="text-center fw-lighter p-4">
       <p id="footer-text" class="me-5" style="display: inline"></p>
-      <a href="/legal/terms_and_conditions" class="text-reset text-decoration-none" style="display: inline;">Condiciones de uso</a> |
-      <a href="/legal/privacy" class="text-reset text-decoration-none" style="display: inline;">Política de privacidad</a>
+      <a href="/legal/terms_and_conditions" class="text-reset text-decoration-none" style="display: inline;">Condiciones
+        de uso</a> |
+      <a href="/legal/privacy" class="text-reset text-decoration-none" style="display: inline;">Política de
+        privacidad</a>
 
     </div>
     <!-- Copyright -->
