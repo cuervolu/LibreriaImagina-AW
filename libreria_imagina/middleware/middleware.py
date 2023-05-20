@@ -12,7 +12,7 @@ class CarritoMiddleware:
                 cantidad_elementos = carrito.cantidad
             else:
                 cantidad_elementos = 0
-            request.cantidad_carrito = cantidad_elementos
+            request.session['cantidad_carrito'] = cantidad_elementos
 
         response = self.get_response(request)
 

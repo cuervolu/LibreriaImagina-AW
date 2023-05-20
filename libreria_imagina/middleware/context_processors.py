@@ -1,2 +1,2 @@
 def cantidad_carrito(request):
-    return {"cantidad_carrito": request.cantidad_carrito}
+    return {"cantidad_carrito": request.session.get('cantidad_carrito', 0)}
