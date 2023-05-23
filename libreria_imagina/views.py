@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse
 from django.utils.html import escapejs
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from decimal import Decimal
 
 # importar una librería decoradora , permite evitar el ingreso de usuarios a la página web
@@ -35,7 +35,7 @@ def index(request):
 
 
 def catalogue(request):
-    libros = Libro.objects.all()
+    libros = Libro.objects.all().order_by('nombre_libro')
 
     categorias = Libro.objects.values_list("categoria", flat=True).distinct()
 
@@ -78,8 +78,34 @@ def book_detail(request, slug):
         libro.save()
 
     libro = format_book_prices(libro)
+    
 
     return render(request, "app/book_detail.html", {"libro": libro})
+
+
+#Buscar Libro
+def search(request):
+    if request.method == "POST":
+        searched = request.POST['search']
+        # Buscar por título o autor
+        entity = Libro.objects.filter(Q(nombre_libro__icontains=searched) | Q(autor__icontains=searched))
+        
+        entity = format_book_prices(entity)
+            
+            # Crear un objeto Paginator con la lista de libros y el número de libros por página
+        paginator = Paginator(entity, 12)
+
+        # Obtener el número de página solicitado de la consulta GET
+        pagina_num = request.GET.get("pagina")
+
+        # Obtener la página correspondiente al número de página solicitado
+        pagina_libros = paginator.get_page(pagina_num)
+            
+        return render(request, "app/search.html", {"searched": searched, "entity": pagina_libros})
+    else:
+        return render(request, "app/search.html")
+    return render(request, "app/search.html")
+
 
 
 # **********************

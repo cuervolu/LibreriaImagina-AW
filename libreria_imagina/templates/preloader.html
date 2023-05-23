@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <link rel="stylesheet" href="{% static 'css/preloader.css' %}">
+</head>
+
+<body>
+    <div class="preloader">
+        <div class="spin">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Después de que el DOM se haya cargado, oculta el preloader después de 3 segundos
+            setTimeout(function () {
+                var preloader = document.querySelector(".preloader");
+                if (preloader) {
+                    console.log('Haciendo alguna wea')
+                    preloader.style.display = "none";
+                }
+            }, 100000);
+        });
+    </script>
+</body>
+
+</html>

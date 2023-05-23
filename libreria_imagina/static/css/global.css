@@ -4,7 +4,7 @@ body {
 }
 
 
-.footer{
+.footer {
     background-color: #146E89 !important;
 }
 
@@ -19,7 +19,7 @@ body {
     background-color: #35869C;
 }
 
-.btn-custom{
+.btn-custom {
     color: white;
     background-color: #82C2CB;
     border-radius: 0;
@@ -133,3 +133,4 @@ body {
     height: 20px;
     width: 20px;
 }
+
