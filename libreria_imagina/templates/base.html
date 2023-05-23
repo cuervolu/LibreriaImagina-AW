@@ -83,15 +83,17 @@
         {% endif %}
       </ul>
       <div class="d-flex align-items-center">
-        <form class="d-none d-lg-flex" role="search">
+        <form class="d-none d-lg-flex" role="search" action="{% url 'search' %}" method="POST">
+          {% csrf_token %}
           <div class="input-group border-bottom border-black me-5" style="width: 200px;">
             <div class="input-group-prepend">
               <span class="input-group-text bg-transparent border-0"><i class="fas fa-search"></i></span>
             </div>
             <input class="form-control bg-transparent border-0 shadow-none" style="font-size: 14px;" type="search"
-              placeholder="Buscar" aria-label="Buscar">
+              placeholder="Buscar" aria-label="Buscar" name="search">
           </div>
         </form>
+        
         <ul class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link position-relative" href="/cart" role="button">
@@ -251,6 +253,22 @@
   <script src="{% static 'js/index.js' %}"></script>
   <script src="{% static 'js/overlay.js' %}"></script>
   {% block script_final %}
+
+  <script>
+    function handleSubmit(event) {
+      // Evita el envío del formulario por defecto
+      event.preventDefault();
+
+      // Obtén el valor del campo de búsqueda
+      var searchValue = document.getElementById('searchInput').value;
+
+      //TODO: Realizar cualquier validación adicional si es necesario
+
+      // Envía el formulario
+      event.target.submit();
+    }
+  </script>
+
   {% endblock script_final %}
 </body>
 
