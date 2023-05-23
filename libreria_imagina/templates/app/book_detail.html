@@ -24,10 +24,10 @@
     </div>
     <div class="col-md-6">
         <h1 class="fw-bolder">{{ libro.nombre_libro }}</h1>
-        <h4 class="fs-6">{{ libro.autor }}</h4>
+        <h4 class="fs-6">{% if libro.autor == "a/d" %}Sin autor registrado{% else %}{{libro.autor}}{% endif %}</h4>
         <div class="isbn mb-3" style="font-size: 0.8rem;">
             <span><strong style="color: #2195A1;">ISBN: </strong>{{ libro.isbn }} | <strong
-                    style="color: #2195A1;">Editorial:</strong> {{ libro.editorial }}</span>
+                    style="color: #2195A1;">Editorial:</strong> {% if libro.editorial == "s/e" %}Sin editorial{% else %}{{libro.editorial}}{% endif %}</span>
         </div>
         <p><strong style="color: #2195A1;">Cantidad disponible:</strong> {{ libro.cantidad_disponible }}</p>
         <p><strong style="color: #2195A1;">Fecha de publicación:</strong> {{ libro.fecha_publicacion }}</p>
@@ -39,19 +39,26 @@
                 {% csrf_token %}
                 <div class="d-flex align-items-center">
                     <div class="input-group align-items-center">
-                        <input type="number" style="max-width: 45px; height: 45px; font-size: 22px; font-weight: 500; border: none; outline: none; background: transparent;" class="count text-end mx-3" min="1" max="{{ libro.cantidad_disponible }}" value="1" readonly name="cantidad">
-                    
+                        <input type="number"
+                            style="max-width: 45px; height: 45px; font-size: 22px; font-weight: 500; border: none; outline: none; background: transparent;"
+                            class="count text-end mx-3" min="1" max="{{ libro.cantidad_disponible }}" value="1" readonly
+                            name="cantidad">
+
                         <div class="mx-2">
                             <div class="input-group-prepend" style="margin-bottom: -9px;">
-                                <button type="button" class="btn btn-link py-1" onclick="increaseValue()"><i class="fa-solid fa-caret-up fa-2xl" style="color: black;"></i></button>
+                                <button type="button" class="btn btn-link py-1" onclick="increaseValue()"><i
+                                        class="fa-solid fa-caret-up fa-2xl" style="color: black;"></i></button>
                             </div>
                             <div class="input-group-append" style="margin-top: -9px;">
-                                <button type="button" class="btn btn-link py-1" onclick="decreaseValue()"><i class="fa-solid fa-caret-down fa-2xl" style="color: black;"></i></button>
+                                <button type="button" class="btn btn-link py-1" onclick="decreaseValue()"><i
+                                        class="fa-solid fa-caret-down fa-2xl" style="color: black;"></i></button>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-lg mt-1 text-nowrap" type="submit" style="font-weight: bolder; background-color: #82C2CB; color:white; box-shadow: 0px 3px 8px rgba(225, 106, 0, 0.19); border-radius: 3px;">AL CARRITO</button>
+                        <button class="btn btn-lg mt-1 text-nowrap" type="submit"
+                            style="font-weight: bolder; background-color: #82C2CB; color:white; box-shadow: 0px 3px 8px rgba(225, 106, 0, 0.19); border-radius: 3px;"
+                            {% if not user.is_authenticated %}disabled{% endif %}>AL CARRITO</button>
                     </div>
                 </div>
             </form>

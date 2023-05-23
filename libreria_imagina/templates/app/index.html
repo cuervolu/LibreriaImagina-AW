@@ -77,9 +77,9 @@
             </a>
             <div class="card-body">
                 <p class="card-text" style="font-size: 22px; font-weight: bold;">${{libro.precio_unitario }}</p>
-                <h5 class="card-title" style="font-size: 15px; font-weight: bold;">
+                <h5 class="card-title mb-3" style="font-size: 15px; font-weight: bold;">
                     {{libro.nombre_libro|truncatechars:20}}</h5>
-                <p class="card-text" style="font-size: 15px; margin-top: -10px;">{{libro.autor}}</p>
+                <p class="card-text" style="font-size: 15px; margin-top: -10px; line-height: 1.3">{% if libro.autor == "a/d" %}Sin autor registrado{% else %}{{libro.autor}}{% endif %}</p>
                 <div class="d-flex align-items-center">
                     <form method="POST" action="{% url 'agregar_al_carrito' libro.id_libro %}">
                         {% csrf_token %}

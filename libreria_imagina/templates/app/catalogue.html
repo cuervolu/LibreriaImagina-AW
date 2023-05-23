@@ -81,25 +81,25 @@
             <ul class="pagination justify-content-center">
                 {% if libros.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?pagina={{ libros.previous_page_number }}" aria-label="Previous" style="color: #2195A1;">&laquo;</a>
+                    <a class="page-link" href="?pagina={{ libros.previous_page_number }}" aria-label="Previous" style="color: #146E89;">&laquo;</a>
                 </li>
                 {% endif %}
         
                 {% for num in libros.paginator.page_range %}
                 {% if libros.number == num %}
                 <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="?pagina={{ num }}" style="background-color: #2195A1; border-color: #2195A1; color: white;">{{ num }}</a>
+                    <a class="page-link" href="?pagina={{ num }}" style="background-color: #146E89; border-color: #146E89; color: white;">{{ num }}</a>
                 </li>
                 {% else %}
                 <li class="page-item">
-                    <a class="page-link" href="?pagina={{ num }}" style="color: #2195A1;">{{ num }}</a>
+                    <a class="page-link" href="?pagina={{ num }}" style="color: #146E89;">{{ num }}</a>
                 </li>
                 {% endif %}
                 {% endfor %}
         
                 {% if libros.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?pagina={{ libros.next_page_number }}" aria-label="Next" style="color: #2195A1;">&raquo;</a>
+                    <a class="page-link" href="?pagina={{ libros.next_page_number }}" aria-label="Next" style="color: #146E89;">&raquo;</a>
                 </li>
                 {% endif %}
             </ul>
