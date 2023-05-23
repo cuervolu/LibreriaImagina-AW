@@ -59,6 +59,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "libreria_imagina.middleware.middleware.CarritoMiddleware",
+    "libreria_imagina.middleware.middleware.DBLoaderMiddleware",
 ]
 
 AUTH_USER_MODEL = 'libreria_imagina.Usuario'
@@ -160,4 +161,3 @@ CURRENCY_SYMBOL = 'CLP'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
-

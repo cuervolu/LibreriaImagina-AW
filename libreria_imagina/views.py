@@ -35,7 +35,7 @@ def index(request):
 
 
 def catalogue(request):
-    libros = Libro.objects.all()
+    libros = Libro.objects.all().order_by('nombre_libro')
 
     categorias = Libro.objects.values_list("categoria", flat=True).distinct()
 
