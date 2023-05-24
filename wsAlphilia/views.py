@@ -153,6 +153,42 @@ class LibroViewSet(viewsets.ModelViewSet):
         libro = Libro.objects.create(**default_values)
         return libro
 
+
+    """
+    Vista para obtener libros desde la API de Google Books y guardarlos en la base de datos.
+
+    Parámetros de entrada:
+        - request: La solicitud HTTP recibida.
+
+    Parámetros de salida:
+        - Response con los datos combinados de la API y la base de datos.
+
+    Comportamiento:
+        1. Obtiene la clave de la API de Google Books desde el archivo de entorno.
+        2. Establece el número máximo de resultados por página.
+        3. Obtiene el número de página de la solicitud y lo convierte en un entero.
+        4. Calcula el índice de inicio para la página actual.
+        5. Inicializa una lista para almacenar los libros creados.
+        6. Inicializa un contador para el número de libros obtenidos.
+        7. Realiza una solicitud a la API de Google Books para obtener los libros más relevantes.
+        8. Verifica si se obtuvieron resultados de la API.
+        9. Itera sobre los libros obtenidos y llama al método create_libro_from_data para crear objetos Libro.
+        10. Añade los libros creados a la lista libros_creados.
+        11. Actualiza el contador y el índice de inicio.
+        12. Verifica si se han obtenido suficientes libros según el número máximo de resultados.
+        13. Guarda los libros creados en la base de datos utilizando el método bulk_create.
+        14. Obtiene todos los libros guardados de la base de datos.
+         15. Pagina los resultados si es necesario.
+        16. Serializar los libros obtenidos y los combina con los datos de la API.
+        17. Retorna una Response con los datos combinados.
+
+    Excepciones:
+        - Si ocurre una excepción al hacer la solicitud a la API de Google Books, se registra el error y se relanza la excepción.
+        - Si no se encuentran resultados en la API, se retorna una Response con el mensaje de error correspondiente.
+        - Si ocurre una excepción al procesar los datos de la API, se registra el error y se retorna una Response con el mensaje de error correspondiente.
+
+    """
+
     @action(detail=False, methods=["get"])
     def get_libros_from_api(self, request):
         # Obtener la clave de la API de Google Books desde el archivo de entorno
@@ -225,6 +261,38 @@ class LibroViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 )
 
+
+
+
+    """
+    Vista para obtener libros de una categoría específica desde la API de Google Books y guardarlos en la base de datos.
+
+    Parámetros de entrada:
+        - request: La solicitud HTTP recibida.
+        - categoria: La categoría de libros a obtener.
+
+    Parámetros de salida:
+        - Response con los datos combinados de la API y la base de datos para la categoría especificada.
+
+    Comportamiento:
+        1. Verifica si se proporcionó una categoría.
+        2. Filtra los libros en la base de datos por la categoría especificada.
+        3. Verifica si existen libros en la categoría.
+        4. Serializa los libros obtenidos de la base de datos.
+        5. Inicializa una lista para almacenar los libros creados.
+        6. Realiza una solicitud a la API de Google Books para obtener los libros de la categoría especificada.
+        7. Verifica si se obtuvieron resultados de la API.
+        8. Itera sobre los libros obtenidos de la API y llama al método create_libro_from_data para crear objetos Libro.
+        9. Añade los libros creados a la lista libros_creados.
+        10. Serializa los libros creados.
+        11. Combina los datos de la API y los datos de la base de datos.
+        12. Retorna una Response con los datos combinados.
+
+    Excepciones:
+        - Si ocurre una excepción al hacer la solicitud a la API de Google Books, se registra el error y se retorna una Response con el mensaje de error correspondiente.
+        - Si ocurre una excepción al procesar los datos de la API, se registra el error y se retorna una Response con el mensaje de error correspondiente.
+
+    """
     @action(detail=False, methods=["get"])
     def get_libros_by_categoria(self, request, categoria=None):
         if categoria:
@@ -273,7 +341,35 @@ class LibroViewSet(viewsets.ModelViewSet):
                 {"error": "La categoría no fue proporcionada."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-            
+
+
+
+    """
+    Vista para obtener o actualizar un libro específico.
+
+    Parámetros de entrada:
+        - request: La solicitud HTTP recibida.
+        - pk: La clave primaria del libro a obtener o actualizar.
+
+    Parámetros de salida:
+        - Response con los datos del libro solicitado o actualizado.
+
+    Comportamiento:
+        1. Intenta obtener el libro de la base de datos utilizando la clave primaria proporcionada.
+        2. Verifica si el libro existe en la base de datos.
+        3. Si la solicitud HTTP es GET, serializa el libro y retorna una Response con los datos del libro.
+        4. Si la solicitud HTTP es PUT, actualiza el libro con los datos proporcionados en la solicitud.
+        5. Verifica si los datos para la actualización son válidos.
+        6. Si los datos son válidos, guarda los cambios y retorna una Response con los datos actualizados del libro.
+        7. Si los datos no son válidos, retorna una Response con los errores de validación.
+
+    Excepciones:
+        - Si el libro no existe en la base de datos, retorna una Response con el mensaje de error correspondiente.
+
+    """
+
+
+         
     @action(detail=True, methods=['get', 'put'])
     def libro_detail(self, request, pk=None):
         try:
