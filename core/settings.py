@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "colorfield",
     "autoslug",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
