@@ -9,120 +9,119 @@
 {% block title %}Buscador{% endblock title %}
 
 {% block content %}
-{% if searched %}
-<nav class="my-3"
-    style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);"
-    aria-label="breadcrumb">
+
+<nav class="" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Inicio</a></li>
         <li class="breadcrumb-item active" aria-current="page">Buscador</li>
     </ol>
 </nav>
-<h5 class="mb-5 h5 text-center">Resultados de búsqueda para:</h5>
-<h1 class="mb-5 h2 text-center fw-bolder" style="color: #2195A1;">{{searched}}</h1>
-{% for libro in entity %}
-<section class="section-products">
-<div class="col-md-6 col-lg-4 col-xl-3">
-    <div id="product" class="single-product card mb-3"
-        style="border-radius: 0%; border: none ; box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);">
-        <div class="part-1 card-img-top"
-            style="background: url('{{ libro.thumbnail  }}') no-repeat center;object-fit: cover;">
-            <form class="agregar-carrito-form" action="{% url 'agregar_al_carrito' libro.id_libro %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="cantidad" class="cantidad" value="1"
-                    data-disponible="{{ libro.cantidad_disponible }}">
-                <ul>
-                    <li>
-                        <a>
-                            <i class=" fas fa-shopping-cart agregar-carrito-icon"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/books/{{ libro.slug }}/">
-                            <i class="fas fa-expand"></i>
-                        </a>
-                    </li>
-                </ul>
-            </form>
+{% if searched %}
+<h5 class="mb-3 text-center">Resultados de búsqueda para:</h5>
+<h2 class="text-center fw-bolder" style="color: #2195A1;">{{searched}}</h2>
+<section class="section-products py-0">
+    <div class="row">
+        {% for libro in entity %}
+        <div class="col-md-6 col-lg-4 col-xl-3 pt-5">
+            <div id="product" class="single-product card mb-3"
+                style="border-radius: 0%; border: none ; box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);">
+                <div class="part-1 card-img-top"
+                    style="background: url('{{ libro.thumbnail  }}') no-repeat center;object-fit: cover;">
+                    <form class="agregar-carrito-form" action="{% url 'agregar_al_carrito' libro.id_libro %}"
+                        method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="cantidad" class="cantidad" value="1"
+                            data-disponible="{{ libro.cantidad_disponible }}">
+                        <ul>
+                            <li>
+                                <a>
+                                    <i class=" fas fa-shopping-cart agregar-carrito-icon"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/books/{{ libro.slug }}/">
+                                    <i class="fas fa-expand"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+                <div class="part-2 card-body text-center">
+                    <h3 class="card-text product-title fw-bold">{{libro.nombre_libro|truncatechars:50}}</h3>
+                    {% if libro.autor == "a/d" %}
+                    <p class="card-text">Sin autor registrado</p>
+                    {% else %}
+                    <p class="card-text">{{libro.autor}}</p>
+                    {% endif %}
+                    <!-- TODO: Agregar ofertas -->
+                    <!-- <h4 class="card-text product-old-price">$79.99</h4> -->
+                    <h4 class="card-text product-price">${{libro.precio_unitario }}</h4>
+                </div>
+            </div>
         </div>
-        <div class="part-2 card-body text-center">
-            <h3 class="card-text product-title fw-bold">{{libro.nombre_libro|truncatechars:50}}</h3>
-            {% if libro.autor == "a/d" %}
-            <p class="card-text">Sin autor registrado</p>
-            {% else %}
-            <p class="card-text">{{libro.autor}}</p>
-            {% endif %}
-            <!-- TODO: Agregar ofertas -->
-            <!-- <h4 class="card-text product-old-price">$79.99</h4> -->
-            <h4 class="card-text product-price">${{libro.precio_unitario }}</h4>
+        {% empty %}
+        <div class="row mb-5 pb-5" style="justify-content: space-between;">
+            <div class="col-auto col-md-auto col-lg-auto">
+                <img class="img-fluid float-start" src="{% static 'img/nothingHere.png' %}" alt="" style="max-width: 500px;">
+            </div>
+            <div class="col-sm-auto col-md-4 col-lg-4 my-auto">
+                <h1 class="mb-3 fw-bolder text-start" style="color: #146E89;">Aquí no hay nada...</h1>
+                <div class="text-start">
+                    <p>No hemos encontrado ningún resultado para la búsqueda que has realizado..</p>
+                </div>
+                <a class="btn btn-custom btn-md fw-bold" href="/" role="button">Volver a la página principal</a>
+            </div>
         </div>
+        {% endfor %}
     </div>
-</div>
 </section>
 
-{% empty %}
-
-<div class="row justify-content-md-center mb-5">
-    <div class="col-8 col-md-8 col-lg-4 mx-auto">
-        <img class="img-fluid float-start mb-2 h-100"
-            src="https://qotoqot.com/sad-animations/img/200/insomnia/insomnia.gif" alt="">
-    </div>
-    <div class="col-sm-auto col-md-4 col-lg-4 my-auto text-center">
-        <h1 class="mb-5 h2 fw-bolder text-danger">Aquí no hay nada...</h1>
-        <p>
-            No hemos encontrado ningún resultado para la búsqueda que has realizado &#x1F614;
-        </p>
-        <a href="/" class="btn my-2" style="color: #2195A1;">Volver a la página principal</a>
-    </div>
-</div>
-
-{% endfor %}
 <!-- Mostrar la paginación -->
+{% if count > 12 %}
 <nav aria-label="Paginación">
     <ul class="pagination justify-content-center">
-        {% if reg.has_previous %}
+        {% if entity.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?pagina={{ reg.previous_page_number }}" aria-label="Previous"
-                style="color: #2195A1;">&laquo;</a>
+            <a class="page-link" href="?pagina={{ entity.previous_page_number }}" aria-label="Previous"
+                style="color: #146E89; box-shadow: none;">&laquo;</a>
         </li>
         {% endif %}
 
-        {% for num in reg.paginator.page_range %}
-        {% if reg.number == num %}
+        {% for num in entity.paginator.page_range %}
+        {% if entity.number == num %}
         <li class="page-item active" aria-current="page">
             <a class="page-link" href="?pagina={{ num }}"
-                style="background-color: #2195A1; border-color: #2195A1; color: white;">{{ num }}</a>
+                style="background-color: #146E89; border-color: #146E89; color: white; box-shadow: none;">{{ num }}</a>
         </li>
         {% else %}
         <li class="page-item">
-            <a class="page-link" href="?pagina={{ num }}" style="color: #2195A1;">{{ num }}</a>
+            <a class="page-link" href="?pagina={{ num }}" style="color: #146E89; box-shadow: none;">{{ num }}</a>
         </li>
         {% endif %}
         {% endfor %}
 
-        {% if reg.has_next %}
+        {% if entity.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?pagina={{ reg.next_page_number }}" aria-label="Next"
-                style="color: #2195A1;">&raquo;</a>
+            <a class="page-link" href="?pagina={{ entity.next_page_number }}" aria-label="Next"
+                style="color: #146E89; box-shadow: none;">&raquo;</a>
         </li>
         {% endif %}
     </ul>
 </nav>
-
+{% endif %}
 
 {% else %}
 
-<div class="row justify-content-md-center">
-    <div class="col-8 col-md-8 col-lg-4 mx-auto">
-        <img class="img-fluid float-start" src="https://qotoqot.com/sad-animations/img/200/insomnia/insomnia.gif"
-            alt="">
+<div class="row my-5 py-5" style="justify-content: space-between;">
+    <div class="col-auto col-md-auto col-lg-auto">
+        <img class="img-fluid float-start" src="{% static 'img/nothingHere.png' %}" alt="" style="max-width: 500px;">
     </div>
-    <div class="col-sm-auto col-md-4 col-lg-4 my-auto text-center">
-        <h1 class="mb-5 h2 fw-bolder text-danger">Aquí no hay nada...</h1>
-        <p>
-            Olvidaste escribir algo en la barra de búsqueda &#x1F610;
-        </p>
-        <a href="/" class="btn btn-custom my-2" style="color: #2195A1;">Volver a la página principal</a>
+    <div class="col-sm-auto col-md-4 col-lg-4 my-auto">
+        <h1 class="mb-3 fw-bolder text-start" style="color: #146E89;">Aquí no hay nada...</h1>
+        <div class="text-start">
+            <p>Lo sentimos, parece que no has ingresado ningún texto en el buscador.</p>
+        </div>
+        <a class="btn btn-custom btn-md fw-bold" href="/" role="button">Volver a la página principal</a>
     </div>
 </div>
 

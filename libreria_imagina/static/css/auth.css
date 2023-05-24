@@ -2,7 +2,21 @@
     background: linear-gradient(to right, #146E89, #64B4CD);
     color: white;
     padding: 15px;
-    border-radius: 10px;
+    border-radius: 14.3035px;
+    border-color: #207198;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.btn:disabled {
+    background: #F6F6F6;
+    color: #CCD1D2;
+    padding: 15px;
+    border-radius: 14.3035px;
+    border-width: 2px;
+    border-color: #CCD1D2;
+    font-weight: 700;
+    font-size: 18px;
 }
 
 .title{
@@ -30,6 +44,13 @@
 }
 
 .input-border{
-    border: 3px solid #207198;
-    border-radius: 20px;
+    border: 2.38392px solid #207198;
+    border-radius: 14.3035px;
+}
+
+.inputusuario .form-control {
+    font-size: 20px;
+    height: 60px;
+    border: 2.38392px solid #207198;
+    border-radius: 14.3035px;
 }

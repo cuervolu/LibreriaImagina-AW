@@ -91,8 +91,9 @@ def search(request):
         entity = Libro.objects.filter(Q(nombre_libro__icontains=searched) | Q(autor__icontains=searched))
         
         entity = format_book_prices(entity)
+        count = entity.count()
             
-            # Crear un objeto Paginator con la lista de libros y el número de libros por página
+        # Crear un objeto Paginator con la lista de libros y el número de libros por página
         paginator = Paginator(entity, 12)
 
         # Obtener el número de página solicitado de la consulta GET
@@ -100,11 +101,10 @@ def search(request):
 
         # Obtener la página correspondiente al número de página solicitado
         pagina_libros = paginator.get_page(pagina_num)
-            
-        return render(request, "app/search.html", {"searched": searched, "entity": pagina_libros})
+        return render(request, "app/search.html", {"searched": searched, "entity": pagina_libros, "count": count})
     else:
         return render(request, "app/search.html")
-    return render(request, "app/search.html")
+
 
 
 

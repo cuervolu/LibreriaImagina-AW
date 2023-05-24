@@ -89,7 +89,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text bg-transparent border-0"><i class="fas fa-search"></i></span>
             </div>
-            <input class="form-control bg-transparent border-0 shadow-none" style="font-size: 14px;" type="search"
+            <input class="form-control bg-transparent border-0 shadow-none search-input" style="font-size: 14px;" type="search"
               placeholder="Buscar" aria-label="Buscar" name="search">
           </div>
         </form>
@@ -119,7 +119,8 @@
   <div id="hamburgerMenuOverlay" class="overlay">
     <div class="overlay-content">
       <button class="cancel-btn">&#10005;</button>
-      <form class="d-flex mx-3" role="search">
+      <form class="d-flex mx-3" role="search" action="{% url 'search' %}" method="POST">
+        {% csrf_token %}
         <div class="input-group border-bottom border-grey align-items-center justify-content-start"
           style="max-width: 100%;">
           <div class="input-group-prepend">
@@ -127,7 +128,7 @@
           </div>
           <input class="form-control bg-transparent border-0 search-input shadow-none"
             style="font-size: 20px; text-align: left; color: white;" type="search" placeholder="Buscar"
-            aria-label="Buscar">
+            aria-label="Buscar" name="search">
         </div>
       </form>
       <ul class="navbar-nav justify-content-end">
@@ -167,9 +168,14 @@
           <a class="navbar-brand me-5" href="#"><img src="{% static 'img/white-brand.png' %}" alt="Librería Imagina"
               style="max-width: 210px; height: auto;"></a>
         </div>
+        <div class="d-block d-sm-none">
+          <div class="gap-3 d-flex align-items-center justify-content-center">
+            <p>Inicio</p><p>Catálogo</p><p>Mis Compras</p><p>Soporte</p><p>Perfil</p>
+          </div>
+        </div>
         <!-- Links -->
         <div class="d-flex col-md-auto col-lg-auto col-xl-auto" style="text-align: left;">
-          <div class="col-md-auto col-lg-auto col-xl-auto mx-5 ml-0 mb-4">
+          <div class="col-md-auto col-lg-auto col-xl-auto mx-5 ml-0 mb-4 d-none d-sm-block">
             <h5 class="mb-4">
               Popular:
             </h5>
@@ -186,7 +192,7 @@
               <a href="#!" class="text-reset text-decoration-none">Negocios</a>
             </p>
           </div>
-          <div class="col-md-auto col-lg-auto col-xl-auto mx-5 mb-4">
+          <div class="col-md-auto col-lg-auto col-xl-auto mx-5 mb-4 d-none d-sm-block">
             <h5 class="mb-4">
               Información:
             </h5>
@@ -200,7 +206,7 @@
               <a href="#!" class="text-reset text-decoration-none">Sobre la Tienda</a>
             </p>
           </div>
-          <div class="col-md-auto col-lg-auto col-xl-auto mx-5 mb-4">
+          <div class="col-md-auto col-lg-auto col-xl-auto mx-5 mb-4 d-none d-sm-block">
             <h5 class="mb-4">
               Ayuda:
             </h5>

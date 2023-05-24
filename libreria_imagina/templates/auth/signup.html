@@ -12,19 +12,20 @@
 
 {% block content %}
 
-<div class="row py-5 needs-validation" novalidate>
-    <div class="col-md-6 background-column">
+<div class="row justify-content-between align-items-center py-5 needs-validation" novalidate>
+    <div class="col-auto col-md-auto col-lg-5 d-none  d-md-none d-lg-block">
         <!-- Imagen -->
         <img src="{% static 'img/signup.svg' %}" class="img-fluid" alt="Imagen">
     </div>
 
-    <div class="col-md-6">
+    <div class="col-sm-12 col-md-12 col-lg-6">
         <form method="POST" class="my-4" id="signup-form">
-            {% csrf_token %}
             <h3 class="mb-4 fw-bolder fs-1 title">Regístrate</h3>
             <p class="text">¿Ya tienes una cuenta? <a href="/auth/login" class="signup">Inicia sesión</a></p>
             {% csrf_token %}
-            {% crispy form %}
+            <div class="inputusuario">
+                {% crispy form %}
+            </div>
             <!-- Mostrar errores de validación -->
             {% for field in form %}
                 {% if field.errors %}
