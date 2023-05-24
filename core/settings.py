@@ -34,6 +34,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 INSTALLED_APPS = [
     "admin_interface",
     "libreria_imagina",
+    "wsAlphilia",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

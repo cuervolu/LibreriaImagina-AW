@@ -9,3 +9,5 @@ django-admin
 django-autoslug
 crispy-bootstrap5
 django-encrypted-field
+django
+djangorestframework
