@@ -216,11 +216,12 @@ class LibroViewSet(viewsets.ModelViewSet):
                     return self.get_paginated_response(serializer.data)
 
                 serializer = LibroSerializer(libros, many=True)
-                return Response(serializer.data)
+                combined_data = {"api_data": data, "db_data": serializer}
+                return Response(combined_data)
             except Exception as e:
                 logger.error(f"Ocurrió un error al procesar los datos de la API: {e}")
                 return Response(
-                    {"error": "Ocurrió un error al procesar los datos de la API"},
+                    {"error": f"Ocurrió un error al procesar los datos de la API: {e}"},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 )
 
