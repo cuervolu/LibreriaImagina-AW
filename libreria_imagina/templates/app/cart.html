@@ -10,6 +10,7 @@
 
 {% block content %}
 <div class="container-fluid my-5 py-3">
+    {% if carrito.cantidad > 0 %}
     <div class="row justify-content-between pb-5">
         <div class="col-auto col-md-auto col-lg-auto">
             <div class="d-flex align-items-center">
@@ -115,6 +116,26 @@
             </div>
         </div>
     </div>
+    {% else %}
+    <div class="row align-items-center" style="justify-content: space-between;">
+        <div class="d-flex align-items-center mb-3">
+            <i class="fa-solid fa-chevron-left fa-lg"></i>
+            <p style="font-size: 20px; font-weight: 600; margin-bottom: 0px; margin-left: 10px;">Seguir Comprando</p>
+        </div>
+        <hr>
+        <p style="font-size: 36px; font-weight: 600; margin-bottom: -5px;">Carrito</p>
+        <div class="col-auto col-md-auto col-lg-auto d-none d-md-none d-lg-block">
+            <img class="img-fluid float-start" src="{% static 'img/carritoVacio.png' %}" alt="" style="max-width: 500px;">
+        </div>
+        <div class="col-sm-auto col-md-auto col-lg-4 mt-5">
+            <h1 class="mb-3 fw-bolder text-start" style="color: #146E89;">Carrito Vacio...</h1>
+            <div class="text-start">
+                <p>Aun no has agregado productos a tu carrito?</p>
+            </div>
+            <a class="btn btn-custom btn-md fw-bold" href="/catalogue" role="button">Ver Catálogo</a>
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 

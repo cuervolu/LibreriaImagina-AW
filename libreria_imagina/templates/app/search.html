@@ -60,11 +60,11 @@
             </div>
         </div>
         {% empty %}
-        <div class="row mb-5 pb-5" style="justify-content: space-between;">
-            <div class="col-auto col-md-auto col-lg-auto">
+        <div class="row mb-5 pb-5 align-items-center" style="justify-content: space-between;">
+            <div class="col-auto col-md-auto col-lg-auto d-none d-md-none d-lg-block">
                 <img class="img-fluid float-start" src="{% static 'img/nothingHere.png' %}" alt="" style="max-width: 500px;">
             </div>
-            <div class="col-sm-auto col-md-4 col-lg-4 my-auto">
+            <div class="col-sm-auto col-md-auto col-lg-4 mt-5">
                 <h1 class="mb-3 fw-bolder text-start" style="color: #146E89;">Aquí no hay nada...</h1>
                 <div class="text-start">
                     <p>No hemos encontrado ningún resultado para la búsqueda que has realizado..</p>
@@ -112,11 +112,11 @@
 
 {% else %}
 
-<div class="row my-5 py-5" style="justify-content: space-between;">
-    <div class="col-auto col-md-auto col-lg-auto">
+<div class="row my-5 py-5 align-items-center" style="justify-content: space-between;">
+    <div class="col-auto col-md-auto col-lg-auto d-none d-md-none d-lg-block">
         <img class="img-fluid float-start" src="{% static 'img/nothingHere.png' %}" alt="" style="max-width: 500px;">
     </div>
-    <div class="col-sm-auto col-md-4 col-lg-4 my-auto">
+    <div class="col-sm-auto col-md-auto col-lg-4 my-auto">
         <h1 class="mb-3 fw-bolder text-start" style="color: #146E89;">Aquí no hay nada...</h1>
         <div class="text-start">
             <p>Lo sentimos, parece que no has ingresado ningún texto en el buscador.</p>

@@ -136,17 +136,31 @@
           <a class="nav-link" aria-current="page" href="/">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Catálogo</a>
+          <a class="nav-link" href="/catalogue">Catálogo</a>
         </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">Mis Compras</a>
+        </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link">Soporte</a>
         </li>
+        {% if user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link">Iniciar Sesión</a>
+          <a class="nav-link" href="#">Perfil</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link">Regístrate</a>
+          <a class="nav-link" href="/auth/logout">Cerrar Sesión</a>
         </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/login">Iniciar Sesión</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/signup">Regístrate</a>
+        </li>
+        {% endif %}
       </ul>
     </div>
   </div>
@@ -159,7 +173,7 @@
 
   <!-- Footer -->
   <footer class="footer text-center text-lg-start text-white">
-    <div class="container-fluid">
+    <div class="container">
       <!-- Grid row -->
       <div class="row justify-content-center" style="padding-top: 4rem;">
         <!-- Grid column -->
@@ -174,51 +188,53 @@
           </div>
         </div>
         <!-- Links -->
-        <div class="d-flex col-md-auto col-lg-auto col-xl-auto" style="text-align: left;">
-          <div class="col-md-auto col-lg-auto col-xl-auto mx-5 ml-0 mb-4 d-none d-sm-block">
-            <h5 class="mb-4">
-              Popular:
-            </h5>
-            <p>
-              <a href="#!" class="text-reset text-decoration-none">Programación</a>
-            </p>
-            <p>
-              <a href="#!" class="text-reset text-decoration-none">Libros para niños</a>
-            </p>
-            <p>
-              <a href="#!" class="text-reset text-decoration-none">Psicología</a>
-            </p>
-            <p>
-              <a href="#!" class="text-reset text-decoration-none">Negocios</a>
-            </p>
-          </div>
-          <div class="col-md-auto col-lg-auto col-xl-auto mx-5 mb-4 d-none d-sm-block">
-            <h5 class="mb-4">
-              Información:
-            </h5>
-            <p>
-              <a href="#!" class="text-reset text-decoration-none">Entrega</a>
-            </p>
-            <p>
-              <a href="#!" class="text-reset text-decoration-none">Pago</a>
-            </p>
-            <p>
-              <a href="#!" class="text-reset text-decoration-none">Sobre la Tienda</a>
-            </p>
-          </div>
-          <div class="col-md-auto col-lg-auto col-xl-auto mx-5 mb-4 d-none d-sm-block">
-            <h5 class="mb-4">
-              Ayuda:
-            </h5>
-            <p>
-              <a href="#!" class="text-reset text-decoration-none">Contacto</a>
-            </p>
-            <p>
-              <a href="#!" class="text-reset text-decoration-none">Devolución de mercancías</a>
-            </p>
-            <p>
-              <a href="#!" class="text-reset text-decoration-none">Ayuda al cliente</a>
-            </p>
+        <div class="row col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+          <div class="d-flex gap-1" style="text-align: left;">
+            <div class="col-sm-3 col-sm-3 col-lg-auto col-xl-auto d-none d-sm-block">
+              <h5 class="mb-4">
+                Popular:
+              </h5>
+              <p>
+                <a href="#!" class="text-reset text-decoration-none">Programación</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset text-decoration-none">Libros para niños</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset text-decoration-none">Psicología</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset text-decoration-none">Negocios</a>
+              </p>
+            </div>
+            <div class="col-sm-3 col-sm-3 col-lg-auto col-xl-auto mx-5 mb-4 d-none d-sm-block">
+              <h5 class="mb-4">
+                Información:
+              </h5>
+              <p>
+                <a href="#!" class="text-reset text-decoration-none">Entrega</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset text-decoration-none">Pago</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset text-decoration-none">Sobre la Tienda</a>
+              </p>
+            </div>
+            <div class="col-sm-3 col-sm-3 col-lg-auto col-xl-auto mx-5 mb-4 d-none d-sm-block text-wrap">
+              <h5 class="mb-4">
+                Ayuda:
+              </h5>
+              <p>
+                <a href="#!" class="text-reset text-decoration-none">Contacto</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset text-decoration-none">Devolución de mercancías</a>
+              </p>
+              <p>
+                <a href="#!" class="text-reset text-decoration-none">Ayuda al cliente</a>
+              </p>
+            </div>
           </div>
         </div>
         <!-- Solicitar llamada -->

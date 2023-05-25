@@ -62,7 +62,7 @@ body {
     justify-content: flex-start;
     height: 100%;
     padding-top: 120px;
-    padding-right: 50px;
+    margin-right: 50px;
 }
 
 .overlay-content ul {

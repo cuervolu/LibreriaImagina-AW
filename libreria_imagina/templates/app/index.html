@@ -13,8 +13,8 @@
 
 {% block content %}
 <!-- Hero -->
-<div class="row align-items-center d-flex justify-content-between">
-    <div class="col-md-4">
+<div class="row hero align-items-center d-flex justify-content-between">
+    <div class="col-auto col-sm-auto col-md-auto col-lg-4 hero-text">
         <strong>
             <p style="font-size: 35px" class="fw-bolder">Libros de la A a la Z</p>
         </strong>
@@ -23,13 +23,12 @@
         <a class="btn btn-custom btn-lg fw-bold" href="/catalogue" role="button">Ir al catálogo</a>
     </div>
 
-    <div class="col-md-6 text-white">
+    <div class="col-auto col-sm-auto col-md-auto col-lg-6 text-white hero-promo mt-5">
         <div class="position-relative">
-            <img src="{% static 'img/Fondo_Libros_Index.png' %}" alt="" style="max-width: 100%; height: auto;">
-            <div class="position-absolute top-50 start-50 translate-middle">
-                <img src="{% static 'img/Libros_Fondo_Index.png' %}" alt=""
-                    style="max-width: 180%; height: auto; position: relative; right: 200px; top: 15px;">
-                <div style="max-width: 270px; position: relative; left: 40px; font-size: 14px; top: 25px;">
+            <img src="{% static 'img/Fondo_Libros_Index.png' %}" alt="" class="img-fluid">
+            <div class="position-absolute top-50 start-50 translate-middle hero-libros">
+                <img src="{% static 'img/Libros_Fondo_Index.png' %}" alt="">
+                <div class="hero-libros-text">
                     <p style="font-weight: 900;" class="my-0">Conjuntos libros de Mark Manson</p>
                     <p style="display: inline-block; font-weight: 400; line-height: 96%;" class="my-0">EL SUTIL ARTE DE
                         ESCABULLIRSE.
@@ -50,16 +49,6 @@
         <strong>
             <p class="fw-bolder" style="font-size: 25px;">Recién llegados</p>
         </strong>
-    </div>
-    <div class="col-auto col-md-auto">
-        <div class="d-flex gap-5 flex-wrap" style="font-size: 14px;">
-            <p class="flex-shrink-0">Fantasía</p>
-            <p class="flex-shrink-0">Auto-desarrollo</p>
-            <p class="flex-shrink-0">Detectives</p>
-            <p class="flex-shrink-0">Infantil</p>
-            <p class="flex-shrink-0">Audiolibros</p>
-            <p class="flex-shrink-0">Otros</p>
-        </div>
     </div>
 </div>
 
@@ -85,8 +74,8 @@
                         {% csrf_token %}
                         <div class="input-group">
                             <button class="btn btn-sm mt-1"
-                                style="font-weight: bolder; background-color: #82C2CB; color:white; box-shadow: 0px 3px 8px rgba(225, 106, 0, 0.19); border-radius: 3px;">AL
-                                CARRITO</button>
+                                style="font-weight: bolder; background-color: #82C2CB; color:white; box-shadow: 0px 3px 8px rgba(225, 106, 0, 0.19); border-radius: 3px;"
+                                {% if not user.is_authenticated %}disabled{% endif %}>AL CARRITO</button>
                         </div>
                     </form>
                 </div>

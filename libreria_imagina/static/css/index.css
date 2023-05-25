@@ -16,7 +16,7 @@
     width: 25px;
     cursor: pointer;
     position: absolute;
-    top: 110px !important;
+    top: 220px !important;
 
 }
 
@@ -27,7 +27,7 @@
 }
 
 .owl-carousel .owl-prev {
-    left: -35px;
+    left: -45px;
     background-color: transparent;
 }
 
@@ -60,6 +60,7 @@
     width: 250px;
     border: none;
     border-radius: 0px;
+    filter: drop-shadow(0px 7px 35px rgba(214, 100, 0, 0.22));
 }
 
 .btn-custom:hover {
@@ -92,9 +93,132 @@
     font-size: 14px;
     color: black;
 }
-@media screen and (max-width: 768px) {
+
+.hero .hero-promo .hero-libros img{
+    max-width: 180%; 
+    height: auto;
+    position: relative;
+    left: -180px;
+    top: 20px;
+}
+
+.hero .hero-promo .hero-libros .hero-libros-text{
+    max-width: 270px; 
+    position: relative; 
+    left: 40px; 
+    font-size: 14px; 
+    top: 25px;
+}
+
+@media screen and (max-width: 576px) {
+
+    .hero .hero-promo .hero-libros img{
+        position: relative;
+        left: -90px;
+        top: 50px;
+    }
+
     .btn-custom {
-        width: 180px;
-        font-size: medium;
+        width: 250px;
+        font-size: 22px;
+    }
+
+    .hero .hero-promo .hero-libros .hero-libros-text{
+        max-width: 150px; 
+        position: relative; 
+        padding-top: 80px;
+        left: 25px; 
+        font-size: 0.85vh; 
+        top: -28px;
+    }
+
+}
+
+@media screen and (min-width: 577px) and (max-width: 768px) {
+
+    .hero .hero-promo .hero-libros img{
+        position: relative;
+        left: -140px;
+        top: 20px;
+    }
+
+    .hero .hero-promo .hero-libros .hero-libros-text{
+        max-width: 220px; 
+        position: relative; 
+        left: 35px; 
+        font-size: 12px; 
+        top: 20px;
+    }
+
+    .hero .hero-text{
+        text-align: center;
+    }
+
+    .btn-custom {
+        width: 260px;
     }
 }
+
+@media screen and (min-width: 769px) and (max-width: 992px) {
+
+    .hero .hero-promo .hero-libros img{
+        position: relative;
+        left: -200px;
+        top: 55px;
+    }
+    
+    .hero .hero-promo .hero-libros .hero-libros-text{
+        max-width: 300px; 
+        padding-top: 80px;
+        position: relative; 
+        left: 44px; 
+        font-size: 14px; 
+        top: -15px;
+    }
+
+    .hero .hero-text{
+        text-align: center;
+    }
+
+    .btn-custom {
+        width: 260px;
+    }
+
+}
+
+@media screen and (min-width: 993px) and (max-width: 1200px) {
+
+    .hero .hero-promo .hero-libros img{
+        position: relative;
+        left: -130px;
+        top: 40px;
+    }
+
+    .hero .hero-promo .hero-libros .hero-libros-text{
+        max-width: 190px; 
+        padding-top: 60px;
+        position: relative; 
+        left: 34px; 
+        font-size: 10px; 
+        top: -10px;
+    }
+
+}
+
+@media screen and (min-width: 1201px) and (max-width: 1400px) {
+
+    .hero .hero-promo .hero-libros img{
+        position: relative;
+        left: -160px;
+        top: 20px;
+    }
+
+    .hero .hero-promo .hero-libros .hero-libros-text{
+        max-width: 220px; 
+        position: relative; 
+        left: 43px; 
+        font-size: 12px; 
+        top: 25px;
+    }
+}
+
