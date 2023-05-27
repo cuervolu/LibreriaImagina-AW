@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/my_purchases.css' %}" />
+{% endblock %}
+{% load humanize %}
+{% block title %}Mis Compras{% endblock title %}
+
+{% block content %}
+<hr>
+<div class="container my-5 py-3">
+    <div class="row justify-content-start mb-4">
+        <div class="col-auto col-md-auto col-lg-auto">
+            <p style="font-size: 36px; font-weight: 600;">Compras</p>
+            <div class="d-flex flex-column flex-sm-row align-items-center">
+                <div class="mb-md-0 mt-2" style="background-color: #FFFF; max-width: 353px; height: 36px; box-shadow: 0px 20px 88px rgba(0, 0, 0, 0.1); border-radius: 10px;">
+                  <div class="input-group align-items-center">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-transparent border-0" style="margin-right: -15px;"><i class="fa fa-search" style="color: gray;"></i></span>
+                    </div>
+                    <input class="form-control bg-transparent border-0" style="box-shadow: none; color: gray; font-weight: 400; font-size: 17px;" type="search" value="" placeholder="Buscar">
+                  </div>                                  
+                </div>
+                <div class="ms-md-3 mt-2 d-flex align-items-center">
+                  <div class="dropdown">
+                    <button class="btn dropdown-toggle transparent-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                      <img src="{% static 'img/filtro.svg' %}" alt="Filtrar" class="img-fluid"> Filtrar
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item">Todas</a></li>
+                      <li><a class="dropdown-item">Filtro1</a></li>
+                      <li><a class="dropdown-item">Filtro2</a></li>
+                      <li><a class="dropdown-item">Filtro3</a></li>
+                    </ul>
+                  </div>
+                  <div class="ms-3 d-flex cantidad-compras text-nowrap">
+                    <p class="mb-0 me-4">|</p>
+                    <p class="mb-0">3 Compras</p>
+                  </div>
+                </div>
+              </div>
+                  
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <!-- Card -->
+        <div class="card mb-5 compra-info d-flex" style="width: 100%; border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+            <div class="ms-4" style="background-color: #FFFF;">
+                <p class="my-3 ms-4 compra-realizacion">9 de Abril 2023</p>
+            </div>
+            <hr class="my-0">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="mt-3">
+                        <p class="ms-5 compra-pedido">Pedido # 29938123</p>
+                        <p class="ms-5 compra-fecha">Entregado: 11 de Abril.</p>
+                    </div>
+                    <div class="ms-5 my-3 d-flex align-items-center">
+                        <img src="{% static 'img/LibroPrueba.png' %}" alt="" class="img-fluid me-5 compra-img" style="max-width: 72px;">
+                        <div>
+                            <p class="compra-estado">Estado: <u>Pedido Entregado</u></p>
+                            <div style="font-weight: 500;">
+                                <p class="compra-nombre">Zosia de la calle Koty...</p>
+                                <p class="compra-autor">Agnieszka Tyszka</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="me-4">
+                    <a href="/purchase_detail" class="btn btn-gradient d-none d-sm-none d-md-block"><p class="my-1">Ver Detalle</p></a>
+                </div>
+            </div>
+            <div class="my-3 d-md-none d-xs-none justify-content-center">
+                <a href="/purchase_detail" class="btn btn-gradient w-100"><p class="my-1">Ver Detalle</p></a>
+            </div>              
+        </div>
+        <!-- End Card -->
+        <!-- Card 2 -->
+        <div class="card mb-5 compra-info d-flex" style="width: 100%; border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+            <div class="ms-4" style="background-color: #FFFF;">
+                <p class="my-3 ms-4 compra-realizacion">9 de Abril 2023</p>
+            </div>
+            <hr class="my-0">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="mt-3">
+                        <p class="ms-5 compra-pedido">Pedido # 29938123</p>
+                        <p class="ms-5 compra-fecha">Entregado: 11 de Abril.</p>
+                    </div>
+                    <div class="ms-5 my-3 d-flex align-items-center">
+                        <img src="{% static 'img/LibroPrueba.png' %}" alt="" class="img-fluid me-5 compra-img" style="max-width: 72px;">
+                        <div>
+                            <p class="compra-estado">Estado: <u>Pedido Entregado</u></p>
+                            <div class="d-flex align-items-center">
+                                <div style="font-weight: 500;">
+                                    <p class="compra-nombre">Zosia de la calle Koty...</p>
+                                    <p class="compra-autor">Agnieszka Tyszka</p>
+                                </div>
+                                <!-- Más de 1 producto en la compra -->
+                                <div class="d-none d-sm-block" style="font-weight: 500; color: gray;">
+                                    <p class="productos-adicionales ms-2">+3 productos</p>
+                                </div>
+                                <!-- End -->
+                            </div>
+                            <!-- Más de 1 producto en la compra -->
+                            <div class="d-block d-sm-none" style="font-weight: 500; color: gray;">
+                                <p class="productos-adicionales">+3 productos</p>
+                            </div>
+                            <!-- End -->
+                        </div>
+                    </div>
+                </div>
+                <div class="me-4">
+                    <a href="/purchase_detail" class="btn btn-gradient d-none d-sm-none d-md-block"><p class="my-1">Ver Detalle</p></a>
+                </div>
+            </div>
+            <div class="my-3 d-md-none d-xs-none justify-content-center">
+                <a href="/purchase_detail" class="btn btn-gradient w-100"><p class="my-1">Ver Detalle</p></a>
+            </div>              
+        </div>
+        <!-- End Card 2 -->
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+
+{% block script_final %}
+{% endblock script_final %}

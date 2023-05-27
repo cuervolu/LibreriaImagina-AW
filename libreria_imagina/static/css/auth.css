@@ -1,17 +1,30 @@
 .btn-gradient {
     background: linear-gradient(to right, #146E89, #64B4CD);
-    color: white;
+    color: white !important;
     padding: 15px;
+    border: none;
     border-radius: 14.3035px;
     border-color: #207198;
     font-weight: 700;
     font-size: 18px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.btn-gradient:hover,
+.btn-gradient:focus {
+    opacity: 0.8;
+}
+
+.btn-gradient:active,
+.btn-gradient.active {
+  opacity: 1;
 }
 
 .btn:disabled {
     background: #F6F6F6;
     color: #CCD1D2;
     padding: 15px;
+    border: solid;
     border-radius: 14.3035px;
     border-width: 2px;
     border-color: #CCD1D2;

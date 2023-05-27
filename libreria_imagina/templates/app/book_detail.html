@@ -34,14 +34,14 @@
         <p><strong style="color: #2195A1;">Categoría:</strong> {{ libro.get_categoria_display }}</p>
         <p><strong style="color: #2195A1;">Precio:</strong></p>
         <div class="d-flex align-items-center justify-content-between mb-3">
-            <h1 class="fw-bold"> ${{ libro.precio_unitario }}</h1>
+            <h1 class="fw-bold precio-unitario"> ${{ libro.precio_unitario }}</h1>
             <form method="POST" action="{% url 'agregar_al_carrito' libro.id_libro %}?cantidad={{ cantidad }}">
                 {% csrf_token %}
                 <div class="d-flex align-items-center">
                     <div class="input-group align-items-center">
                         <input type="number"
-                            style="max-width: 45px; height: 45px; font-size: 22px; font-weight: 500; border: none; outline: none; background: transparent;"
-                            class="count text-end mx-3" min="1" max="{{ libro.cantidad_disponible }}" value="1" readonly
+                            style="max-width: 30px; height: 45px; font-size: 22px; font-weight: 500; border: none; outline: none; background: transparent;"
+                            class="count text-end mr-2" min="1" max="{{ libro.cantidad_disponible }}" value="1" readonly
                             name="cantidad">
 
                         <div class="mx-2">
@@ -56,7 +56,7 @@
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-lg mt-1 text-nowrap" type="submit"
+                        <button class="btn btn-lg mt-1 btn-custom text-nowrap" type="submit"
                             style="font-weight: bolder; background-color: #82C2CB; color:white; box-shadow: 0px 3px 8px rgba(225, 106, 0, 0.19); border-radius: 3px;"
                             {% if not user.is_authenticated %}disabled{% endif %}>AL CARRITO</button>
                     </div>

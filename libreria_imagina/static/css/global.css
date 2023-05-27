@@ -1,3 +1,9 @@
+html,
+body{
+    width: 100%;
+    overflow-x: hidden;
+}
+
 body {
     background-color: #fffaf5 !important;
     font-family: 'Montserrat', sans-serif !important;
@@ -141,4 +147,18 @@ body {
     background-size: 20px 20px;
     height: 20px;
     width: 20px;
+}
+
+.cantidad-carrito{
+    top: 12px; 
+    left: 46px; 
+    background: #2195A1;
+}
+
+@media screen and (max-width: 992px) {
+
+    .cantidad-carrito{
+        left: 38px; 
+    }
+
 }

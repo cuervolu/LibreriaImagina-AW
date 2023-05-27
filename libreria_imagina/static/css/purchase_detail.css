@@ -1,0 +1,158 @@
+.accordion.accordion-flush .accordion-item .accordion-button:not(.collapsed) {
+    background-color: transparent !important;
+}
+
+.accordion-button.custom-color {
+    color: #000000 !important; 
+    max-height: auto;
+    max-width: 180px;
+}
+
+.accordion-button.custom-color:not(.collapsed) {
+    color: #000000;
+}
+
+.accordion-button.custom-color::after {
+    color: #000000 !important; 
+}
+
+.metodo-pago{
+    width: 55px; 
+    height: 55px; 
+    border: 0.8px 
+    solid #686868; 
+    border-radius: 50%; 
+    background-color: transparent;
+}
+
+.metodo-pago img{
+    width: 40px;
+}
+
+.pago-precio{
+    font-weight: 400; 
+    font-size: 15px;
+}
+
+.info-pago{
+    font-weight: 500; 
+    font-size: 13px;
+}
+
+.pago-estado{
+    color: #6FCF97; 
+    font-weight: 500; 
+    font-size: 15px;
+}
+
+.img-truck{
+    width: 55px; 
+    height: 55px; 
+    border: 0.8px solid #686868; 
+    border-radius: 50%; 
+    background-color: transparent;
+}
+
+.img-truck img{
+    width: 25px;
+}
+
+.envio-direccion{
+    font-weight: 400; 
+    font-size: 16px;
+}
+
+.envio-comuna-region{
+    font-weight: 400; 
+    font-size: 12px;
+}
+
+.cartas-pago-envio{
+    max-width: 370px; 
+    height: auto; 
+    border: 0.9px solid #686868; 
+    backdrop-filter: blur(2.38392px); 
+    border-radius: 7px;
+}
+
+@media screen and (max-width: 472px) {
+
+    .metodo-pago{
+        height: 43px; 
+        width: 43px;
+    }
+
+    .metodo-pago img{
+        width: 28px;
+    }
+
+    .img-truck{
+        height: 40px; 
+        width: 40px;
+    }
+
+    .img-truck img{
+        height: 15px; 
+    }
+
+}
+
+@media screen and (min-width: 993px) and (max-width: 1200px) {
+
+    .pago-precio{
+        font-size: 13px;
+    }
+    .info-pago{
+        font-size: 10px;
+    }
+
+    .pago-estado{
+        font-size: 13px;
+    }
+
+    .metodo-pago{
+        height: 50px; 
+    }
+
+    .metodo-pago img{
+        width: 30px;
+    }
+
+    .img-truck{
+        height: 50px; 
+        width: 50px;
+    }
+
+    .img-truck img{
+        height: 15px; 
+    }
+
+    .envio-direccion{
+        font-size: 13px;
+    }
+    
+    .envio-comuna-region{
+        font-size: 10px;
+    }
+
+}
+
+@media screen and (min-width: 1201px) and (max-width: 1400px) {
+    .metodo-pago{
+        height: 50px; 
+    }
+
+    .metodo-pago img{
+        width: 30px;
+    }
+
+    .img-truck{
+        height: 50px; 
+        width: 50px;
+    }
+
+    .img-truck img{
+        height: 15px; 
+    }
+
+}

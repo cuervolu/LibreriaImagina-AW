@@ -10,3 +10,237 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
+.carta-pago{
+    background: #146E89; 
+    border-radius: 20px; 
+    filter: drop-shadow(0px 22px 75px rgba(0, 0, 0, 0.25));
+}
+
+.btn-pago{
+    max-width: auto; 
+    height: 72px; 
+    background: linear-gradient(271.15deg, #64B4CD 7.64%, #146E89 90.68%); 
+    border: 1px solid white; 
+    border-radius: 14px;
+}
+
+.btn-pago-content{
+    justify-content: space-between;
+    align-items: center;
+}
+
+.producto-nombre{
+    font-size: 25px; 
+    font-weight: 600; 
+    margin-bottom: 0px;
+}
+
+.producto-autor{
+    font-size: 17px; 
+    font-weight: 500; 
+    margin-bottom: 0px
+}
+
+.producto-cantidad input{
+    max-width: 45px; 
+    height: 45px; 
+    font-size: 22px; 
+    font-weight: 500; 
+    border: none; 
+    outline: none;
+}
+
+.producto-precio p{
+    font-size: 23px; 
+    font-weight: 600; 
+    margin-bottom: 0px;
+}
+
+.producto-imagen{
+    margin: 3rem;
+}
+
+.producto-imagen img{
+    max-width: 72px; 
+    height: auto;
+}
+
+@media screen and (max-width: 576px) {
+
+    .seccion-productos{
+        .producto-nombre{
+            font-size: 12px;
+        }
+
+        .producto-autor{
+            font-size: 10px; 
+        }
+
+        .producto-cantidad input{
+            max-width: 25px; 
+            height: 25px; 
+            font-size: 17px; 
+            font-weight: 500; 
+            border: none; 
+            outline: none;
+        }
+
+        .producto-cantidad i{
+            font-size: 18px;
+        }
+
+        .producto-precio p{
+            font-size: 19px; 
+        }
+
+        .producto-info{
+            max-width: 90px;
+        }
+
+        .producto-imagen{
+            margin-left: 1.1rem;
+            margin-right: 1.1rem;
+        }
+
+        .producto-imagen img{
+            max-width: 40px;
+        }
+
+        .img-basurero{
+            width: 27px;
+        }
+
+    }
+}
+
+@media screen and (min-width: 577px) and (max-width: 768px) {
+    .seccion-productos{
+        .producto-nombre{
+            font-size: 17px;
+        }
+
+        .producto-autor{
+            font-size: 12px; 
+        }
+
+        .producto-cantidad input{
+            max-width: 25px; 
+            height: 25px; 
+            font-size: 19px; 
+            font-weight: 500; 
+            border: none; 
+            outline: none;
+        }
+
+        .producto-cantidad i{
+            font-size: 20px;
+        }
+
+        .producto-precio p{
+            font-size: 19px; 
+        }
+
+        .producto-info{
+            max-width: 140px;
+        }
+
+        .producto-imagen{
+            margin-left: 1.5rem;
+            margin-right: 1.5rem;
+        }
+    }
+        
+}
+
+@media screen and (min-width: 769px) and (max-width: 992px) {
+
+    .seccion-productos{
+        .producto-nombre{
+            font-size: 19px;
+        }
+
+        .producto-autor{
+            font-size: 14px; 
+        }
+
+        .producto-cantidad input{
+            max-width: 25px; 
+            height: 45px; 
+            font-size: 19px; 
+            font-weight: 500; 
+            border: none; 
+            outline: none;
+        }
+
+        .producto-cantidad i{
+            font-size: 24px;
+        }
+
+        .producto-precio p{
+            font-size: 20px; 
+        }
+    }
+
+}
+
+@media screen and (max-width: 1200px) {
+
+    .seccion-productos{
+        width: 100%;
+    }
+
+    .carta-pago{
+        max-width: 1400px;
+        width: 1400px;
+    }
+
+    .btn-pago{
+        width: 100%;
+        text-align: center;
+
+    }
+
+}
+
+@media screen and (min-width: 1201px) and (max-width: 1400px) {
+
+    .seccion-productos{
+        max-width: 700px;
+
+        .producto-nombre{
+            font-size: 20px;
+        }
+
+        .producto-autor{
+            font-size: 15px; 
+        }
+
+        .producto-cantidad input{
+            max-width: 25px; 
+            height: 45px; 
+            font-size: 19px; 
+            font-weight: 500; 
+            border: none; 
+            outline: none;
+        }
+
+        .producto-cantidad i{
+            font-size: 24px;
+        }
+
+        .producto-precio p{
+            font-size: 20px; 
+        }
+    }
+    
+
+    .carta-pago{
+        max-width: 300px;
+    }
+
+    .btn-pago{
+        max-width: 250px;
+    }
+
+}

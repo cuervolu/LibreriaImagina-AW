@@ -9,10 +9,10 @@
 {% block title %}Carrito{% endblock title %}
 
 {% block content %}
-<div class="container-fluid my-5 py-3">
+<div class="container my-5 py-3">
     {% if carrito.cantidad > 0 %}
     <div class="row justify-content-between pb-5">
-        <div class="col-auto col-md-auto col-lg-auto">
+        <div class="col-auto col-md-auto col-lg-auto seccion-productos">
             <div class="d-flex align-items-center">
                 <i class="fa-solid fa-chevron-left fa-lg"></i>
                 <p style="font-size: 20px; font-weight: 600; margin-bottom: 0px; margin-left: 10px;">Seguir Comprando
@@ -24,21 +24,19 @@
             {% for detalle_carrito in detalle_carrito %}
             <div class="d-flex align-items-center justify-content-between mt-4"
                 style="background: white; max-width: auto; height: auto; border-radius: 15px;filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1));">
-                <div class="m-5">
-                    <img src="{{ detalle_carrito.libro.thumbnail }}" alt="{{ detalle_carrito.libro.nombre_libro }}"
-                        style="max-width: 72px; height: auto;">
+                <div class="producto-imagen">
+                    <img src="{{ detalle_carrito.libro.thumbnail }}" alt="{{ detalle_carrito.libro.nombre_libro }}" class="img-fluid">
                 </div>
-                <div class="mx-auto">
-                    <p style="font-size: 25px; font-weight: 600; margin-bottom: 0px;">
+                <div class="producto-info">
+                    <p class="producto-nombre">
                         {{ detalle_carrito.libro.nombre_libro|truncatechars:20 }}</p>
-                    <p style="font-size: 17px; font-weight: 500; margin-bottom: 0px">{{ detalle_carrito.libro.autor }}
+                    <p class="producto-autor">{{ detalle_carrito.libro.autor }}
                     </p>
                 </div>
-                <div class="mx-auto">
+                <div class="mx-auto producto-cantidad">
                     <div class="input-group align-items-center">
                         <input type="number"
-                            style="max-width: 45px; height: 45px; font-size: 22px; font-weight: 500; border: none; outline: none;"
-                            class="count text-end mx-3" min="1" max="{{ detalle_carrito.libro.cantidad_disponible }}"
+                            class="count text-end ml-2" min="1" max="{{ detalle_carrito.libro.cantidad_disponible }}"
                             value="{{ detalle_carrito.cantidad }}" readonly name="cantidad">
 
                         <div class="mx-2">
@@ -59,22 +57,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="mx-4">
-                    <p style="font-size: 23px; font-weight: 600; margin-bottom: 0;">${{ detalle_carrito.precio_total }}
-                    </p>
+                <div class="mx-auto producto-precio">
+                    <p>${{ detalle_carrito.precio_total }}</p>
                 </div>
                 <div class="mx-2">
                     <form method="post" action="{% url 'eliminar_producto_carrito' detalle_carrito.id %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-link"><img src="{% static 'img/basurero.svg' %}" class="img-fluid" alt=""></button>
+                        <button type="submit" class="btn btn-link"><img class="img-basurero" src="{% static 'img/basurero.svg' %}" alt=""></button>
                     </form>
                 </div>
             </div>
             {% endfor %}
         </div>
-        <div class="col-auto col-md-auto col-lg-auto d-flex align-items-start mt-5 pt-5">
-            <div class="p-4"
-                style="background: #146E89; max-width: auto; height: auto; border-radius: 20px; filter: drop-shadow(0px 22px 75px rgba(0, 0, 0, 0.25));">
+        <div class="col-auto col-md-auto col-lg-auto d-flex align-items-start mt-5 pt-5 seccion-pago">
+            <div class="p-4 carta-pago">
                 <div style="margin-bottom: 30px;">
                     <p class="text-start" style="font-size: 23px; font-weight: 500; color: white; margin-bottom: 0px;">
                         Resumen Compra</p>
@@ -93,9 +89,8 @@
                     <p class="text-start" style="font-size: 14px; font-weight: 500; color: white;">${{total}}</p>
                 </div>
                 <div>
-                    <button
-                        style="max-width: auto; height: 72px; background: linear-gradient(271.15deg, #64B4CD 7.64%, #146E89 90.68%); border: 1px solid white; border-radius: 14px;">
-                        <div class="d-flex justify-content-between mx-4">
+                    <button class="btn-pago">
+                        <div class="d-flex mx-2 btn-pago-content">
                             <div class="mx-3">
                                 <p class="text-start"
                                     style="font-size: 16px; font-weight: 500; color: white; margin-bottom: 0px">
@@ -117,13 +112,13 @@
         </div>
     </div>
     {% else %}
-    <div class="row align-items-center" style="justify-content: space-between;">
+    <div class="row align-items-center my-3" style="justify-content: space-between;">
         <div class="d-flex align-items-center mb-3">
             <i class="fa-solid fa-chevron-left fa-lg"></i>
             <p style="font-size: 20px; font-weight: 600; margin-bottom: 0px; margin-left: 10px;">Seguir Comprando</p>
         </div>
         <hr>
-        <p style="font-size: 36px; font-weight: 600; margin-bottom: -5px;">Carrito</p>
+        <p class="d-none d-md-none d-lg-block" style="font-size: 36px; font-weight: 600; margin-bottom: -5px;">Carrito</p>
         <div class="col-auto col-md-auto col-lg-auto d-none d-md-none d-lg-block">
             <img class="img-fluid float-start" src="{% static 'img/carritoVacio.png' %}" alt="" style="max-width: 500px;">
         </div>

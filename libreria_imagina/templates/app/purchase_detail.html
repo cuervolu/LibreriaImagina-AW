@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/purchase_detail.css' %}" />
+{% endblock %}
+{% load humanize %}
+{% block title %}Detalle Compra{% endblock title %}
+
+{% block content %}
+<hr>
+<div class="container my-5 py-3">
+    <div class="row justify-content-start mb-4">
+        <div class="col-auto col-md-auto col-lg-auto">
+            <p style="font-size: 36px; font-weight: 600;">Detalle Pedido</p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <!-- Card -->
+        <div class="card mb-5 compra-info d-flex"
+            style="width: 100%; border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+            <div class="row justify-content-between mx-3 my-5">
+                <div class="col-sm-12 col-md-12 col-lg-7">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div style="font-weight: 500;">
+                            <p class="mb-0" style="font-size: 37px;">Zosia de la calle Koty...</p>
+                            <div class="d-flex align-items-center">
+                                <p style="font-size: 24px;">Agnieszka Tyszka</p>
+                                <p class="mb-0 ms-4 text-nowrap" style="font-size: 19px;">x 2</p>
+                            </div>
+                        </div>
+                        <img src="{% static 'img/LibroPrueba.png' %}" alt="" class="img-fluid me-5 compra-img"
+                            style="max-width: 72px;">
+                    </div>
+                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-headingOne">
+                                <button class="accordion-button collapsed custom-color" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                    aria-controls="flush-collapseOne" style="box-shadow: none;">
+                                    +3 productos
+                                </button>
+                            </h2>
+                            <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body pt-0">
+                                    <!-- Productos adicionales -->
+                                    <div class="mt-3">
+                                        <hr>
+                                        <div class="d-flex align-items-center">
+                                            <div style="font-weight: 500;">
+                                                <p class="mb-0" style="font-size: 18px;">Zosia de la calle Koty...</p>
+                                                <p style="font-size: 14px;">Agnieszka Tyszka</p>
+                                            </div>
+                                            <img src="{% static 'img/LibroPrueba.png' %}" alt="" class="img-fluid ms-5 compra-img"
+                                                style="max-width: 42px;">
+                                            <p class="mb-0 ms-5">x 2</p>
+                                        </div>
+                                    </div>
+                                    <!-- End Productos adicionales -->
+                                    <div class="mt-3">
+                                        <hr>
+                                        <div class="d-flex align-items-center">
+                                            <div style="font-weight: 500;">
+                                                <p class="mb-0" style="font-size: 18px;">Zosia de la calle Koty...</p>
+                                                <p style="font-size: 14px;">Agnieszka Tyszka</p>
+                                            </div>
+                                            <img src="{% static 'img/LibroPrueba.png' %}" alt="" class="img-fluid ms-5 compra-img"
+                                                style="max-width: 42px;">
+                                            <p class="mb-0 ms-5">x 1</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <hr>
+                                        <div class="d-flex align-items-center">
+                                            <div style="font-weight: 500;">
+                                                <p class="mb-0" style="font-size: 18px;">Zosia de la calle Koty...</p>
+                                                <p style="font-size: 14px;">Agnieszka Tyszka</p>
+                                            </div>
+                                            <img src="{% static 'img/LibroPrueba.png' %}" alt="" class="img-fluid ms-5 compra-img"
+                                                style="max-width: 42px;">
+                                            <p class="mb-0 ms-5">x 3</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div>
+                        <p class="mb-2" style="color: #6FCF97; font-weight: 500;">Entregado</p>
+                        <p style="font-weight: 500; font-size: 25px;">Llegó el 11 de Abril</p>
+                        <p style="font-weight: 300; font-size: 20px;">Entregamos tu pedido a las 17:33 hs en El Trovador
+                            4280 of. 611, Las Condes, RM (Metropolitana)</p>
+                        <a style="color: #527EFF; font-weight: 300; font-size: 18px;" href="">Ver detalle envío</a>
+                    </div>
+                    <hr class="mt-4">
+                    <div>
+                        <p style="font-weight: 500; font-size: 25px;">Ayuda con la compra</p>
+                        <p style="font-weight: 300; font-size: 20px;">Opinar sobre el producto</p>
+                        <p style="font-weight: 300; font-size: 20px;">Más ayuda</p>
+                    </div>
+                    <hr class="d-none d-md-block d-lg-none">
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-4 me-3">
+                    <p style="font-size: 23px; font-weight: bold;">Detalle de la compra</p>
+                    <p style="font-size: 15px; font-weight: 400;">Fecha Pedido: 9 de Abril de 2023 | # 29938123</p>
+                    <hr>
+                    <div style="font-weight: 300;">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <p>Subtotal</p>
+                            <p>$13.890</p>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-2">
+                            <p>Envio</p>
+                            <p>$3.200</p>
+                        </div>
+                        <hr class="mt-0">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <p>Total</p>
+                            <p>$17.090</p>
+                        </div>
+                    </div>
+                    <div class="seccion-pago d-flex flex-column mt-3">
+                        <p style="font-size: 23px; font-weight: bold;">Pago</p>
+                        <div class="ms-3 cartas-pago-envio">
+                            <div class="d-flex align-items-start m-3">
+                                <div class="d-flex justify-content-center align-items-center metodo-pago">
+                                    <img src="{% static 'img/Visa.png' %}" alt="" class="img-fluid">
+                                </div>
+                                <div class="ms-4" style="color: #686868;">
+                                    <div>
+                                        <p class="mb-0 pago-precio">$17.090</p>
+                                        <div class="info-pago">
+                                            <p class="mb-0">Visa Debito **** 6789</p>
+                                            <p class="mb-0">9 de Abril de 2023 | #527029238133</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="mb-0 pago-estado">Pago
+                                            aprobado</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="seccion-envio d-flex flex-column mt-3">
+                        <p style="font-size: 23px; font-weight: bold;">Envío</p>
+                        <div class="ms-3 cartas-pago-envio">
+                            <div class="d-flex align-items-start m-3">
+                                <div class="d-flex justify-content-center align-items-center img-truck">
+                                    <img src="{% static 'img/delivery-truck.svg' %}" alt="" class="img-fluid">
+                                </div>
+                                <div class="ms-4" style="color: #686868;">
+                                    <div>
+                                        <p class="mb-0 envio-direccion">El Trovador 4280 of.
+                                            611</p>
+                                        <p class="mb-0 envio-comuna-region">Las Condes, RM
+                                            (Metropolitana)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Card -->
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+
+{% block script_final %}
+{% endblock script_final %}

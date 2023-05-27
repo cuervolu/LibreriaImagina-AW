@@ -1,0 +1,105 @@
+.btn-gradient {
+  background: linear-gradient(to right, #146E89, #64B4CD);
+  backdrop-filter: blur(2.38392px);
+  color: white !important;
+  width: 309px;
+  height: 51px;
+  border: none;
+  border-radius: 14.3035px;
+  border-color: #207198;
+  font-weight: 700;
+  font-size: 22px;
+  transition: opacity 0.3s ease-in-out;
+}
+
+
+.btn-gradient:hover,
+.btn-gradient:focus {
+  opacity: 0.8;
+}
+
+.btn-gradient:active,
+.btn-gradient.active {
+  opacity: 1;
+}
+
+.transparent-dropdown {
+    background-color: transparent;
+    border: none;
+    color: #202020;
+}
+
+.compra-info{
+    width: 100%; 
+    border-radius: 15px; 
+    filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); 
+    border: none;
+}
+
+.compra-fecha{
+    font-weight: 700;
+}
+
+.compra-estado{
+    font-size: 14px;
+}
+
+.compra-nombre{
+    font-size: 20px; 
+    margin-bottom: 0;
+}
+.productos-adicionales{
+    font-size: 12px;
+}
+
+@media screen and (max-width: 768px) {
+    .btn-gradient {
+        font-size: 20px;
+    }
+    
+    .compra-realizacion{
+        font-size: 14px;
+    }
+
+    .compra-pedido{
+        font-size: 14px;
+    }
+
+    .compra-fecha{
+        font-size: 14px;
+    }
+
+    .compra-estado{
+        font-size: 12px;
+    }
+
+    .cantidad-compras{
+        font-size: 14px;
+    }
+
+    .compra-nombre{
+        font-size: 18px;
+    }
+
+    .compra-autor{
+        font-size: 14px;
+    }
+        
+    .transparent-dropdown img{
+        width: 23px;
+    }
+    .transparent-dropdown {
+        font-size: 14px;
+    }
+    .productos-adicionales{
+        font-size: 10px;
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 992px) {
+
+    .btn-gradient {
+        width: 209px;
+    }
+
+}

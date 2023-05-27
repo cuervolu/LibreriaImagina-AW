@@ -11,6 +11,8 @@ urlpatterns = [
         name="agregar_al_carrito",
     ),
     path("cart", cart, name="cart"),
+    path("my_purchases", my_purchases, name="my_purchases"),
+    path("purchase_detail", purchase_detail, name="purchase_detail"),
     path("catalogue", catalogue, name="catalogue"),
     path("books/<slug:slug>/", book_detail, name="book_detail"),
     path("search", search, name="search"),
