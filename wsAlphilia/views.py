@@ -21,7 +21,7 @@ from django.contrib.auth import authenticate
 from libreria_imagina.models import TipoUsuario, Usuario
 
 from .models import Libro
-from .serializers import LibroSerializer, LoginSerializer
+from .serializers import LibroSerializer, LoginSerializer, UserSerializer
 
 from decouple import config
 import traceback
@@ -429,9 +429,10 @@ class LoginView(APIView):
 
                 # Registrar evento de inicio de sesión exitoso
                 logger.info(f"Inicio de sesión exitoso para el usuario: {user.username}")
-
-                # Devolver la respuesta con el token
-                return Response({'token': token.key})
+                
+                # Devolver la respuesta con el token y los datos del usuario
+                user_serializer = UserSerializer(user)
+                return Response({'token': token.key, 'user': user_serializer.data})
             else:
                 # Usuario no válido
                 logger.warning("Intento de inicio de sesión fallido")
