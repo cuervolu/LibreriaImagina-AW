@@ -1,6 +1,5 @@
 .btn-gradient {
   background: linear-gradient(to right, #146E89, #64B4CD);
-  backdrop-filter: blur(2.38392px);
   color: white !important;
   width: 309px;
   height: 51px;

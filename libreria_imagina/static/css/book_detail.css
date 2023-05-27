@@ -2,6 +2,10 @@
     background-color: #82C2CB !important;
 }
 
+.accordion.accordion-flush .accordion-item .accordion-button:not(.collapsed) {
+    background-color: transparent !important;
+}
+
 /* Chrome, Safari, Edge, Opera */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
