@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import LibroViewSet
+from .views import LibroViewSet, LoginView
 
 urlpatterns = [
     path(
@@ -34,4 +34,5 @@ urlpatterns = [
         LibroViewSet.as_view({"get": "libro_detail", "put": "libro_detail"}),
         name="libro-detail",
     ),
+    path('login/', LoginView.as_view(), name='login'),
 ]

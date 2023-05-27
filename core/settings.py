@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "colorfield",
     "autoslug",
     "rest_framework",
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -163,3 +164,10 @@ CURRENCY_SYMBOL = 'CLP'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authtoken',
+    ],
+}

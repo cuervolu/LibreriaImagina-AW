@@ -12,10 +12,16 @@ import json
 from rest_framework.response import Response
 from rest_framework import viewsets, pagination, status
 from rest_framework.decorators import action
+from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.exceptions import PermissionDenied
 
+from django.contrib.auth import authenticate
+from libreria_imagina.models import TipoUsuario, Usuario
 
 from .models import Libro
-from .serializers import LibroSerializer
+from .serializers import LibroSerializer, LoginSerializer
 
 from decouple import config
 import traceback
@@ -386,3 +392,52 @@ class LibroViewSet(viewsets.ModelViewSet):
                 serializer.save()
                 return Response(serializer.data)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# **********************
+# *       AUTH       *
+# **********************
+
+class LoginView(APIView):
+    authentication_classes = [TokenAuthentication]
+
+    def post(self, request):
+        try:
+            serializer = LoginSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+
+            username = serializer.validated_data.get('username')
+            email = serializer.validated_data.get('email')
+            password = serializer.validated_data['password']
+
+            # Autenticar al usuario utilizando el correo electrónico o el nombre de usuario
+            user = None
+            if email:
+                user = authenticate(request, email=email, password=password)
+            elif username:
+                user = authenticate(request, username=username, password=password)
+
+            if user:
+                # Validar el rol del usuario
+                if user.tipo_usuario not in [TipoUsuario.ADMIN, TipoUsuario.TECNICO, TipoUsuario.ENCARGADO_BODEGA]:
+                    # Usuario no válido debido a falta de permisos
+                    logger.warning("Intento de inicio de sesión fallido debido a falta de permisos")
+                    return Response({'error': 'Falta de permisos'}, status=status.HTTP_403_FORBIDDEN)
+                
+
+                # Generar o recuperar el token de autenticación
+                token, created = Token.objects.get_or_create(user=user)
+
+                # Registrar evento de inicio de sesión exitoso
+                logger.info(f"Inicio de sesión exitoso para el usuario: {user.username}")
+
+                # Devolver la respuesta con el token
+                return Response({'token': token.key})
+            else:
+                # Usuario no válido
+                logger.warning("Intento de inicio de sesión fallido")
+                return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            # Registrar el error en el log
+            logger.exception("Error en el inicio de sesión: %s", str(e))
+            # Devolver una respuesta de error adecuada
+            return Response({'error': 'Error en el inicio de sesión'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
