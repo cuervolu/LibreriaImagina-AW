@@ -13,11 +13,13 @@
     {% if carrito.cantidad > 0 %}
     <div class="row justify-content-between pb-5">
         <div class="col-auto col-md-auto col-lg-auto seccion-productos">
-            <div class="d-flex align-items-center">
-                <i class="fa-solid fa-chevron-left fa-lg"></i>
-                <p style="font-size: 20px; font-weight: 600; margin-bottom: 0px; margin-left: 10px;">Seguir Comprando
-                </p>
-            </div>
+            <a href="/" class="text-decoration-none text-black">
+                <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-chevron-left fa-lg"></i>
+                    <p style="font-size: 20px; font-weight: 600; margin-bottom: 0px; margin-left: 10px;">Seguir Comprando
+                    </p>
+                </div>
+            </a>
             <hr>
             <p style="font-size: 36px; font-weight: 600; margin-bottom: -5px;">Carrito</p>
             <p style="font-size: 20px; font-weight: 500;">Tienes {{ carrito.cantidad }} productos en el carro</p>

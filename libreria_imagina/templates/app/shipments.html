@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/shipments.css' %}" />
+{% endblock %}
+{% load humanize %}
+{% block title %}Detalle Envío{% endblock title %}
+
+{% block content %}
+<a href="/purchase_detail" class="text-decoration-none text-black">
+    <div class="d-flex align-items-center">
+        <i class="fa-solid fa-chevron-left fa-md"></i>
+        <p style="font-size: 18px; font-weight: 600; margin-bottom: 0px; margin-left: 10px;">Detalle pedido</p>
+    </div>
+</a>
+<hr>
+<div class="container my-5 py-3">
+    <div class="row justify-content-start mb-4">
+        <div class="col-auto col-md-auto col-lg-auto">
+            <p style="font-size: 36px; font-weight: 600;">Detalle Envío</p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <!-- Card -->
+        <div class="card mb-5 compra-info d-flex"
+            style="width: 100%; border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+            <div class="row justify-content-between mx-3 my-5">
+                <div class="col-sm-12 col-md-12 col-lg-8">
+                    <h2 class="mb-4" style="font-weight: 500; font-size: 34px;">Entregado el 11 de Abril</h2>
+                    <hr>
+                    <div class="row">
+                        <div class="col-1" style="display: flex; flex-direction: column; align-items: center;">
+                            <div class="circulo" style="width: 10px; height: 10px; margin-top: 10px; margin-bottom: 5px;"></div>
+                            <div class="linea linea1"></div>
+                            <div class="circulo" style="width: 10px; height: 10px; margin-top: 5px; margin-bottom: 5px;"></div>
+                            <div class="linea linea2"></div>
+                            <div class="circulo" style="width: 15px; height: 15px; margin-top: 5px; margin-bottom: 10px;"></div>
+                        </div>
+                        <div class="col-10">
+                            <p class="mb-2" style="color: rgba(104, 104, 104, 0.7); font-weight: 300; font-size: 18px;">En Preparación</p>
+                            <div class="collapse multi-collapse" id="multiCollapseExample1">
+                                <div class="card card-body py-0" style="border: none; font-size: 14px;">
+                                    <p class="mb-1">7 abril, 23:52 | El vendedor está preparando tu paquete.</p>
+                                </div>
+                            </div>
+                            <p class="pt-3 mb-2" style="color: rgba(104, 104, 104, 0.7); font-weight: 300; font-size: 18px;">En Camino</p>
+                            <div class="collapse multi-collapse" id="multiCollapseExample2">
+                                <div class="card card-body py-0" style="border: none; font-size: 14px;">
+                                    <p class="mb-1">9 abril, 23:52 | El vendedor despachó tu paquete.</p>
+                                    <p class="mb-1">10 abril, 23:52 | Ingresó al centro de distribución de Renca.</p>
+                                    <p class="mb-1">11 abril, 23:52 | Salió del centro de distribución de Renca y sigue en viaje.</p>
+                                    <p class="mb-1">11 abril, 23:52 | Tu paquete está en el último tramo del recorrido.</p>
+                                    <p class="mb-1">11 abril, 23:52 | Tu paquete está muy cerca.</p>
+                                </div>
+                            </div>
+                            <p class="pt-3 mb-2" style="color: #6FCF97; font-weight: 500; font-size: 18px;">Entregado</p>
+                            <p>11 abril, 17:33 | Entregamos el pedido.</p>
+                        </div>
+                    </div>
+                    <a style="border: none; color: #527EFF;" class="btn" type="button" data-bs-toggle="collapse"
+                        data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Ver
+                        detalle<i class="fa-solid fa-caret-down rotate-icon ms-2"></i></a>
+                    <hr>
+                    <div>
+                        <p style="font-weight: 500; font-size: 25px;">Informacion de la Entrega</p>
+                        <div class="d-flex flex-column mt-3">
+                            <div class="ms-2">
+                                <div class="d-flex align-items-start m-3">
+                                    <div class="d-flex justify-content-center align-items-center img-direccion" >
+                                        <img src="{% static 'img/direction-point.svg' %}" alt="" class="img-fluid">
+                                    </div>
+                                    <div class="ms-5" style="color: #686868;">
+                                        <div>
+                                            <p class="mb-0" style="color: black; font-size: 20px;">Dirección de entrega</p>
+                                            <p class="mb-0">El Trovador 4280 of. 611</p>
+                                            <p class="mb-0">Las Condes, RM (Metropolitana)</p>
+                                            <p class="mb-0">Recibe Martin Cooper 8847 3678</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <!-- End Card -->
+    </div>
+
+</div>
+
+<script>
+    var collapseElementList = [].slice.call(document.querySelectorAll('.collapse'))
+
+    collapseElementList.forEach(function (collapseEl) {
+        collapseEl.addEventListener('show.bs.collapse', function () {
+            // Agregar clase "active" a las líneas 1 y 2
+            document.querySelector('.linea1').classList.add('active');
+            document.querySelector('.linea2').classList.add('active');
+        })
+
+        collapseEl.addEventListener('hide.bs.collapse', function () {
+            // Remover clase "active" de las líneas 1 y 2
+            document.querySelector('.linea1').classList.remove('active');
+            document.querySelector('.linea2').classList.remove('active');
+        })
+    })
+</script>
+
+
+{% endblock %}
+
+
+{% block script_final %}
+{% endblock script_final %}
