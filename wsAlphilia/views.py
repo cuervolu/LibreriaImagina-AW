@@ -16,6 +16,7 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import ValidationError
 
 from django.contrib.auth import authenticate
 from libreria_imagina.models import TipoUsuario, Usuario
@@ -436,7 +437,13 @@ class LoginView(APIView):
             else:
                 # Usuario no válido
                 logger.warning("Intento de inicio de sesión fallido")
-                return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response({'non_field_errors': ['Credenciales inválidas']}, status=status.HTTP_400_BAD_REQUEST)
+        except ValidationError as e:
+            # Capturar la excepción ValidationError
+            errors = e.get_full_details()
+
+            # Devolver una respuesta con los errores personalizados
+            return Response(errors, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             # Registrar el error en el log
             logger.exception("Error en el inicio de sesión: %s", str(e))

@@ -28,8 +28,9 @@ class LoginSerializer(serializers.Serializer):
             user = authenticate(request=self.context.get('request'), username=username, password=password)
 
         if not user:
-            # Usuario no válido
-            raise serializers.ValidationError('Credenciales inválidas')
+            # Devolver un diccionario con los errores en lugar de lanzar la excepción
+            errors = {'non_field_errors': ['Credenciales inválidas']}
+            raise serializers.ValidationError(errors)
 
         # Agregar el objeto user al contexto
         attrs['user'] = user
