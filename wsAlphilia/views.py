@@ -15,7 +15,6 @@ from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.exceptions import ValidationError
 
 from django.contrib.auth import authenticate
@@ -269,7 +268,38 @@ class LibroViewSet(viewsets.ModelViewSet):
                 )
 
 
+    @action(detail=True, methods=["get", "put", "delete"])
+    def libros(self, request, pk=None):
+        try:
+            libro = Libro.objects.get(pk=pk)
+        except Libro.DoesNotExist:
+            return Response(
+                {"error": "El libro no existe."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
+        if request.method == "GET":
+            serializer = LibroSerializer(libro)
+            return Response(serializer.data)
+
+        elif request.method == "PUT":
+            serializer = LibroSerializer(libro, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        elif request.method == "DELETE":
+            libro.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(
+            {"error": "Método HTTP no permitido."},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
+        )
 
     """
     Vista para obtener libros de una categoría específica desde la API de Google Books y guardarlos en la base de datos.
@@ -449,3 +479,14 @@ class LoginView(APIView):
             logger.exception("Error en el inicio de sesión: %s", str(e))
             # Devolver una respuesta de error adecuada
             return Response({'error': 'Error en el inicio de sesión'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class LogoutView(APIView):
+    authentication_classes = [TokenAuthentication]
+
+    def post(self, request, *args, **kwargs):
+        # Invalidar el token de autenticación del usuario
+        if request.auth:
+            request.auth.delete()
+            logger.info(f"Cierre de sesión exitoso para el usuario")
+
+        return Response({'detail': 'Cierre de sesión exitoso.'})
