@@ -1,0 +1,25 @@
+.rounded-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 0.125rem solid #207198;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    color: #207198;
+}
+
+.rounded-item-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,.07)!important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    color: #0000;
+}

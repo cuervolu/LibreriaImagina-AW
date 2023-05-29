@@ -196,6 +196,23 @@ def purchase_detail(request):
 def shipments(request):
     return render(request, "app/shipments.html")
 
+@login_required(login_url="auth/login")
+def profile(request):
+    usuario = request.user
+
+    datos = {
+        'usuario' : usuario
+    }
+    return render(request, "app/profile.html", datos)
+
+@login_required(login_url="auth/login")
+def my_data(request):
+    usuario = request.user
+    datos = {
+        'usuario' : usuario
+    }
+    return render(request, "app/my_data.html", datos)
+
 
 @login_required(login_url="auth/login")
 def eliminar_producto_carrito(request, detalle_carrito_id):

@@ -1,0 +1,366 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/my_data.css' %}" />
+{% endblock %}
+{% load humanize %}
+{% block title %}Mi datos{% endblock title %}
+
+{% block content %}
+<hr>
+<div class="container my-5 py-3">
+    <div class="row justify-content-start mb-2">
+        <div class="col-auto col-md-auto col-lg-auto">
+            <p class="" style="font-size: 30px; font-weight: 600;">Mis Datos</p>
+        </div>
+    </div>
+    <p class="mb-4" style="font-size: 19px; font-weight: 600;">Datos de cuenta</p>
+    <!-- Card -->
+    <div class="card mb-5 d-flex"
+        style="border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+        <div class="row mx-3 my-4">
+            <div class="col-sm-12 col-md-12 col-lg-12 mb-2">
+                <div>
+                    <button class="btn border-0 w-100" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseUsername" aria-expanded="false" aria-controls="collapseUsername">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-7 col-sm-10">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 text-start text-nowrap">
+                                        <h6>Usuario</h6>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-8 col-lg-8  text-start">
+                                        <h6 class="datos-info">{{ usuario.username }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 text-end">
+                                <i class="fa-solid fa-chevron-right rotate-icon"></i>
+                            </div>
+                        </div>
+                    </button>
+                    <div class="collapse" id="collapseUsername">
+                        <div class="card card-body border-0">
+                            <hr class="mt-0">
+                            <h6>Cambiar nombre de usuario:</h6>
+                            <div>
+                                <div class="row align-items-center justify-content-between">
+                                    <div class="col-sm-12 col-md-4 col-lg-4">
+                                        <h6 class="datos-info">Nuevo Username</h6>
+                                    </div>
+                                    <div class="col-sm-12 col-md-8 col-lg-8 d-flex">
+                                        <input type="text" name="username" autofocus autocapitalize="none"
+                                            autocomplete="username" maxlength="30" class="text-input form-control"
+                                            required style="box-shadow: none;">
+                                        <button class="btn ms-3"
+                                            style="color: white; background-color: #82C2CB; border-radius: 0;">Cambiar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div>
+                    <button class="btn border-0 w-100" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseEmail" aria-expanded="false" aria-controls="collapseEmail">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-7 col-sm-10">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 text-start text-nowrap">
+                                        <h6>Email</h6>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-8 col-lg-8  text-start">
+                                        <h6 class="datos-info">{{ usuario.correo }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 text-end">
+                                <i class="fa-solid fa-chevron-right rotate-icon"></i>
+                            </div>
+                        </div>
+                    </button>
+                    <div class="collapse" id="collapseEmail">
+                        <div class="card card-body border-0">
+                            <hr class="mt-0">
+                            <h6>Cambiar correo electrónico:</h6>
+                            <div>
+                                <div class="row align-items-center justify-content-between">
+                                    <div class="col-sm-12 col-md-4 col-lg-4">
+                                        <h6 class="datos-info">Nuevo Correo</h6>
+                                    </div>
+                                    <div class="col-sm-12 col-md-8 col-lg-8 d-flex">
+                                        <input type="text" name="email" autofocus autocapitalize="none"
+                                            autocomplete="email" maxlength="150" class="text-input form-control"
+                                            required style="box-shadow: none;">
+                                        <button class="btn ms-3"
+                                            style="color: white; background-color: #82C2CB; border-radius: 0;">Cambiar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div>
+                    <button class="btn border-0 w-100" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseContraseña" aria-expanded="false" aria-controls="collapseContraseña">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-7 col-sm-10">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 text-start text-nowrap">
+                                        <h6>Contraseña</h6>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-8 col-lg-8  text-start">
+                                        <h6 class="datos-info">************</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 text-end">
+                                <i class="fa-solid fa-chevron-right rotate-icon"></i>
+                            </div>
+                        </div>
+                    </button>
+                    <div class="collapse" id="collapseContraseña">
+                        <div class="card card-body border-0">
+                            <hr class="mt-0">
+                            <h6>Cambiar contraseña:</h6>
+                            <div>
+                                <div>
+                                    <div class="row align-items-center justify-content-between mb-2">
+                                        <div class="col-sm-12 col-md-4 col-lg-4">
+                                            <h6 class="datos-info">Contraseña Actual</h6>
+                                        </div>
+                                        <div class="col-sm-12 col-md-8 col-lg-8 d-flex">
+                                            <input type="password" name="password" autofocus autocapitalize="none"
+                                                maxlength="150" class="text-input form-control"
+                                                required style="box-shadow: none;">
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center justify-content-between mb-2">
+                                        <div class="col-sm-12 col-md-4 col-lg-4">
+                                            <h6 class="datos-info">Nueva Contraseña</h6>
+                                        </div>
+                                        <div class="col-sm-12 col-md-8 col-lg-8 d-flex">
+                                            <input type="password" name="password" autofocus autocapitalize="none"
+                                                maxlength="150" class="text-input form-control"
+                                                required style="box-shadow: none;">
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center justify-content-between">
+                                        <div class="col-sm-12 col-md-4 col-lg-4">
+                                            <h6 class="datos-info">Confirmar Contraseña</h6>
+                                        </div>
+                                        <div class="col-sm-12 col-md-8 col-lg-8 d-flex">
+                                            <input type="password" name="password" autofocus autocapitalize="none"
+                                                maxlength="150" class="text-input form-control"
+                                                required style="box-shadow: none;">
+                                            <button class="btn ms-3"
+                                                style="color: white; background-color: #82C2CB; border-radius: 0;">Cambiar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Card -->
+    <p class="mb-4" style="font-size: 19px; font-weight: 600;">Datos Personales</p>
+    <!-- Card -->
+    <div class="card mb-5 d-flex"
+        style="border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+        <div class="row mx-3 my-4">
+            <div class="col-sm-12 col-md-12 col-lg-12 mb-2">
+                <div>
+                    <button class="btn border-0 w-100" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseNombreApellido" aria-expanded="false"
+                        aria-controls="collapseNombreApellido">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-7 col-sm-10">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 text-start text-nowrap">
+                                        <h6>Nombre y Apellido</h6>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-8 col-lg-8  text-start">
+                                        <h6 class="datos-info">{{ usuario.nombre }} {{ usuario.apellido }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 text-end">
+                                <i class="fa-solid fa-chevron-right rotate-icon"></i>
+                            </div>
+                        </div>
+                    </button>
+                    <div class="collapse" id="collapseNombreApellido">
+                        <div class="card card-body border-0">
+                            Some placeholder content for the collapse component. This panel is hidden by default but
+                            revealed when the user activates the relevant trigger.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div>
+                    <button class="btn border-0 w-100" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseRut" aria-expanded="false" aria-controls="collapseRut">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-7 col-sm-10">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 text-start text-nowrap">
+                                        <h6>Rut</h6>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-8 col-lg-8  text-start">
+                                        <h6 class="datos-info">{{ usuario.rut }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 text-end">
+                                <i class="fa-solid fa-chevron-right rotate-icon"></i>
+                            </div>
+                        </div>
+                    </button>
+                    <div class="collapse" id="collapseRut">
+                        <div class="card card-body border-0">
+                            Some placeholder content for the collapse component. This panel is hidden by default but
+                            revealed when the user activates the relevant trigger.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div>
+                    <button class="btn border-0 w-100" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseTelefono" aria-expanded="false" aria-controls="collapseTelefono">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-7 col-sm-10">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-4 col-lg-4 text-start text-nowrap">
+                                        <h6>Teléfono</h6>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-8 col-lg-8  text-start">
+                                        <h6 class="datos-info">{{ usuario.telefono }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 text-end">
+                                <i class="fa-solid fa-chevron-right rotate-icon"></i>
+                            </div>
+                        </div>
+                    </button>
+                    <div class="collapse" id="collapseTelefono">
+                        <div class="card card-body border-0">
+                            <hr class="mt-0">
+                            <h6>Cambiar Teléfono:</h6>
+                            <div>
+                                <div class="row align-items-center justify-content-between">
+                                    <div class="col-sm-12 col-md-4 col-lg-4">
+                                        <h6 class="datos-info">Nuevo telefono</h6>
+                                    </div>
+                                    <div class="col-sm-12 col-md-8 col-lg-8 d-flex">
+                                        <input type="tel" name="telefono" autofocus autocapitalize="none"
+                                            autocomplete="tel" maxlength="8" class="text-input form-control"
+                                            required style="box-shadow: none;">
+                                        <button class="btn ms-3"
+                                            style="color: white; background-color: #82C2CB; border-radius: 0;">Cambiar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Card -->
+    <p class="mb-4" style="font-size: 19px; font-weight: 600;">Tarjetas</p>
+    <!-- Card -->
+    <div class="card mb-5 d-flex"
+        style="border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+        <div class="row mx-3 mt-4">
+            <div class="col-sm-12 col-md-12 col-lg-12 mb-2 d-flex align-items-center">
+                <div class="d-flex justify-content-center align-items-center metodo-pago">
+                    <img src="{% static 'img/Visa.png' %}" alt="" class="img-fluid">
+                </div>
+                <div class="ms-4">
+                    <h6>Terminada en 0438</h6>
+                    <h6 style="font-size: 14px; font-weight: 300;">Visa</h6>
+                    <h6 style="font-size: 14px; font-weight: 300;">Vencimiento: 09/2029</h6>
+                </div>
+                <div class="text-end ms-auto">
+                    <button class="btn border-0" type="button" style="color: #207198;">Eliminar</button>
+                </div>
+            </div>
+            <hr>
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center ms-auto">
+                <button class="btn border-0" type="button" style="color: #207198;">
+                    <div class="d-flex">
+                        <h5>+ Nueva Tarjeta</h5>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- End Card -->
+    <p class="mb-4" style="font-size: 19px; font-weight: 600;">Domicilios</p>
+    <!-- Card -->
+    <div class="card mb-5 d-flex"
+        style="border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+        <div class="row mx-3 mt-4">
+            <div class="col-sm-12 col-md-12 col-lg-12 mb-2 d-flex align-items-center">
+                <div class="d-flex justify-content-center align-items-center ms-2">
+                    <img src="{% static 'img/direction-point.svg' %}" alt="" class="img-fluid" width="18px">
+                </div>
+                <div class="ms-4">
+                    <h6>El Trovador 4280 of. 611</h6>
+                    <h6 style="font-size: 14px; font-weight: 300;">RM (Metropolitana) - Las Condes</h6>
+                    <h6 style="font-size: 14px; font-weight: 300;">{{ usuario.nombre }} {{ usuario.apellido }} -
+                        {{usuario.telefono }}</h6>
+                </div>
+                <div class="text-end ms-auto">
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle boton-dropdown border-0" type="button"
+                            id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
+                            style="color: #207198;">
+                            <i class="fas fa-ellipsis-v fa-lg"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="#">Editar</a></li>
+                            <li><a class="dropdown-item" href="#">Eliminar</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center ms-auto">
+                <button class="btn border-0" type="button" style="color: #207198;">
+                    <div class="my-2 d-flex">
+                        <h5>Agregar domicilio</h5>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Card -->
+</div>
+
+</div>
+
+
+{% endblock %}
+
+
+{% block script_final %}
+{% endblock script_final %}
