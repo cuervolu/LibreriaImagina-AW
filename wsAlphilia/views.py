@@ -57,7 +57,7 @@ class LibroPagination(pagination.PageNumberPagination):
 
 
 class LibroViewSet(viewsets.ModelViewSet):
-    queryset = Libro.objects.order_by("nombre_libro")
+    queryset = Libro.objects.order_by("id_libro")
     serializer_class = LibroSerializer
     pagination_class = LibroPagination
 
