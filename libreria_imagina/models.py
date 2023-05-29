@@ -457,3 +457,11 @@ class DetalleCarrito(models.Model):
     precio_total = models.DecimalField(max_digits=10, decimal_places=2)
     class Meta:
         db_table = 'detalle_carrito'
+        
+class Error(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    mensaje = models.TextField()
+    traceback = models.TextField()
+
+    class Meta:
+        db_table = 'error'
