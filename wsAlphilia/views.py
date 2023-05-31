@@ -130,10 +130,6 @@ class LibroViewSet(viewsets.ModelViewSet):
             month = random.randint(1, 12)
             day = random.randint(1, 28)
             fecha_publicacion = datetime.datetime(year, month, day).strftime("%Y-%m-%d")
-            logger.error(f"Error al analizar la fecha de publicación: {e}")
-            logger.error(
-                traceback.format_exc()
-            )  # Registrar el traceback completo para obtener detalles específicos
 
         default_values = {
             "nombre_libro": volume_info.get("title", ""),
@@ -158,7 +154,6 @@ class LibroViewSet(viewsets.ModelViewSet):
 
         libro = Libro.objects.create(**default_values)
         return libro
-
 
     """
     Vista para obtener libros desde la API de Google Books y guardarlos en la base de datos.
@@ -250,23 +245,15 @@ class LibroViewSet(viewsets.ModelViewSet):
                 # Guardar los libros creados en la base de datos
                 Libro.objects.bulk_create(libros_creados)
 
-                # Obtener todos los libros guardados y serializarlos para enviarlos en la respuesta
-                libros = Libro.objects.all()
-                page = self.paginate_queryset(libros)
-                if page is not None:
-                    serializer = LibroSerializer(page, many=True)
-                    return self.get_paginated_response(serializer.data)
+                # Retornar solo el JSON de la API de Google Books en la respuesta
+                return Response(data)
 
-                serializer = LibroSerializer(libros, many=True)
-                combined_data = {"api_data": data, "db_data": serializer}
-                return Response(combined_data)
             except Exception as e:
                 logger.error(f"Ocurrió un error al procesar los datos de la API: {e}")
                 return Response(
                     {"error": f"Ocurrió un error al procesar los datos de la API: {e}"},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 )
-
 
     @action(detail=True, methods=["get", "put", "delete"])
     def libros(self, request, pk=None):
@@ -330,6 +317,7 @@ class LibroViewSet(viewsets.ModelViewSet):
         - Si ocurre una excepción al procesar los datos de la API, se registra el error y se retorna una Response con el mensaje de error correspondiente.
 
     """
+
     @action(detail=False, methods=["get"])
     def get_libros_by_categoria(self, request, categoria=None):
         if categoria:
@@ -379,8 +367,6 @@ class LibroViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-
-
     """
     Vista para obtener o actualizar un libro específico.
 
@@ -405,28 +391,30 @@ class LibroViewSet(viewsets.ModelViewSet):
 
     """
 
-
-         
-    @action(detail=True, methods=['get', 'put'])
+    @action(detail=True, methods=["get", "put"])
     def libro_detail(self, request, pk=None):
         try:
             libro = Libro.objects.get(pk=pk)
         except Libro.DoesNotExist:
-            return Response({'error': 'El libro no existe.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "El libro no existe."}, status=status.HTTP_404_NOT_FOUND
+            )
 
-        if request.method == 'GET':
+        if request.method == "GET":
             serializer = LibroSerializer(libro)
             return Response(serializer.data)
-        elif request.method == 'PUT':
+        elif request.method == "PUT":
             serializer = LibroSerializer(libro, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # **********************
 # *       AUTH       *
 # **********************
+
 
 class LoginView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -436,9 +424,9 @@ class LoginView(APIView):
             serializer = LoginSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
 
-            username = serializer.validated_data.get('username')
-            email = serializer.validated_data.get('email')
-            password = serializer.validated_data['password']
+            username = serializer.validated_data.get("username")
+            email = serializer.validated_data.get("email")
+            password = serializer.validated_data["password"]
 
             # Autenticar al usuario utilizando el correo electrónico o el nombre de usuario
             user = None
@@ -449,25 +437,37 @@ class LoginView(APIView):
 
             if user:
                 # Validar el rol del usuario
-                if user.tipo_usuario not in [TipoUsuario.ADMIN, TipoUsuario.TECNICO, TipoUsuario.ENCARGADO_BODEGA]:
+                if user.tipo_usuario not in [
+                    TipoUsuario.ADMIN,
+                    TipoUsuario.TECNICO,
+                    TipoUsuario.ENCARGADO_BODEGA,
+                ]:
                     # Usuario no válido debido a falta de permisos
-                    logger.warning("Intento de inicio de sesión fallido debido a falta de permisos")
-                    return Response({'error': 'Falta de permisos'}, status=status.HTTP_403_FORBIDDEN)
-                
+                    logger.warning(
+                        "Intento de inicio de sesión fallido debido a falta de permisos"
+                    )
+                    return Response(
+                        {"error": "Falta de permisos"}, status=status.HTTP_403_FORBIDDEN
+                    )
 
                 # Generar o recuperar el token de autenticación
                 token, created = Token.objects.get_or_create(user=user)
 
                 # Registrar evento de inicio de sesión exitoso
-                logger.info(f"Inicio de sesión exitoso para el usuario: {user.username}")
-                
+                logger.info(
+                    f"Inicio de sesión exitoso para el usuario: {user.username}"
+                )
+
                 # Devolver la respuesta con el token y los datos del usuario
                 user_serializer = UserSerializer(user)
-                return Response({'token': token.key, 'user': user_serializer.data})
+                return Response({"token": token.key, "user": user_serializer.data})
             else:
                 # Usuario no válido
                 logger.warning("Intento de inicio de sesión fallido")
-                return Response({'non_field_errors': ['Credenciales inválidas']}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"non_field_errors": ["Credenciales inválidas"]},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
         except ValidationError as e:
             # Capturar la excepción ValidationError
             errors = e.get_full_details()
@@ -478,8 +478,12 @@ class LoginView(APIView):
             # Registrar el error en el log
             logger.exception("Error en el inicio de sesión: %s", str(e))
             # Devolver una respuesta de error adecuada
-            return Response({'error': 'Error en el inicio de sesión'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+            return Response(
+                {"error": "Error en el inicio de sesión"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
 class LogoutView(APIView):
     authentication_classes = [TokenAuthentication]
 
@@ -489,4 +493,4 @@ class LogoutView(APIView):
             request.auth.delete()
             logger.info(f"Cierre de sesión exitoso para el usuario")
 
-        return Response({'detail': 'Cierre de sesión exitoso.'})
+        return Response({"detail": "Cierre de sesión exitoso."})
