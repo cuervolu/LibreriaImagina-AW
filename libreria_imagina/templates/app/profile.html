@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+{% endblock %}
+{% load humanize %}
+{% block title %}Mi perfil{% endblock title %}
+
+{% block content %}
+<hr>
+<div class="container my-5 py-3" style="width: 60%;">
+    <div class="row justify-content-start mb-4">
+        <div class="col-auto col-md-auto col-lg-auto">
+            <p style="font-size: 36px; font-weight: 600;">Mi Perfil</p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <!-- Card -->
+        <div class="card mb-5 d-flex"
+            style="border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+            <div class="row mx-3 my-4">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-avatar me-4">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+                        <h4 style="font-weight: 600;">{{usuario.nombre}} {{usuario.apellido}}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-5 d-flex"
+            style="border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+            <div class="row m-4">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-4">
+                            <a href="/my_data" style="text-decoration: none;">
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-avatar me-4" style="width: 55px; height: 55px; color: black; border: 1px solid rgba(0,0,0,.07)!important; font-size: 25px;">
+                                        <i class="fa-regular fa-user"></i>
+                                    </div>
+                                    <div>
+                                        <h6 style="color: black;" >Mis Datos</h6>
+                                        <h6 style="color: rgba(0, 0, 0, 0.582);" >Todos los datos de tu cuenta.</h6>
+                                    </div>
+                                    <div class="ms-auto" style="color: black;">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="mb-4">
+                            <a href="" style="text-decoration: none;">
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-avatar me-4" style="width: 55px; height: 55px; color: black; border: 1px solid rgba(0,0,0,.07)!important; font-size: 25px;">
+                                        <i class="fa-regular fa-credit-card"></i>
+                                    </div>
+                                    <div>
+                                        <h6 style="color: black;" >Tarjetas</h6>
+                                        <h6 style="color: rgba(0, 0, 0, 0.582);" >Tarjetas guardadas en tu cuenta.</h6>
+                                    </div>
+                                    <div class="ms-auto" style="color: black;">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="" style="text-decoration: none;">
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-avatar me-4" style="width: 55px; height: 55px; color: black; border: 1px solid rgba(0,0,0,.07)!important; font-size: 25px;">
+                                        <img src="{% static 'img/direction-point.svg' %}" alt="" class="img-fluid" style="width: 20px;">
+                                    </div>
+                                    <div>
+                                        <h6 style="color: black;" >Direcciones</h6>
+                                        <h6 style="color: rgba(0, 0, 0, 0.582);" >Direcciones guardadas en tu cuenta.</h6>
+                                    </div>
+                                    <div class="ms-auto" style="color: black;">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- End Card -->
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+
+{% block script_final %}
+{% endblock script_final %}

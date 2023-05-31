@@ -17,6 +17,8 @@ urlpatterns = [
     path("catalogue", catalogue, name="catalogue"),
     path("books/<slug:slug>/", book_detail, name="book_detail"),
     path("search", search, name="search"),
+    path("profile", profile, name="profile"),
+    path("my_data", my_data, name="my_data"),
     # Incluir las URLs de autenticación desde auth.urls
     path("auth/", include(auth_urls, namespace="auth")),
     # Páginas Legales

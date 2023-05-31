@@ -1,0 +1,92 @@
+.accordion.accordion-flush .accordion-item .accordion-button:not(.collapsed) {
+    background-color: transparent !important;
+}
+
+.accordion-button.custom-color {
+    color: #000000 !important; 
+}
+
+.accordion-button.custom-color:not(.collapsed) {
+    color: #000000;
+}
+
+.accordion-button.custom-color::after {
+    color: #000000 !important; 
+}
+
+.rotate-icon {
+    transition: transform 0.3s ease;
+}
+
+.btn[aria-expanded="true"] .rotate-icon {
+    transform: rotate(90deg);
+}
+
+.metodo-pago{
+    width: 65px; 
+    height: 65px; 
+    border: 1px solid rgba(0, 0, 0, 0.192)!important; 
+    border-radius: 50%; 
+    background-color: transparent;
+}
+
+.metodo-pago img{
+    width: 44px;
+    margin: 20px;
+}
+
+.container{
+    max-width: 75%;
+}
+
+.boton-dropdown::after {
+    content: none;
+}
+
+.datos-info{
+    font-weight: 300;
+}
+
+.fa-chevron-right{
+    color: #207198;
+}
+
+.dropdown-menu .dropdown-item:focus,
+.dropdown-menu .dropdown-item:hover {
+    background-color: #82C2CB;
+    color: white;
+}
+
+.form-control {
+    max-width: 320px;
+    height: 40px;
+    border: 2.38392px solid #207198;
+    border-radius: 14.3035px;
+}
+
+@media screen and (max-width: 576px) {
+    .container{
+        max-width: 100%;
+    }
+}
+
+@media screen and (min-width: 577px) and (max-width: 768px) {
+    .container{
+        max-width: 100%;
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 992px) {
+    
+    .container{
+        max-width: 85%;
+    }
+}
+
+@media screen and (min-width: 993px) and (max-width: 1200px) {
+
+    .container{
+        max-width: 80%;
+    }
+    
+}
