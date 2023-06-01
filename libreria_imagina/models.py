@@ -111,7 +111,7 @@ class Categoria(models.TextChoices):
 
 
 class Libro(models.Model):
-    id_libro = models.BigAutoField(
+    id_libro = models.AutoField(
         primary_key=True, db_column="ID_LIBRO", verbose_name="ID Libro"
     )
     nombre_libro = models.CharField(max_length=100, null=False)
@@ -457,11 +457,4 @@ class DetalleCarrito(models.Model):
     precio_total = models.DecimalField(max_digits=10, decimal_places=2)
     class Meta:
         db_table = 'detalle_carrito'
-        
-class Error(models.Model):
-    timestamp = models.DateTimeField(auto_now_add=True)
-    mensaje = models.TextField()
-    traceback = models.TextField()
-
-    class Meta:
-        db_table = 'error'
+    
