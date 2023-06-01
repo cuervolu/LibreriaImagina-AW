@@ -18,6 +18,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import ValidationError
 
 from django.contrib.auth import authenticate
+from django.db.models import Q
 from libreria_imagina.models import TipoUsuario, Usuario
 
 from .models import Libro
@@ -90,71 +91,78 @@ class LibroViewSet(viewsets.ModelViewSet):
 
         return large_thumbnail_url
 
-    def create_libro_from_data(self, data, _=None):
-        book_id = data.get("id")
-        volume_info = data.get("volumeInfo", {})
-        sale_info = data.get("saleInfo", {})
+    def create_libro_from_data(self, data):
+        try:
+            book_id = data.get("id")
+            volume_info = data.get("volumeInfo", {})
+            sale_info = data.get("saleInfo", {})
 
-        isbn = volume_info.get("industryIdentifiers", [])[0].get("identifier", "s/e")
-        nombre_libro = volume_info.get("title", "")
-        autor = volume_info.get("authors", ["a/d"])[0]
+            isbn = volume_info.get("industryIdentifiers", [])[0].get(
+                "identifier", "Sin ISBN"
+            )
+            existing_libro = Libro.objects.filter(isbn=isbn).first()
 
-        if Libro.objects.filter(
-            isbn=isbn, nombre_libro=nombre_libro, autor=autor
-        ).exists():
-            return None
+            if existing_libro:
+                return None
 
-        if "categories" in volume_info:
-            categorias = volume_info.get("categories")
-            if categorias:
-                categoria = categorias[0]
+            if "categories" in volume_info:
+                categorias = volume_info.get("categories")
+                if categorias:
+                    categoria = categorias[0]
+                else:
+                    categoria = "General"
             else:
                 categoria = "General"
-        else:
-            categoria = "General"
 
-        fecha_publicacion = volume_info.get("publishedDate")
+            fecha_publicacion = volume_info.get("publishedDate")
 
-        if not fecha_publicacion:
-            current_year = datetime.datetime.now().year
-            fecha_publicacion = datetime.datetime(
-                current_year,
-                random.randint(1, 12),
-                random.randint(1, 28),
-            ).strftime("%Y-%m-%d")
+            if not fecha_publicacion:
+                current_year = datetime.datetime.now().year
+                fecha_publicacion = datetime.datetime(
+                    current_year,
+                    random.randint(1, 12),
+                    random.randint(1, 28),
+                ).strftime("%Y-%m-%d")
 
-        try:
-            datetime.datetime.strptime(fecha_publicacion, "%Y-%m-%d")
-        except ValueError as e:
-            year = random.randint(1960, 2023)
-            month = random.randint(1, 12)
-            day = random.randint(1, 28)
-            fecha_publicacion = datetime.datetime(year, month, day).strftime("%Y-%m-%d")
+            try:
+                datetime.datetime.strptime(fecha_publicacion, "%Y-%m-%d")
+            except ValueError as e:
+                year = random.randint(1960, 2023)
+                month = random.randint(1, 12)
+                day = random.randint(1, 28)
+                fecha_publicacion = datetime.datetime(year, month, day).strftime(
+                    "%Y-%m-%d"
+                )
 
-        default_values = {
-            "nombre_libro": volume_info.get("title", ""),
-            "autor": volume_info.get("authors", ["Sin autor"])[0],
-            "descripcion": volume_info.get("description", "Sin descripción"),
-            "editorial": volume_info.get("publisher", "Sin editorial"),
-            "precio_unitario": sale_info.get("retailPrice", {}).get(
-                "amount", random.randint(8000, 45000)
-            ),
-            "portada": self.obtener_portada_large(book_id),
-            "thumbnail": volume_info.get("imageLinks", {}).get(
-                "thumbnail",
-                "https://islandpress.org/sites/default/files/default_book_cover_2015.jpg",
-            ),
-            "cantidad_disponible": random.randint(1, 150),
-            "fecha_publicacion": fecha_publicacion,
-            "categoria": categoria,
-            "isbn": volume_info.get("industryIdentifiers", [])[0].get(
-                "identifier", "Sin ISBN"
-            ),
-        }
+            default_values = {
+                "nombre_libro": volume_info.get("title", ""),
+                "autor": volume_info.get("authors", ["Sin autor"])[0],
+                "descripcion": volume_info.get("description", "Sin descripción"),
+                "editorial": volume_info.get("publisher", "Sin editorial"),
+                "precio_unitario": sale_info.get("retailPrice", {}).get(
+                    "amount", random.randint(8000, 45000)
+                ),
+                "portada": self.obtener_portada_large(book_id),
+                "thumbnail": volume_info.get("imageLinks", {}).get(
+                    "thumbnail",
+                    "https://islandpress.org/sites/default/files/default_book_cover_2015.jpg",
+                ),
+                "cantidad_disponible": random.randint(1, 150),
+                "fecha_publicacion": fecha_publicacion,
+                "categoria": categoria,
+                "isbn": volume_info.get("industryIdentifiers", [])[0].get(
+                    "identifier", "Sin ISBN"
+                ),
+            }
 
-        libro = Libro.objects.create(**default_values)
-        return libro
-
+            libro = Libro.objects.create(**default_values)
+            return libro
+        except Exception as e:
+            # Manejar errores relacionados con la creación del libro
+            logger.error(
+                f"Ocurrió un error al crear un libro desde los datos de la API: {e}"
+            )
+            return None
 
     """
     Vista para obtener libros desde la API de Google Books y guardarlos en la base de datos.
@@ -196,94 +204,64 @@ class LibroViewSet(viewsets.ModelViewSet):
         # Obtener la clave de la API de Google Books desde el archivo de entorno
         api_key = config("GOOGLE_BOOKS_API_KEY")
 
-        # Establecer el número máximo de resultados por página
+        # Establecer el número máximo de resultados
         max_results = 40
 
-        # Obtener el número de página de la solicitud
-        page_number = request.query_params.get("page", "1")
-        page_number = int(page_number)  # convierte el valor en un entero
-
-        # Calcular el índice de inicio para la página actual
-        start_index = (page_number - 1) * max_results + 1
-
-        libros_creados = []
-        count = 0
-        while count < max_results:
-            # Hacer una solicitud a la API de Google Books para obtener los libros más relevantes
-            try:
-                response = requests.get(
-                    f"https://www.googleapis.com/books/v1/volumes?q=*&key={api_key}&startIndex={start_index}&maxResults={max_results}&orderBy=relevance&random={random.random()}&projection=full"
-                )
-            except requests.exceptions.RequestException as e:
-                logger.error(f"Ocurrió un error al hacer la solicitud: {e}")
-                logger.error(
-                    traceback.format_exc()
-                )  # Registrar el traceback completo para obtener detalles específicos
-                raise
-            try:
-                data = json.loads(response.content)
-                response.close()
-                if "items" not in data:
-                    data = json.loads(response.content)
-                response.close()
-                if "items" not in data:
-                    return Response(
-                        {"error": "No se encontraron resultados"},
-                        status=status.HTTP_404_NOT_FOUND,
-                    )
-
-                for item in data.get("items", []):
-                    libro = self.create_libro_from_data(item)
-                    if libro:
-                        libros_creados.append(libro)
-
-                    count += 1
-                    start_index += 1
-
-                    if count >= max_results:
-                        break
-
-               # Guardar los libros creados en la base de datos
-                Libro.objects.bulk_create(libros_creados)
-
-                # Retornar solo el JSON de la API de Google Books en la respuesta
-                return Response(data)
-
-            except Exception as e:
-                   logger.error(f"Ocurrió un error al procesar los datos de la API: {e}")
-                   return Response(
-                                    {"error": f"Ocurrió un error al procesar los datos de la API: {e}"},
-                                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                                )
-
-
-    @action(detail=True, methods=["get", "put", "delete"])
-    def libros(self, request, pk=None):
         try:
-            libro = Libro.objects.get(pk=pk)
-        except Libro.DoesNotExist:
-            return Response(
-                {"error": "El libro no existe."},
-                status=status.HTTP_404_NOT_FOUND,
+            # Hacer una solicitud a la API de Google Books para obtener los libros más relevantes
+            response = requests.get(
+                f"https://www.googleapis.com/books/v1/volumes?q=*&key={api_key}&maxResults={max_results}&orderBy=relevance&random={random.random()}&projection=full"
             )
+            response.raise_for_status()  # Lanza una excepción en caso de error HTTP
+            data = response.json()
+            if "items" not in data:
+                return Response(
+                    {"error": "No se encontraron resultados"},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
 
-        if request.method == "GET":
-            serializer = LibroSerializer(libro)
+            libros_creados = []
+            for item in data.get("items", []):
+                libro = self.create_libro_from_data(item)
+                if libro:
+                    libros_creados.append(libro)
+            # Serializar los libros creados
+            serializer = LibroSerializer(libros_creados, many=True)
+
+            # Retornar solo los libros creados en la respuesta
             return Response(serializer.data)
 
-        elif request.method == "PUT":
-            serializer = LibroSerializer(libro, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
+        except requests.exceptions.RequestException as api_error:
+            # Manejar errores relacionados con la API
+            logger.error(
+                f"Ocurrió un error al hacer la solicitud a la API: {api_error}"
+            )
+            logger.error(
+                traceback.format_exc()
+            )  # Registrar el traceback completo para obtener detalles específicos
             return Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST,
+                {
+                    "error": f"Ocurrió un error al hacer la solicitud a la API: {api_error}"
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+        except Exception as e:
+            logger.error(
+                f"Ocurrió un error general al procesar los datos de la API: {e}"
+            )
+            return Response(
+                {
+                    "error": f"Ocurrió un error general al procesar los datos de la API: {e}"
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-        elif request.method == "DELETE":
-            libro.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+    @action(detail=False, methods=["get"])
+    def libros(self, request):
+        if request.method == "GET":
+            libros = Libro.objects.all()
+            serializer = LibroSerializer(libros, many=True)
+            return Response(serializer.data)
 
         return Response(
             {"error": "Método HTTP no permitido."},
@@ -319,6 +297,7 @@ class LibroViewSet(viewsets.ModelViewSet):
         - Si ocurre una excepción al procesar los datos de la API, se registra el error y se retorna una Response con el mensaje de error correspondiente.
 
     """
+
     @action(detail=False, methods=["get"])
     def get_libros_by_categoria(self, request, categoria=None):
         if categoria:
@@ -368,8 +347,6 @@ class LibroViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-
-
     """
     Vista para obtener o actualizar un libro específico.
 
@@ -394,28 +371,30 @@ class LibroViewSet(viewsets.ModelViewSet):
 
     """
 
-
-         
-    @action(detail=True, methods=['get', 'put'])
+    @action(detail=True, methods=["get", "put"])
     def libro_detail(self, request, pk=None):
         try:
             libro = Libro.objects.get(pk=pk)
         except Libro.DoesNotExist:
-            return Response({'error': 'El libro no existe.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "El libro no existe."}, status=status.HTTP_404_NOT_FOUND
+            )
 
-        if request.method == 'GET':
+        if request.method == "GET":
             serializer = LibroSerializer(libro)
             return Response(serializer.data)
-        elif request.method == 'PUT':
+        elif request.method == "PUT":
             serializer = LibroSerializer(libro, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # **********************
 # *       AUTH       *
 # **********************
+
 
 class LoginView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -425,9 +404,9 @@ class LoginView(APIView):
             serializer = LoginSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
 
-            username = serializer.validated_data.get('username')
-            email = serializer.validated_data.get('email')
-            password = serializer.validated_data['password']
+            username = serializer.validated_data.get("username")
+            email = serializer.validated_data.get("email")
+            password = serializer.validated_data["password"]
 
             # Autenticar al usuario utilizando el correo electrónico o el nombre de usuario
             user = None
@@ -438,25 +417,37 @@ class LoginView(APIView):
 
             if user:
                 # Validar el rol del usuario
-                if user.tipo_usuario not in [TipoUsuario.ADMIN, TipoUsuario.TECNICO, TipoUsuario.ENCARGADO_BODEGA]:
+                if user.tipo_usuario not in [
+                    TipoUsuario.ADMIN,
+                    TipoUsuario.TECNICO,
+                    TipoUsuario.ENCARGADO_BODEGA,
+                ]:
                     # Usuario no válido debido a falta de permisos
-                    logger.warning("Intento de inicio de sesión fallido debido a falta de permisos")
-                    return Response({'error': 'Falta de permisos'}, status=status.HTTP_403_FORBIDDEN)
-                
+                    logger.warning(
+                        "Intento de inicio de sesión fallido debido a falta de permisos"
+                    )
+                    return Response(
+                        {"error": "Falta de permisos"}, status=status.HTTP_403_FORBIDDEN
+                    )
 
                 # Generar o recuperar el token de autenticación
                 token, created = Token.objects.get_or_create(user=user)
 
                 # Registrar evento de inicio de sesión exitoso
-                logger.info(f"Inicio de sesión exitoso para el usuario: {user.username}")
-                
+                logger.info(
+                    f"Inicio de sesión exitoso para el usuario: {user.username}"
+                )
+
                 # Devolver la respuesta con el token y los datos del usuario
                 user_serializer = UserSerializer(user)
-                return Response({'token': token.key, 'user': user_serializer.data})
+                return Response({"token": token.key, "user": user_serializer.data})
             else:
                 # Usuario no válido
                 logger.warning("Intento de inicio de sesión fallido")
-                return Response({'non_field_errors': ['Credenciales inválidas']}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"non_field_errors": ["Credenciales inválidas"]},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
         except ValidationError as e:
             # Capturar la excepción ValidationError
             errors = e.get_full_details()
@@ -467,8 +458,12 @@ class LoginView(APIView):
             # Registrar el error en el log
             logger.exception("Error en el inicio de sesión: %s", str(e))
             # Devolver una respuesta de error adecuada
-            return Response({'error': 'Error en el inicio de sesión'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+            return Response(
+                {"error": "Error en el inicio de sesión"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
 class LogoutView(APIView):
     authentication_classes = [TokenAuthentication]
 
@@ -478,4 +473,4 @@ class LogoutView(APIView):
             request.auth.delete()
             logger.info(f"Cierre de sesión exitoso para el usuario")
 
-        return Response({'detail': 'Cierre de sesión exitoso.'})
+        return Response({"detail": "Cierre de sesión exitoso."})

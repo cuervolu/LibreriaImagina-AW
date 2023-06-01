@@ -4,19 +4,12 @@ from .views import LibroViewSet, LoginView, LogoutView
 urlpatterns = [
     path(
         "libros/",
-        LibroViewSet.as_view({"get": "list", "post": "create"}),
+        LibroViewSet.as_view({"get": "libros"}),
         name="libro-list",
     ),
     path(
         "libros/<int:pk>/",
-        LibroViewSet.as_view(
-            {
-                "get": "retrieve",
-                "put": "update",
-                "patch": "partial_update",
-                "delete": "destroy",
-            }
-        ),
+        LibroViewSet.as_view({"get": "retrieve", "put": "update"}),
         name="libro-detail",
     ),
     path(
@@ -30,7 +23,6 @@ urlpatterns = [
         name="libro-get-libros-by-categoria",
     ),
     # Otras rutas
-    path('login/', LoginView.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path("login/", LoginView.as_view(), name="login"),
+    path("logout/", LogoutView.as_view(), name="logout"),
 ]
-
