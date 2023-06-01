@@ -1,9 +1,7 @@
 from django.shortcuts import render
 
-# Create your views here.
 import datetime
 import logging
-
 
 import random
 import requests
@@ -186,7 +184,7 @@ class LibroViewSet(viewsets.ModelViewSet):
         10. Añade los libros creados a la lista libros_creados.
         11. Actualiza el contador y el índice de inicio.
         12. Verifica si se han obtenido suficientes libros según el número máximo de resultados.
-        13. Guarda los libros creados en la base de datos utilizando el método bulk_create.
+        13. Guarda los libros creados en la base de datos con el método create_libro_from_data.
         14. Obtiene todos los libros guardados de la base de datos.
          15. Pagina los resultados si es necesario.
         16. Serializar los libros obtenidos y los combina con los datos de la API.
@@ -210,7 +208,7 @@ class LibroViewSet(viewsets.ModelViewSet):
         try:
             # Hacer una solicitud a la API de Google Books para obtener los libros más relevantes
             response = requests.get(
-                f"https://www.googleapis.com/books/v1/volumes?q=*&key={api_key}&maxResults={max_results}&orderBy=relevance&random={random.random()}&projection=full"
+                f"https://www.googleapis.com/books/v1/volumes?q=*&key={api_key}&maxResults={max_results}&orderBy=relevance&projection=full"
             )
             response.raise_for_status()  # Lanza una excepción en caso de error HTTP
             data = response.json()
@@ -225,11 +223,16 @@ class LibroViewSet(viewsets.ModelViewSet):
                 libro = self.create_libro_from_data(item)
                 if libro:
                     libros_creados.append(libro)
-            # Serializar los libros creados
-            serializer = LibroSerializer(libros_creados, many=True)
 
-            # Retornar solo los libros creados en la respuesta
-            return Response(serializer.data)
+            # Crear un objeto paginador y paginar los libros creados
+            paginator = LibroPagination()
+            paginated_libros = paginator.paginate_queryset(libros_creados, request)
+
+            # Serializar los libros paginados
+            serializer = LibroSerializer(paginated_libros, many=True)
+
+            # Retornar la respuesta paginada
+            return paginator.get_paginated_response(serializer.data)
 
         except requests.exceptions.RequestException as api_error:
             # Manejar errores relacionados con la API
@@ -245,6 +248,7 @@ class LibroViewSet(viewsets.ModelViewSet):
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
         except Exception as e:
             logger.error(
                 f"Ocurrió un error general al procesar los datos de la API: {e}"
@@ -301,13 +305,6 @@ class LibroViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["get"])
     def get_libros_by_categoria(self, request, categoria=None):
         if categoria:
-            libros = Libro.objects.filter(categoria=categoria)
-            if libros.exists():
-                serializer = LibroSerializer(libros, many=True)
-                response_data = serializer.data
-            else:
-                response_data = []
-
             # Obtener la clave de la API de Google Books desde el archivo de entorno
             api_key = config("GOOGLE_BOOKS_API_KEY")
 
@@ -319,6 +316,16 @@ class LibroViewSet(viewsets.ModelViewSet):
                 response.raise_for_status()
                 data = response.json()
                 response.close()
+                libros_creados = []
+                for item in data.get("items", []):
+                    libro = self.create_libro_from_data(item)
+                    if libro:
+                        libros_creados.append(libro)
+                print(libros_creados)
+                libros_creados_serializados = LibroSerializer(
+                    libros_creados, many=True
+                ).data
+                return Response(libros_creados_serializados)
             except (
                 requests.exceptions.RequestException,
                 json.JSONDecodeError,
@@ -331,16 +338,6 @@ class LibroViewSet(viewsets.ModelViewSet):
                     {"error": f"Error al obtener los libros de la API: {e}"},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 )
-
-            libros_creados = []
-            for item in data.get("items", []):
-                libro = self.create_libro_from_data(item)
-                if libro:
-                    libros_creados.append(libro)
-
-            serializer = LibroSerializer(libros_creados, many=True)
-            combined_data = {"api_data": data, "db_data": response_data}
-            return Response(combined_data)
         else:
             return Response(
                 {"error": "La categoría no fue proporcionada."},
