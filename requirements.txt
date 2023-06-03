@@ -11,3 +11,4 @@ crispy-bootstrap5
 django-encrypted-field
 django
 djangorestframework
+python-dotenv
