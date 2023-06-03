@@ -11,9 +11,16 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 from decouple import config, Csv
 
-DJANGO_ENCRYPTED_FIELD_KEY = b'L4NMMv1z31lGcPSi7R7YRKtsnXY9Jjx0'
+
+# Cargar las variables de entorno desde el archivo .env
+load_dotenv()
+
+# Obtener el valor de la variable de entorno y convertirlo en bytes
+DJANGO_ENCRYPTED_FIELD_KEY = os.environ.get('ENV_DJANGO_ENCRYPTED_FIELD_KEY').encode()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
