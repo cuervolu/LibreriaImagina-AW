@@ -13,6 +13,7 @@ from pathlib import Path
 import os
 from decouple import config, Csv
 
+DJANGO_ENCRYPTED_FIELD_KEY = b'L4NMMv1z31lGcPSi7R7YRKtsnXY9Jjx0'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

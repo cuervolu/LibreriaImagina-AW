@@ -19,6 +19,9 @@ urlpatterns = [
     path("search", search, name="search"),
     path("profile", profile, name="profile"),
     path("my_data", my_data, name="my_data"),
+    path('obtener_comunas/', obtener_comunas, name='obtener_comunas'),
+    path("cards", cards, name="cards"),
+    path("addresses", addresses, name="addresses"),
     # Incluir las URLs de autenticación desde auth.urls
     path("auth/", include(auth_urls, namespace="auth")),
     # Páginas Legales
@@ -27,4 +30,9 @@ urlpatterns = [
     path('cart/eliminar/<int:detalle_carrito_id>/', eliminar_producto_carrito, name='eliminar_producto_carrito'),
     path('aumentar_cantidad/<int:detalle_carrito_id>/', aumentar_cantidad, name='aumentar_cantidad'),
     path('disminuir_cantidad/<int:detalle_carrito_id>/', disminuir_cantidad, name='disminuir_cantidad'),
+    path("agregar_domicilio", agregar_domicilio, name="agregar_domicilio"),
+    path('eliminar_domicilio/<int:id_direccion>/', eliminar_domicilio, name='eliminar_domicilio'),
+    path("agregar_metodo_pago", agregar_metodo_pago, name="agregar_metodo_pago"),
+    path('eliminar_metodo_pago/<int:metodo_pago_id>/', eliminar_metodo_pago, name='eliminar_metodo_pago'),
+    
 ]

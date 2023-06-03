@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.utils.html import escapejs
 from django.db.models import Sum, Q
 from decimal import Decimal
+from django.http import JsonResponse
+from datetime import datetime
 
 # importar una librería decoradora , permite evitar el ingreso de usuarios a la página web
 from django.contrib.auth.decorators import login_required, permission_required
@@ -199,7 +201,7 @@ def shipments(request):
 @login_required(login_url="auth/login")
 def profile(request):
     usuario = request.user
-
+    
     datos = {
         'usuario' : usuario
     }
@@ -208,10 +210,140 @@ def profile(request):
 @login_required(login_url="auth/login")
 def my_data(request):
     usuario = request.user
+    regiones = Region.objects.all()
+    selected_region_id = request.GET.get('region_id')  # Obtener el ID de la región seleccionada en el formulario
+    direcciones = None
+
+    if usuario.direccion:
+        direcciones = Direccion.objects.filter(id_direccion=usuario.direccion.id_direccion)
+
+    if selected_region_id:
+        comunas = Comuna.objects.filter(region_id=selected_region_id)
+    else:
+        comunas = Comuna.objects.all()
+    
+    tarjetas = MetodoPago.objects.filter(usuario=usuario)
+    
+    datos = {
+        'usuario' : usuario,
+        'regiones' : regiones,
+        'comunas' : comunas,
+        'direcciones' : direcciones,
+        'tarjetas' : tarjetas,
+    }
+    return render(request, "app/my_data.html", datos)
+
+
+def obtener_comunas(request):
+    selected_region_id = request.GET.get('region_id')
+    if selected_region_id:
+        comunas = Comuna.objects.filter(region_id=selected_region_id).values('nombre_comuna', 'id_comuna')
+        return JsonResponse({'comunas': list(comunas)})
+    else:
+        return JsonResponse({'comunas': []})
+
+
+@login_required(login_url="auth/login")
+def cards(request):
+    usuario = request.user
     datos = {
         'usuario' : usuario
     }
-    return render(request, "app/my_data.html", datos)
+    return render(request, "app/cards.html", datos)
+
+@login_required(login_url="auth/login")
+def addresses(request):
+    usuario = request.user
+    regiones = Region.objects.all()
+    selected_region_id = request.GET.get('region_id')  # Obtener el ID de la región seleccionada en el formulario
+    direcciones = None
+
+    if usuario.direccion:
+        direcciones = Direccion.objects.filter(id_direccion=usuario.direccion.id_direccion)
+    
+    if selected_region_id:
+        comunas = Comuna.objects.filter(region_id=selected_region_id)
+    else:
+        comunas = Comuna.objects.all()
+
+    datos = {
+        'usuario' : usuario,
+        'regiones' : regiones,
+        'comunas' : comunas,
+        'direcciones' : direcciones
+    }
+    return render(request, "app/addresses.html", datos)
+
+@login_required(login_url="auth/login")
+def agregar_metodo_pago(request):
+    usuario = request.user
+    url_anterior = request.META.get('HTTP_REFERER')
+
+    if request.method == 'POST':
+        nombre_tarjeta = request.POST['nombre_tarjeta']
+        nombre_titular = request.POST['nombre_titular']
+        numero_tarjeta = request.POST['numero_tarjeta']
+        fecha_vencimiento = request.POST['fecha_vencimiento']
+
+        fecha_vencimiento = datetime.strptime(fecha_vencimiento, '%m/%y').strftime('%Y-%m-%d')
+
+        metodo_pago = MetodoPago()
+
+        metodo_pago.usuario = usuario
+        metodo_pago.metodo_nombre = nombre_tarjeta
+        metodo_pago.tarjeta_numero = numero_tarjeta
+        metodo_pago.tarjeta_nombre_titular = nombre_titular
+        metodo_pago.fecha_vencimiento = fecha_vencimiento
+
+        metodo_pago.save()
+            
+        # Redirigir al usuario después de procesar exitosamente el formulario POST
+        return redirect(url_anterior)
+    
+@login_required(login_url="auth/login")
+def eliminar_metodo_pago(request, metodo_pago_id):
+    url_anterior = request.META.get('HTTP_REFERER')
+
+    if request.method == 'POST':
+        metodo_pago = MetodoPago.objects.get(id = metodo_pago_id)
+        metodo_pago.delete()
+            
+        # Redirigir al usuario después de procesar exitosamente el formulario POST
+        return redirect(url_anterior)
+
+@login_required(login_url="auth/login")
+def agregar_domicilio(request):
+    usuario = request.user
+    url_anterior = request.META.get('HTTP_REFERER')
+
+    if request.method == 'POST':
+        direccion = Direccion()
+        direccion.direccion = request.POST['direccion']
+        idcomuna = request.POST['idcomuna']
+        comuna = Comuna.objects.get(id_comuna=idcomuna)
+        direccion.comuna = comuna
+
+        if usuario.direccion:
+            usuario.direccion.delete()
+            usuario.direccion = direccion
+            usuario.save()
+        else:
+            usuario.direccion = direccion
+            usuario.save()
+            
+        # Redirigir al usuario después de procesar exitosamente el formulario POST
+        return redirect(url_anterior)
+
+@login_required(login_url="auth/login")
+def eliminar_domicilio(request, id_direccion):
+    url_anterior = request.META.get('HTTP_REFERER')
+
+    if request.method == 'POST':
+        direccion = Direccion.objects.get(id_direccion = id_direccion)
+        direccion.delete()
+            
+        # Redirigir al usuario después de procesar exitosamente el formulario POST
+        return redirect(url_anterior)
 
 
 @login_required(login_url="auth/login")

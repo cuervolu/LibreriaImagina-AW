@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/my_data.css' %}" />
+{% endblock %}
+{% load humanize %}
+{% block title %}Mis direcciones{% endblock title %}
+
+{% block content %}
+<hr>
+<div class="container my-5 py-3">
+    <div class="row justify-content-start mb-2">
+        <div class="col-auto col-md-auto col-lg-auto">
+            <p class="" style="font-size: 30px; font-weight: 600;">Mis Direcciones</p>
+        </div>
+    </div>
+    <p class="mb-4" style="font-size: 19px; font-weight: 600;">Domicilios</p>
+    <!-- Card -->
+    <div class="card mb-5 d-flex"
+        style="border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+        <div class="row mx-3 mt-4">
+            {% if direcciones != None %}
+            <div class="col-sm-12 col-md-12 col-lg-12 my-auto d-flex align-items-center">
+                <div class="d-flex justify-content-center align-items-center ms-2">
+                    <img src="{% static 'img/direction-point.svg' %}" alt="" class="img-fluid" width="18px">
+                </div>
+                <div class="ms-4">
+                    <h6>{{ usuario.direccion }}</h6>
+                    <h6 style="font-size: 14px; font-weight: 300;">{{ usuario.direccion.comuna.region.nombre }} - {{ usuario.direccion.comuna.nombre_comuna}}</h6>
+                    <h6 style="font-size: 14px; font-weight: 300;">{{ usuario.nombre }} {{ usuario.apellido }} -
+                        {{usuario.telefono }}</h6>
+                </div>
+                <div class="text-end ms-auto">
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle boton-dropdown border-0" type="button"
+                            id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
+                            style="color: #207198;">
+                            <i class="fas fa-ellipsis-v fa-lg"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarDomicilioModal">Editar</button></li>
+                            <li><a class="dropdown-item" href="#">Eliminar</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-4">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center ms-auto">
+                <button class="btn border-0" type="button" style="color: #207198;" data-bs-toggle="modal"
+                    data-bs-target="#agregarDomicilioModal">
+                    <div class="mt-2 d-flex">
+                        <h5>Editar domicilio</h5>
+                    </div>
+                </button>
+            </div>
+            {% else %}
+            <div class="col-sm-12 col-md-12 col-lg-12 mb-2 d-flex align-items-center">
+                <div class="mx-auto my-3">
+                    <h4>Aún no posees una direccion en tu cuenta</h4>
+                </div>
+            </div>
+            <hr>
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center ms-auto">
+                <button class="btn border-0" type="button" style="color: #207198;" data-bs-toggle="modal"
+                    data-bs-target="#agregarDomicilioModal">
+                    <div class="mt-2 d-flex">
+                        <h5>Agregar domicilio</h5>
+                    </div>
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- End Card -->
+
+    <!-- Modal Agregar Domicilio -->
+    <div class="modal fade" id="agregarDomicilioModal" tabindex="-1" aria-labelledby="agregarDomicilioModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0">
+                    {% if direcciones != None %}
+                    <h4 class="modal-title ms-3 mt-3" style="font-weight: 600;" id="agregarDomicilioModalLabel">Editar Domicilio</h4>
+                    {% else %}
+                    <h4 class="modal-title ms-3 mt-3" style="font-weight: 600;" id="agregarDomicilioModalLabel">Agregar nuevo Domicilio</h4>
+                    {% endif %}
+                    <button type="button" class="btn-close me-3" style="box-shadow: none;" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{% url 'agregar_domicilio' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="row d-flex align-items-center">
+                            <div class="col-md-12 col-lg-6">
+                                <div>
+                                    <img src="{% static 'img/domicilioDirection.png' %}" alt="" class="img-fluid"
+                                        style="padding: 60px;">
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-lg-6">
+                                <div>
+                                    <p style="font-weight: 600;">Region</p>
+                                    {% if direcciones != None %}
+                                    <div class="input-group mb-3">
+                                        <select class="form-select" required id="regionSelect">
+                                            <option value="0" selected>{{ usuario.direccion.comuna.region.nombre }}</option>
+                                            {% for region in regiones %}
+                                            <option value="{{ region.id_region }}">{{ region.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <p style="font-weight: 600;">Comuna</p>
+                                    <div class="input-group mb-3">
+                                        <select class="form-select" required id="comunaSelect" name="idcomuna">
+                                            <option selected>{{ usuario.direccion.comuna.nombre_comuna }}</option>
+                                        </select>
+                                    </div>
+                                    <p style="font-weight: 600;">Direccion</p>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" name="direccion" required
+                                            aria-label="Sizing example input" placeholder="{{ usuario.direccion }}"
+                                            aria-describedby="inputGroup-sizing-default">
+                                    </div>
+                                    {% else %}
+                                    <div class="input-group mb-3">
+                                        <select class="form-select" required id="regionSelect">
+                                            <option value="0" selected>Seleccionar Región</option>
+                                            {% for region in regiones %}
+                                            <option value="{{ region.id_region }}">{{ region.nombre }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <p style="font-weight: 600;">Comuna</p>
+                                    <div class="input-group mb-3">
+                                        <select class="form-select" required id="comunaSelect" name="idcomuna">
+                                            <option selected>Seleccionar Comuna</option>
+                                        </select>
+                                    </div>
+                                    <p style="font-weight: 600;">Direccion</p>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" name="direccion" required
+                                            aria-label="Sizing example input"
+                                            aria-describedby="inputGroup-sizing-default">
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="submit" class="btn btn-lg ms-3"
+                            style="color: white; background-color: #82C2CB; border-radius: 0;">Agregar
+                            Domicilio</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal Agregar Domicilio -->
+</div>
+
+</div>
+
+
+{% endblock %}
+
+
+{% block script_final %}
+<script src="{% static 'js/direccion.js' %}"></script>
+{% endblock script_final %}
