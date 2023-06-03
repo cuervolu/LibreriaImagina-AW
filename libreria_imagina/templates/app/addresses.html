@@ -20,7 +20,7 @@
     <!-- Card -->
     <div class="card mb-5 d-flex"
         style="border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
-        <div class="row mx-3 mt-4">
+        <div class="row mx-3 mt-4 mb-2">
             {% if direcciones != None %}
             <div class="col-sm-12 col-md-12 col-lg-12 my-auto d-flex align-items-center">
                 <div class="d-flex justify-content-center align-items-center ms-2">
@@ -28,7 +28,8 @@
                 </div>
                 <div class="ms-4">
                     <h6>{{ usuario.direccion }}</h6>
-                    <h6 style="font-size: 14px; font-weight: 300;">{{ usuario.direccion.comuna.region.nombre }} - {{ usuario.direccion.comuna.nombre_comuna}}</h6>
+                    <h6 style="font-size: 14px; font-weight: 300;">{{ usuario.direccion.comuna.region.nombre }} -
+                        {{ usuario.direccion.comuna.nombre_comuna}}</h6>
                     <h6 style="font-size: 14px; font-weight: 300;">{{ usuario.nombre }} {{ usuario.apellido }} -
                         {{usuario.telefono }}</h6>
                 </div>
@@ -40,8 +41,13 @@
                             <i class="fas fa-ellipsis-v fa-lg"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarDomicilioModal">Editar</button></li>
-                            <li><a class="dropdown-item" href="#">Eliminar</a></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal"
+                                    data-bs-target="#agregarDomicilioModal">Editar</button></li>
+                            <form method="POST" action="{% url 'eliminar_domicilio' usuario.direccion.id_direccion %}">
+                                {% csrf_token %}
+                                <li><button class="dropdown-item" type="submit">Eliminar</button></li>
+                            </form>
+                            
                         </ul>
                     </div>
                 </div>
@@ -50,7 +56,7 @@
             <div class="col-sm-12 col-md-12 col-lg-12 text-center ms-auto">
                 <button class="btn border-0" type="button" style="color: #207198;" data-bs-toggle="modal"
                     data-bs-target="#agregarDomicilioModal">
-                    <div class="mt-2 d-flex">
+                    <div class="d-flex">
                         <h5>Editar domicilio</h5>
                     </div>
                 </button>
@@ -82,9 +88,11 @@
             <div class="modal-content">
                 <div class="modal-header border-bottom-0">
                     {% if direcciones != None %}
-                    <h4 class="modal-title ms-3 mt-3" style="font-weight: 600;" id="agregarDomicilioModalLabel">Editar Domicilio</h4>
+                    <h4 class="modal-title ms-3 mt-3" style="font-weight: 600;" id="agregarDomicilioModalLabel">Editar
+                        Domicilio</h4>
                     {% else %}
-                    <h4 class="modal-title ms-3 mt-3" style="font-weight: 600;" id="agregarDomicilioModalLabel">Agregar nuevo Domicilio</h4>
+                    <h4 class="modal-title ms-3 mt-3" style="font-weight: 600;" id="agregarDomicilioModalLabel">Agregar
+                        nuevo Domicilio</h4>
                     {% endif %}
                     <button type="button" class="btn-close me-3" style="box-shadow: none;" data-bs-dismiss="modal"
                         aria-label="Close"></button>
@@ -105,7 +113,8 @@
                                     {% if direcciones != None %}
                                     <div class="input-group mb-3">
                                         <select class="form-select" required id="regionSelect">
-                                            <option value="0" selected>{{ usuario.direccion.comuna.region.nombre }}</option>
+                                            <option value="0" selected>{{ usuario.direccion.comuna.region.nombre }}
+                                            </option>
                                             {% for region in regiones %}
                                             <option value="{{ region.id_region }}">{{ region.nombre }}</option>
                                             {% endfor %}

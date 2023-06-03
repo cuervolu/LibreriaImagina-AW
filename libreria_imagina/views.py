@@ -246,8 +246,10 @@ def obtener_comunas(request):
 @login_required(login_url="auth/login")
 def cards(request):
     usuario = request.user
+    tarjetas = MetodoPago.objects.filter(usuario=usuario)
     datos = {
-        'usuario' : usuario
+        'usuario' : usuario,
+        'tarjetas' : tarjetas,
     }
     return render(request, "app/cards.html", datos)
 
