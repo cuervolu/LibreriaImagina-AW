@@ -10,6 +10,11 @@ from decimal import Decimal
 from django.http import JsonResponse
 from datetime import datetime
 
+# Integración servicio SOAP
+import zeep
+from zeep import Client
+
+import xml.etree.ElementTree as ET
 # importar una librería decoradora , permite evitar el ingreso de usuarios a la página web
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -19,7 +24,9 @@ from libreria_imagina.utils import format_book_prices
 
 from .models import *
 from .forms import SignupForm
+import logging
 
+logger = logging.getLogger(__name__)
 # **********************
 # *       APP          *
 # **********************
@@ -451,6 +458,17 @@ def imaginaPay(request):
 @login_required(login_url="auth/login")
 def generar_pago(request):
     url_anterior = request.META.get('HTTP_REFERER')
+    usuario = request.user
+    envio = 3200
+    try:
+        carrito = Carrito.objects.get(usuario=request.user)
+    except Carrito.DoesNotExist:
+        carrito = Carrito.objects.create(usuario=request.user)
+    
+    total = carrito.total_pagar + envio
+    carrito.total_pagar = format(carrito.total_pagar, ",.0f")
+    
+    cliente = Client("http://localhost:54585/ImaginaPay.asmx?WSDL")
 
     if request.method == 'POST':
         metodo_pago_id = request.POST['flexRadioDefault']
@@ -458,9 +476,55 @@ def generar_pago(request):
         metodo_pago = MetodoPago.objects.get(id = metodo_pago_id)
         
         if metodo_pago.tarjeta_numero == numero_tarjeta:
-            print(metodo_pago.tarjeta_numero)
+            try:
+                pedido = Pedido()
+                pedido.cliente = usuario
+                pedido.fecha_pedido = datetime.now()
+                pedido.estado_pedido = EstadoPedido.VALIDACION
+                pedido.monto_total = total
+                
+                pedido.save()
+
+                if pedido:
+                    
+                    detalle_carrito = DetalleCarrito.objects.filter(carrito = carrito.id_carrito)
+                    for aux in detalle_carrito:
+                        detalle_pedido = DetallePedido()
+                        detalle_pedido.pedido = pedido
+                        detalle_pedido.libro = aux.libro
+                        detalle_pedido.cantidad = aux.cantidad
+                        detalle_pedido.precio_unitario = aux.libro.precio_unitario
+                        detalle_pedido.subtotal = aux.precio_total
+
+                        detalle_pedido.save()
+
+                    carrito.delete()
+                    
+                    try: 
+                        logger.info("Comenzando llamado al servicio web ImaginaPay")
+                        print(f"Total: {total}, Pedido: {pedido.id_pedido},MDP: {metodo_pago.id}, Usuario: {usuario.pk}")
+                        # Llamada al servicio SOAP y obtener la respuesta XML
+                        response = cliente.service.CreatePayment(total,pedido.id_pedido,metodo_pago.id,usuario.pk)
+                        # Parsear la respuesta XML
+                        xml_response = ET.fromstring(response)
+                        
+                         # Verificar si la respuesta indica un error
+                        if xml_response.tag == "ErrorDetails":
+                            # Extraer los elementos de error del XML
+                            status_code = xml_response.find("StatusCode").text
+                            message = xml_response.find("Message").text
+                            stackTrace = xml_response.find("StackTrace").text
+                            logger.error(f"Error al llamar al servicio web SOAP: {status_code} - {message}")
+                            logger.exception(f"Error al llamar al servicio web SOAP: {stackTrace}")
+                    except Exception as e: 
+                        # Manejar cualquier excepción que pueda ocurrir durante la llamada al servicio SOAP
+                        logger.exception("Error al llamar al servicio web SOAP: %s", str(e))
+                else:
+                    logger.warning("No se pudo crear el pedido")
+            except Exception as e:
+                logger.exception("Error al crear el Pedido: %s", str(e))
         else:
-            print("No coincide")
+            logger.warning("No coincide el número de tarjeta")
             
         # Redirigir al usuario después de procesar exitosamente el formulario POST
         return redirect(url_anterior)
