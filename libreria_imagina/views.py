@@ -424,6 +424,47 @@ def disminuir_cantidad(request, detalle_carrito_id):
 
     return redirect("cart")
 
+@login_required(login_url="auth/login")
+def imaginaPay(request):
+    usuario = request.user
+    tarjetas = MetodoPago.objects.filter(usuario=usuario)
+
+    envio = 3200
+    try:
+        carrito = Carrito.objects.get(usuario=request.user)
+    except Carrito.DoesNotExist:
+        carrito = Carrito.objects.create(usuario=request.user)
+    
+    total = carrito.total_pagar + envio
+
+    carrito.total_pagar = format(carrito.total_pagar, ",.0f")
+    
+
+    datos = {
+        'usuario' : usuario,
+        'tarjetas' : tarjetas,
+        'carrito' : carrito,
+        'total': format(total, ",.0f")
+    }
+    return render(request, "app/imaginaPay.html", datos)
+
+@login_required(login_url="auth/login")
+def generar_pago(request):
+    url_anterior = request.META.get('HTTP_REFERER')
+
+    if request.method == 'POST':
+        metodo_pago_id = request.POST['flexRadioDefault']
+        numero_tarjeta = request.POST['cardInput']
+        metodo_pago = MetodoPago.objects.get(id = metodo_pago_id)
+        
+        if metodo_pago.tarjeta_numero == numero_tarjeta:
+            print(metodo_pago.tarjeta_numero)
+        else:
+            print("No coincide")
+            
+        # Redirigir al usuario después de procesar exitosamente el formulario POST
+        return redirect(url_anterior)
+
 
 # **********************
 # *       LEGAL        *
