@@ -14,9 +14,6 @@ from django.db.models import Q
 from encrypted_field import fields
 # Create your models here.
 
-
-
-
 class Region(models.Model):
     id_region = models.IntegerField(
         primary_key=True, db_column="id_region", verbose_name="ID Region"
@@ -254,18 +251,7 @@ class TipoUsuario(models.TextChoices):
     ENCARGADO_BODEGA = "Encargado de Bodega"
 
 
-class Transaccion(models.Model):
-    id_transaccion = models.BigAutoField(
-        primary_key=True, db_column="id_transaccion", verbose_name="ID Transaccion"
-    )
-    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
-    total_transaccion = models.BigIntegerField()
 
-    class Meta:
-        db_table = "transaccion"
-
-    def __str__(self):
-        return self.id_transaccion
 
 
 class UsuarioManager(BaseUserManager):
@@ -458,3 +444,19 @@ class DetalleCarrito(models.Model):
     class Meta:
         db_table = 'detalle_carrito'
     
+class Transaccion(models.Model):
+    id_transaccion = models.AutoField(
+        primary_key=True, db_column="id_transaccion", verbose_name="ID Transaccion"
+    )
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
+    metodo_pago = models.ForeignKey(MetodoPago, on_delete=models.CASCADE)
+    total_transaccion = models.DecimalField(max_digits=8, decimal_places=2)
+    aprobado = models.BooleanField(default=False)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    fecha = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        db_table = "transaccion"
+        
+
+    def __str__(self):
+        return f"Transacción #{self.pk} - Usuario: {self.usuario.username}"
