@@ -16,7 +16,8 @@
             <a href="/" class="text-decoration-none text-black">
                 <div class="d-flex align-items-center">
                     <i class="fa-solid fa-chevron-left fa-lg"></i>
-                    <p style="font-size: 20px; font-weight: 600; margin-bottom: 0px; margin-left: 10px;">Seguir Comprando
+                    <p style="font-size: 20px; font-weight: 600; margin-bottom: 0px; margin-left: 10px;">Seguir
+                        Comprando
                     </p>
                 </div>
             </a>
@@ -27,7 +28,8 @@
             <div class="d-flex align-items-center justify-content-between mt-4"
                 style="background: white; max-width: auto; height: auto; border-radius: 15px;filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1));">
                 <div class="producto-imagen">
-                    <img src="{{ detalle_carrito.libro.thumbnail }}" alt="{{ detalle_carrito.libro.nombre_libro }}" class="img-fluid">
+                    <img src="{{ detalle_carrito.libro.thumbnail }}" alt="{{ detalle_carrito.libro.nombre_libro }}"
+                        class="img-fluid">
                 </div>
                 <div class="producto-info">
                     <p class="producto-nombre">
@@ -37,23 +39,23 @@
                 </div>
                 <div class="mx-auto producto-cantidad">
                     <div class="input-group align-items-center">
-                        <input type="number"
-                            class="count text-end ml-2" min="1" max="{{ detalle_carrito.libro.cantidad_disponible }}"
-                            value="{{ detalle_carrito.cantidad }}" readonly name="cantidad">
+                        <input type="number" class="count text-end ml-2" min="1"
+                            max="{{ detalle_carrito.libro.cantidad_disponible }}" value="{{ detalle_carrito.cantidad }}"
+                            readonly name="cantidad">
 
                         <div class="mx-2">
                             <div class="input-group-prepend" style="margin-bottom: -9px;">
                                 <form method="post" action="{% url 'aumentar_cantidad' detalle_carrito.id %}">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-link py-1"><i class="fa-solid fa-caret-up fa-2xl"
-                                        style="color: black;"></i></button>
+                                    <button type="submit" class="btn btn-link py-1"><i
+                                            class="fa-solid fa-caret-up fa-2xl" style="color: black;"></i></button>
                                 </form>
                             </div>
                             <div class="input-group-append" style="margin-top: -9px;">
                                 <form method="post" action="{% url 'disminuir_cantidad' detalle_carrito.id %}">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-link py-1"><i class="fa-solid fa-caret-down fa-2xl" 
-                                        style="color: black;"></i></button>
+                                    <button type="submit" class="btn btn-link py-1"><i
+                                            class="fa-solid fa-caret-down fa-2xl" style="color: black;"></i></button>
                                 </form>
                             </div>
                         </div>
@@ -65,7 +67,8 @@
                 <div class="mx-2">
                     <form method="post" action="{% url 'eliminar_producto_carrito' detalle_carrito.id %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-link"><img class="img-basurero" src="{% static 'img/basurero.svg' %}" alt=""></button>
+                        <button type="submit" class="btn btn-link"><img class="img-basurero"
+                                src="{% static 'img/basurero.svg' %}" alt=""></button>
                     </form>
                 </div>
             </div>
@@ -91,7 +94,7 @@
                     <p class="text-start" style="font-size: 14px; font-weight: 500; color: white;">${{total}}</p>
                 </div>
                 <div>
-                    <button class="btn-pago">
+                    <button class="btn-pago" onclick="openPopup()">
                         <div class="d-flex mx-2 btn-pago-content">
                             <div class="mx-3">
                                 <p class="text-start"
@@ -102,8 +105,7 @@
                             <div class="mx-3 d-flex align-items-center">
                                 <p class="text-start"
                                     style="font-size: 16px; font-weight: 500; color: white; margin-bottom: 0px; margin-right: 6px;">
-                                    Continuar
-                                    Compra</p>
+                                    Continuar Compra</p>
                                 <i class="fa-solid fa-arrow-right" style="color: #ffffff;"></i>
 
                             </div>
@@ -120,9 +122,11 @@
             <p style="font-size: 20px; font-weight: 600; margin-bottom: 0px; margin-left: 10px;">Seguir Comprando</p>
         </div>
         <hr>
-        <p class="d-none d-md-none d-lg-block" style="font-size: 36px; font-weight: 600; margin-bottom: -5px;">Carrito</p>
+        <p class="d-none d-md-none d-lg-block" style="font-size: 36px; font-weight: 600; margin-bottom: -5px;">Carrito
+        </p>
         <div class="col-auto col-md-auto col-lg-auto d-none d-md-none d-lg-block">
-            <img class="img-fluid float-start" src="{% static 'img/carritoVacio.png' %}" alt="" style="max-width: 500px;">
+            <img class="img-fluid float-start" src="{% static 'img/carritoVacio.png' %}" alt=""
+                style="max-width: 500px;">
         </div>
         <div class="col-sm-auto col-md-auto col-lg-4 mt-5">
             <h1 class="mb-3 fw-bolder text-start" style="color: #146E89;">Carrito Vacio...</h1>
@@ -140,4 +144,20 @@
 
 
 {% block script_final %}
+<script>
+    function openPopup() {
+        var popupUrl = '/imaginaPay'; // URL de la página que deseas abrir en la ventana emergente
+        var popupWidth = 800; // Ancho de la ventana emergente
+        var popupHeight = 600; // Altura de la ventana emergente
+        var popupLeft = (window.innerWidth - popupWidth) / 2; // Calcular la posición izquierda para centrar la ventana emergente
+        var popupTop = (window.innerHeight - popupHeight) / 2; // Calcular la posición superior para centrar la ventana emergente
+        var popupWindow = window.open(popupUrl, '_blank', 'width=' + popupWidth + ',height=' + popupHeight + ',left=' + popupLeft + ',top=' + popupTop); // Abrir la ventana emergente centrada
+        if (popupWindow) {
+            popupWindow.focus();
+        } else {
+            // Si se bloquea la apertura de ventanas emergentes, muestra un mensaje de error al usuario
+            alert('La ventana emergente ha sido bloqueada por el navegador. Por favor, habilite las ventanas emergentes para este sitio web.');
+        }
+    }
+</script>
 {% endblock script_final %}

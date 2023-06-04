@@ -424,6 +424,30 @@ def disminuir_cantidad(request, detalle_carrito_id):
 
     return redirect("cart")
 
+@login_required(login_url="auth/login")
+def imaginaPay(request):
+    usuario = request.user
+    tarjetas = MetodoPago.objects.filter(usuario=usuario)
+
+    envio = 3200
+    try:
+        carrito = Carrito.objects.get(usuario=request.user)
+    except Carrito.DoesNotExist:
+        carrito = Carrito.objects.create(usuario=request.user)
+    
+    total = carrito.total_pagar + envio
+
+    carrito.total_pagar = format(carrito.total_pagar, ",.0f")
+    
+
+    datos = {
+        'usuario' : usuario,
+        'tarjetas' : tarjetas,
+        'carrito' : carrito,
+        'total': format(total, ",.0f")
+    }
+    return render(request, "app/imaginaPay.html", datos)
+
 
 # **********************
 # *       LEGAL        *
