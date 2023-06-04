@@ -48,118 +48,120 @@
                 <img src="{% static 'img/ImaginaPay.png' %}" alt="" class="img-fluid" style="width: 200px;">
             </div>
             <div class="card card-general mt-5">
-                <div class="row m-5 p-3">
-                    <div class="col-sm-12 col-md-12 col-lg-6">
-                        <div class="row">
-                            <div class="d-flex justify-content-between">
-                                <p>Estas pagando en:</p>
-                                <p>Monto a pagar:</p>
+                <div class="">
+                    <form method="POST" action="{% url 'generar_pago' %}" class="row m-5 p-3">
+                        {% csrf_token %}
+                        <div class="col-sm-12 col-md-12 col-lg-6">
+                            <div class="row">
+                                <div class="d-flex justify-content-between">
+                                    <p>Estas pagando en:</p>
+                                    <p>Monto a pagar:</p>
+                                </div>
+                                <div class="d-flex justify-content-between mt-3">
+                                    <img src="{% static 'img/logo.png' %}" alt="" class="img-fluid"
+                                        style="width: auto; height: 35px;">
+                                    <h3 style="font-weight: bolder;">${{ total }}</h3>
+                                </div>
                             </div>
-                            <div class="d-flex justify-content-between mt-3">
-                                <img src="{% static 'img/logo.png' %}" alt="" class="img-fluid"
-                                    style="width: auto; height: 35px;">
-                                <h3 style="font-weight: bolder;">${{ total }}</h3>
-                            </div>
-                        </div>
-                        <div class="row mt-5">
-                            <p style="font-size: 17px; font-weight: 500;">Selecciona tu medio de pago:</p>
-                            {% if tarjetas %}
-                            {% for metodo_pago in tarjetas %}
-                            <div class="form-check">
-                                <div class="col-sm-12 col-md-12 col-lg-12 mb-2 d-flex align-items-center metodo-pago-container my-4">
-                                    <div class="d-flex my-3">
-                                        <div class="d-flex justify-content-center align-items-center metodo-pago mx-3">
-                                            {% if metodo_pago.tarjeta_numero|slice:"0:1" == '4' %}
-                                            <img src="{% static 'img/Visa.png' %}" alt="" class="img-fluid">
-                                            {% elif metodo_pago.tarjeta_numero|slice:"0:2" == '51' or metodo_pago.tarjeta_numero|slice:"0:2" == '52' or metodo_pago.tarjeta_numero|slice:"0:2" == '53' or metodo_pago.tarjeta_numero|slice:"0:2" == '54' or metodo_pago.tarjeta_numero|slice:"0:2" == '55' %}
-                                            <img src="{% static 'img/Mastercard.png' %}" alt="" class="img-fluid">
-                                            {% elif metodo_pago.tarjeta_numero|slice:"0:2" == '34' or metodo_pago.tarjeta_numero|slice:"0:2" == '37' %}
-                                            <img src="{% static 'img/AmericanExpress.png' %}" alt="" class="img-fluid">
-                                            {% else %}
-                                            <img src="{% static 'img/OtraTarjeta.png' %}" alt="" class="img-fluid">
-                                            {% endif %}
+                            <div class="row mt-5">
+                                <p style="font-size: 17px; font-weight: 500;">Selecciona tu medio de pago:</p>
+                                {% if tarjetas %}
+                                {% for metodo_pago in tarjetas %}
+                                <div class="form-check">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 mb-2 d-flex align-items-center metodo-pago-container my-4">
+                                        <div class="d-flex my-3">
+                                            <div class="d-flex justify-content-center align-items-center metodo-pago mx-3">
+                                                {% if metodo_pago.tarjeta_numero|slice:"0:1" == '4' %}
+                                                <img src="{% static 'img/Visa.png' %}" alt="" class="img-fluid">
+                                                {% elif metodo_pago.tarjeta_numero|slice:"0:2" == '51' or metodo_pago.tarjeta_numero|slice:"0:2" == '52' or metodo_pago.tarjeta_numero|slice:"0:2" == '53' or metodo_pago.tarjeta_numero|slice:"0:2" == '54' or metodo_pago.tarjeta_numero|slice:"0:2" == '55' %}
+                                                <img src="{% static 'img/Mastercard.png' %}" alt="" class="img-fluid">
+                                                {% elif metodo_pago.tarjeta_numero|slice:"0:2" == '34' or metodo_pago.tarjeta_numero|slice:"0:2" == '37' %}
+                                                <img src="{% static 'img/AmericanExpress.png' %}" alt="" class="img-fluid">
+                                                {% else %}
+                                                <img src="{% static 'img/OtraTarjeta.png' %}" alt="" class="img-fluid">
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="d-flex my-3">
+                                            <div class="ms-4">
+                                                <h6>Terminada en {{ metodo_pago.tarjeta_numero|slice:"-4:" }}</h6>
+                                                {% if metodo_pago.tarjeta_numero|slice:"0:1" == '4' %}
+                                                <h6 style="font-size: 14px; font-weight: 300;">Visa</h6>
+                                                {% elif metodo_pago.tarjeta_numero|slice:"0:2" == '51' or metodo_pago.tarjeta_numero|slice:"0:2" == '52' or metodo_pago.tarjeta_numero|slice:"0:2" == '53' or metodo_pago.tarjeta_numero|slice:"0:2" == '54' or metodo_pago.tarjeta_numero|slice:"0:2" == '55' %}
+                                                <h6 style="font-size: 14px; font-weight: 300;">Mastercard</h6>
+                                                {% elif metodo_pago.tarjeta_numero|slice:"0:2" == '34' or metodo_pago.tarjeta_numero|slice:"0:2" == '37' %}
+                                                <h6 style="font-size: 14px; font-weight: 300;">American Express</h6>
+                                                {% else %}
+                                                <h6 style="font-size: 14px; font-weight: 300;">Otro tipo de tarjeta</h6>
+                                                {% endif %}
+                                                <h6 style="font-size: 14px; font-weight: 300;">Nombre Tarjeta: {{ metodo_pago.metodo_nombre }}</h6>
+                                            </div>
+                                        </div>
+                                        <div class="ms-auto">
+                                            <input class="form-check-input me-4" required type="radio" name="flexRadioDefault" value="{{ metodo_pago.id }}" id="flexRadioDefault{{ metodo_pago.id }}" checked>
                                         </div>
                                     </div>
-                                    <div class="d-flex my-3">
-                                        <div class="ms-4">
-                                            <h6>Terminada en {{ metodo_pago.tarjeta_numero|slice:"-4:" }}</h6>
-                                            {% if metodo_pago.tarjeta_numero|slice:"0:1" == '4' %}
-                                            <h6 style="font-size: 14px; font-weight: 300;">Visa</h6>
-                                            {% elif metodo_pago.tarjeta_numero|slice:"0:2" == '51' or metodo_pago.tarjeta_numero|slice:"0:2" == '52' or metodo_pago.tarjeta_numero|slice:"0:2" == '53' or metodo_pago.tarjeta_numero|slice:"0:2" == '54' or metodo_pago.tarjeta_numero|slice:"0:2" == '55' %}
-                                            <h6 style="font-size: 14px; font-weight: 300;">Mastercard</h6>
-                                            {% elif metodo_pago.tarjeta_numero|slice:"0:2" == '34' or metodo_pago.tarjeta_numero|slice:"0:2" == '37' %}
-                                            <h6 style="font-size: 14px; font-weight: 300;">American Express</h6>
-                                            {% else %}
-                                            <h6 style="font-size: 14px; font-weight: 300;">Otro tipo de tarjeta</h6>
-                                            {% endif %}
-                                            <h6 style="font-size: 14px; font-weight: 300;">Nombre Tarjeta: {{ metodo_pago.metodo_nombre }}</h6>
-                                        </div>
-                                    </div>
-                                    <div class="ms-auto">
-                                        <input class="form-check-input me-4" required type="radio" name="flexRadioDefault" value="{{ metodo_pago.id }}" id="flexRadioDefault{{ metodo_pago.id }}" checked>
+                                </div>
+                                {% endfor %}
+                                {% else %}
+                                <div class="col-sm-12 col-md-12 col-lg-12 mb-2 d-flex align-items-center">
+                                    <div class="mx-auto my-3">
+                                        <h4>Aún no posees tarjetas en tu cuenta</h4>
                                     </div>
                                 </div>
+                                <hr>
+                                {% endif %}
                             </div>
-                            {% endfor %}
-                            {% else %}
-                            <div class="col-sm-12 col-md-12 col-lg-12 mb-2 d-flex align-items-center">
-                                <div class="mx-auto my-3">
-                                    <h4>Aún no posees tarjetas en tu cuenta</h4>
+                            <div class="row d-flex mt-5 d-none d-md-none d-sm-none d-lg-block">
+                                <div class="text-center">
+                                    <a href="#" class="text-decoration-none" onclick="closeCurrentTab()"><p style="color: #527EFF; font-weight: 500;">Anular compra y volver</p></a>
                                 </div>
                             </div>
-                            <hr>
-                            {% endif %}
-
+                            <hr class="d-block d-sm-block d-md-block d-lg-none mb-4">
                         </div>
-                        <div class="row d-flex mt-5 d-none d-md-none d-sm-none d-lg-block">
-                            <div class="text-center">
-                                <a href="#" class="text-decoration-none" onclick="closeCurrentTab()"><p style="color: #527EFF; font-weight: 500;">Anular compra y volver</p></a>
-                            </div>
-                        </div>
-                        <hr class="d-block d-sm-block d-md-block d-lg-none mb-4">
-                    </div>
-                    <div class="col-sm-12 col-md-12 col-lg-6">
-                        <div class="row text-center justify-content-center">
-                            <p>Verifica los datos de tu tarjeta selecionada:</p>
-                            <div class="card card-tarjeta mt-4">
-                                <div class="mt-5 pt-4">
-                                    <p id="cardNumber" style="color: #828EA5; font-weight: 600;">XXXX XXXX XXXX XXXX</p>
-                                </div>
-                                <div class="text-start" style="margin-left: 23px;">
-                                    <p id="expirationDate" style="color: #828EA5; font-weight: 500;">XX/XX</p>
+                        <div class="col-sm-12 col-md-12 col-lg-6">
+                            <div class="row text-center justify-content-center">
+                                <p>Verifica los datos de tu tarjeta selecionada:</p>
+                                <div class="card card-tarjeta mt-4">
+                                    <div class="mt-5 pt-4">
+                                        <p id="cardNumber" style="color: #828EA5; font-weight: 600;">XXXX XXXX XXXX XXXX</p>
+                                    </div>
+                                    <div class="text-start" style="margin-left: 23px;">
+                                        <p id="expirationDate" style="color: #828EA5; font-weight: 500;">XX/XX</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row justify-content-center mt-5">
-                            <div class="col-sm-12 col-md-12 col-lg-10 col-xl-9 cardnumber-info">
-                                <p>Numero de tarjeta:</p>
-                                <div class="input-icon justify-content-center">
-                                    <i class="fas fa-credit-card" style="color: #828EA5;"></i>
-                                    <input type="text" id="cardInput" maxlength="19" placeholder="XXXX XXXX XXXX XXXX">
+                            <div class="row justify-content-center mt-5">
+                                <div class="col-sm-12 col-md-12 col-lg-10 col-xl-9 cardnumber-info">
+                                    <p>Numero de tarjeta:</p>
+                                    <div class="input-icon justify-content-center">
+                                        <i class="fas fa-credit-card" style="color: #828EA5;"></i>
+                                        <input type="text" id="cardInput" required name="cardInput" maxlength="19" placeholder="XXXX XXXX XXXX XXXX">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-12 col-lg-10 col-xl-9 mt-4">
+                                    <button type="submit" class="btn btn-lg btn-pagar w-100">Pagar</button>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-12 col-lg-10 col-xl-9 mt-4">
-                                <button class="btn btn-lg btn-pagar w-100">Pagar</button>
+                            <div class="row justify-content-center mt-3">
+                                <div class="col-sm-12 col-md-12 col-lg-10 col-xl-9 d-flex justify-content-center">
+                                    <div class="gap-3">
+                                        <img src="{% static 'img/Visa.png' %}" alt="" class="img-fluid mx-2" style="width: 30px;">
+                                        <img src="{% static 'img/Mastercard.png' %}" alt="" class="img-fluid mx-2" style="width: 30px;">
+                                        <img src="{% static 'img/AmericanExpress.png' %}" alt="" class="img-fluid mx-2" style="width: 35px;">
+                                        <img src="{% static 'img/DinersClub.png' %}" alt="" class="img-fluid mx-2" style="width: 40px;">
+                                        <img src="{% static 'img/Magna.png' %}" alt="" class="img-fluid mx-2" style="width: 40px;">
+                                        <img src="{% static 'img/Redcompra.png' %}" alt="" class="img-fluid mx-2" style="width: 70px;">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row justify-content-center mt-3">
-                            <div class="col-sm-12 col-md-12 col-lg-10 col-xl-9 d-flex justify-content-center">
-                                <div class="gap-3">
-                                    <img src="{% static 'img/Visa.png' %}" alt="" class="img-fluid mx-2" style="width: 30px;">
-                                    <img src="{% static 'img/Mastercard.png' %}" alt="" class="img-fluid mx-2" style="width: 30px;">
-                                    <img src="{% static 'img/AmericanExpress.png' %}" alt="" class="img-fluid mx-2" style="width: 35px;">
-                                    <img src="{% static 'img/DinersClub.png' %}" alt="" class="img-fluid mx-2" style="width: 40px;">
-                                    <img src="{% static 'img/Magna.png' %}" alt="" class="img-fluid mx-2" style="width: 40px;">
-                                    <img src="{% static 'img/Redcompra.png' %}" alt="" class="img-fluid mx-2" style="width: 70px;">
+                            <div class="row d-flex mt-5 d-block d-sm-block d-md-block d-lg-none">
+                                <div class="text-center">
+                                    <a href="#" class="text-decoration-none" onclick="closeCurrentTab()"><p style="color: #527EFF; font-weight: 500;">Anular compra y volver</p></a>
                                 </div>
                             </div>
                         </div>
-                        <div class="row d-flex mt-5 d-block d-sm-block d-md-block d-lg-none">
-                            <div class="text-center">
-                                <a href="#" class="text-decoration-none" onclick="closeCurrentTab()"><p style="color: #527EFF; font-weight: 500;">Anular compra y volver</p></a>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
             <div class="row text-center my-5">

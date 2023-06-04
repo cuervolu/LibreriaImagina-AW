@@ -448,6 +448,23 @@ def imaginaPay(request):
     }
     return render(request, "app/imaginaPay.html", datos)
 
+@login_required(login_url="auth/login")
+def generar_pago(request):
+    url_anterior = request.META.get('HTTP_REFERER')
+
+    if request.method == 'POST':
+        metodo_pago_id = request.POST['flexRadioDefault']
+        numero_tarjeta = request.POST['cardInput']
+        metodo_pago = MetodoPago.objects.get(id = metodo_pago_id)
+        
+        if metodo_pago.tarjeta_numero == numero_tarjeta:
+            print(metodo_pago.tarjeta_numero)
+        else:
+            print("No coincide")
+            
+        # Redirigir al usuario después de procesar exitosamente el formulario POST
+        return redirect(url_anterior)
+
 
 # **********************
 # *       LEGAL        *
