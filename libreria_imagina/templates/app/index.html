@@ -96,7 +96,7 @@
     <div class="row justify-content-center">
         {% for categoria in categorias|slice:":9"  %}
         <div class="col-auto col-md-auto">
-            <button class="btn-categoria"><span>{{ categoria.0 }}</span></button>
+            <a class="btn-categoria text-decoration-none" href="/catalogue?categoria={{ categoria.0 }}"><span>{{ categoria.0 }}</span></a>
         </div>
         {% endfor %}
   
