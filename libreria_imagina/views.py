@@ -20,9 +20,13 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 from django.core.paginator import Paginator
 
+
 from libreria_imagina.utils import format_book_prices
 
 from .models import *
+
+#Se llama al helper de procedimientos
+from .helpers.procedures import *
 from .forms import SignupForm
 import logging
 
@@ -37,8 +41,12 @@ def index(request):
     # Se obtienen 10 libros aleatorios de la base de datos
     libros = list(Libro.objects.order_by("nombre_libro", "fecha_publicacion")[:10])
     libros = format_book_prices(libros)
+    
+    # Se llama al procedimiento de obtener categorias
+    categorias = get_categories()
+    cantidad_libros = get_numbers_of_books()
     # Se crea un diccionario con los libros obtenidos para pasarlo al contexto
-    context = {"libros": libros}
+    context = {"libros": libros, "categorias": categorias,"cantidad_libros": cantidad_libros}
     # Se renderiza la plantilla 'index.html' con el contexto creado
     return render(request, "app/index.html", context)
 
