@@ -30,75 +30,74 @@
                 <div class="col-sm-12 col-md-12 col-lg-7">
                     <div class="d-flex align-items-center justify-content-between">
                         <div style="font-weight: 500;">
-                            <p class="mb-0" style="font-size: 37px;">Zosia de la calle Koty...</p>
+                            <p class="mb-0" style="font-size: 37px;">{{ detalle_pedidos.0.libro.nombre_libro|truncatechars:20 }}</p>
                             <div class="d-flex align-items-center">
-                                <p style="font-size: 24px;">Agnieszka Tyszka</p>
-                                <p class="mb-0 ms-4 text-nowrap" style="font-size: 19px;">x 2</p>
+                                <p style="font-size: 24px;">{{ detalle_pedidos.0.libro.autor }}</p>
+                                <p class="mb-0 ms-4 text-nowrap" style="font-size: 19px;">x {{ detalle_pedidos.0.cantidad }}</p>
                             </div>
                         </div>
-                        <img src="{% static 'img/LibroPrueba.png' %}" alt="" class="img-fluid me-5 compra-img"
+                        <img src="{{ detalle_pedidos.0.libro.thumbnail }}" alt="" class="img-fluid me-5 compra-img"
                             style="max-width: 72px;">
                     </div>
+                    {% if detalle_pedidos|length > 1 %}
                     <div class="accordion accordion-flush" id="accordionFlushExample">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="flush-headingOne">
                                 <button class="accordion-button collapsed custom-color" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#flush-collapseOne" aria-expanded="false"
                                     aria-controls="flush-collapseOne" style="box-shadow: none;">
-                                    +3 productos
+                                    +{{ detalle_pedidos|length|add:"-1" }} productos
                                 </button>
                             </h2>
                             <div id="flush-collapseOne" class="accordion-collapse collapse"
                                 aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                                 <div class="accordion-body pt-0">
                                     <!-- Productos adicionales -->
+                                    {% for detalle_pedido in detalle_pedidos|slice:"1:" %}
                                     <div class="mt-3">
                                         <hr>
                                         <div class="d-flex align-items-center">
                                             <div style="font-weight: 500;">
-                                                <p class="mb-0" style="font-size: 18px;">Zosia de la calle Koty...</p>
-                                                <p style="font-size: 14px;">Agnieszka Tyszka</p>
+                                                <p class="mb-0" style="font-size: 18px;">{{ detalle_pedido.libro.nombre_libro|truncatechars:25 }}</p>
+                                                <p style="font-size: 14px;">{{ detalle_pedido.libro.autor }}</p>
                                             </div>
-                                            <img src="{% static 'img/LibroPrueba.png' %}" alt="" class="img-fluid ms-5 compra-img"
+                                            <img src="{{ detalle_pedido.libro.thumbnail }}" alt="" class="img-fluid ms-5 compra-img"
                                                 style="max-width: 42px;">
-                                            <p class="mb-0 ms-5">x 2</p>
+                                            <p class="mb-0 ms-5">x {{ detalle_pedido.cantidad }}</p>
                                         </div>
                                     </div>
+                                    {% endfor %}
                                     <!-- End Productos adicionales -->
-                                    <div class="mt-3">
-                                        <hr>
-                                        <div class="d-flex align-items-center">
-                                            <div style="font-weight: 500;">
-                                                <p class="mb-0" style="font-size: 18px;">Zosia de la calle Koty...</p>
-                                                <p style="font-size: 14px;">Agnieszka Tyszka</p>
-                                            </div>
-                                            <img src="{% static 'img/LibroPrueba.png' %}" alt="" class="img-fluid ms-5 compra-img"
-                                                style="max-width: 42px;">
-                                            <p class="mb-0 ms-5">x 1</p>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">
-                                        <hr>
-                                        <div class="d-flex align-items-center">
-                                            <div style="font-weight: 500;">
-                                                <p class="mb-0" style="font-size: 18px;">Zosia de la calle Koty...</p>
-                                                <p style="font-size: 14px;">Agnieszka Tyszka</p>
-                                            </div>
-                                            <img src="{% static 'img/LibroPrueba.png' %}" alt="" class="img-fluid ms-5 compra-img"
-                                                style="max-width: 42px;">
-                                            <p class="mb-0 ms-5">x 3</p>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {% else %}
+                    <br>
+                    {% endif %}
                     <hr>
                     <div>
-                        <p class="mb-2" style="color: #6FCF97; font-weight: 500;">Entregado</p>
+                        {% if pedido.estado_pedido == 'En Validación' %}
+                        <p class="mb-2" style="color: #eec146; font-weight: 500;">{{ pedido.estado_pedido }}</p>
+                        <p style="font-weight: 500; font-size: 25px;">En proceso de Validación</p>
+                        <p style="font-weight: 300; font-size: 20px;">Estamos en proceso de asignación de un repartidor para tu pedido</p>
+                        {% elif pedido.estado_pedido == 'En Preparación' %}
+                        <p class="mb-2" style="color: #cfcd6f; font-weight: 500;">{{ pedido.estado_pedido }}</p>
+                        <p style="font-weight: 500; font-size: 25px;">Preparación para el envío</p>
+                        <p style="font-weight: 300; font-size: 20px;">El repartidor Juanito está preparando tu pedido para entregarlo</p>
+                        {% elif pedido.estado_pedido == 'En Ruta' %}
+                        <p class="mb-2" style="color: #a7c245; font-weight: 500;">En Camino</p>
+                        <p style="font-weight: 500; font-size: 25px;">Tu pedido está en camino</p>
+                        <p style="font-weight: 300; font-size: 20px;">El repartidor Juanito se encuentra en camino a tu domicilio</p>
+                        {% elif pedido.estado_pedido == 'Entregado' %}
+                        <p class="mb-2" style="color: #6FCF97; font-weight: 500;">{{ pedido.estado_pedido }}</p>
                         <p style="font-weight: 500; font-size: 25px;">Llegó el 11 de Abril</p>
                         <p style="font-weight: 300; font-size: 20px;">Entregamos tu pedido a las 17:33 hs en El Trovador
                             4280 of. 611, Las Condes, RM (Metropolitana)</p>
+                        {% elif pedido.estado_pedido == 'Cancelado' %}
+                        <p class="mb-2" style="color: #e24646; font-weight: 500;">{{ pedido.estado_pedido }}</p>
+                        <p style="font-weight: 500; font-size: 25px;">Tu pedido fue cancelado</p>
+                        {% endif %}
                         <a style="color: #527EFF; font-weight: 300; font-size: 18px;" href="/shipments">Ver detalle envío</a>
                     </div>
                     <hr class="mt-4">
@@ -111,12 +110,12 @@
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-4 me-3">
                     <p style="font-size: 23px; font-weight: bold;">Detalle de la compra</p>
-                    <p style="font-size: 15px; font-weight: 400;">Fecha Pedido: 9 de Abril de 2023 | # 29938123</p>
+                    <p style="font-size: 15px; font-weight: 400;">Fecha Pedido: {{ pedido.fecha_pedido|date:"d \d\e " }}{{ pedido.fecha_pedido|date:"F Y"|capfirst }} | # {{ pedido.id_pedido }}</p>
                     <hr>
                     <div style="font-weight: 300;">
                         <div class="d-flex align-items-center justify-content-between">
                             <p>Subtotal</p>
-                            <p>$13.890</p>
+                            <p>${{ subtotal }}</p>
                         </div>
                         <div class="d-flex align-items-center justify-content-between mt-2">
                             <p>Envio</p>
@@ -125,7 +124,7 @@
                         <hr class="mt-0">
                         <div class="d-flex align-items-center justify-content-between">
                             <p>Total</p>
-                            <p>$17.090</p>
+                            <p>${{ pedido.monto_total }}</p>
                         </div>
                     </div>
                     <div class="seccion-pago d-flex flex-column mt-3">
@@ -133,19 +132,38 @@
                         <div class="ms-3 cartas-pago-envio">
                             <div class="d-flex align-items-start m-3">
                                 <div class="d-flex justify-content-center align-items-center metodo-pago">
+                                    {% if transaccion.metodo_pago.tarjeta_numero|slice:"0:1" == '4' %}
                                     <img src="{% static 'img/Visa.png' %}" alt="" class="img-fluid">
+                                    {% elif transaccion.metodo_pago.tarjeta_numero|slice:"0:2" == '51' or transaccion.metodo_pago.tarjeta_numero|slice:"0:2" == '52' or transaccion.metodo_pago.tarjeta_numero|slice:"0:2" == '53' or transaccion.metodo_pago.tarjeta_numero|slice:"0:2" == '54' or transaccion.metodo_pago.tarjeta_numero|slice:"0:2" == '55' %}
+                                    <img src="{% static 'img/Mastercard.png' %}" alt="" class="img-fluid">
+                                    {% elif transaccion.metodo_pago.tarjeta_numero|slice:"0:2" == '34' or transaccion.metodo_pago.tarjeta_numero|slice:"0:2" == '37' %}
+                                    <img src="{% static 'img/AmericanExpress.png' %}" alt="" class="img-fluid">
+                                    {% else %}
+                                    <img src="{% static 'img/OtraTarjeta.png' %}" alt="" class="img-fluid">
+                                    {% endif %}
                                 </div>
                                 <div class="ms-4" style="color: #686868;">
                                     <div>
-                                        <p class="mb-0 pago-precio">$17.090</p>
+                                        <p class="mb-0 pago-precio">${{ transaccion.total_transaccion }}</p>
                                         <div class="info-pago">
-                                            <p class="mb-0">Visa Debito **** 6789</p>
-                                            <p class="mb-0">9 de Abril de 2023 | #527029238133</p>
+                                            {% if transaccion.metodo_pago.tarjeta_numero|slice:"0:1" == '4' %}
+                                            <p class="mb-0">Visa Debito **** {{ transaccion.metodo_pago.tarjeta_numero|slice:"-4:" }}</p>
+                                            {% elif transaccion.metodo_pago.tarjeta_numero|slice:"0:2" == '51' or transaccion.metodo_pago.tarjeta_numero|slice:"0:2" == '52' or transaccion.metodo_pago.tarjeta_numero|slice:"0:2" == '53' or transaccion.metodo_pago.tarjeta_numero|slice:"0:2" == '54' or transaccion.metodo_pago.tarjeta_numero|slice:"0:2" == '55' %}
+                                            <p class="mb-0">Mastercard Debito **** {{ transaccion.metodo_pago.tarjeta_numero|slice:"-4:" }}</p>
+                                            {% elif transaccion.metodo_pago.tarjeta_numero|slice:"0:2" == '34' or transaccion.metodo_pago.tarjeta_numero|slice:"0:2" == '37' %}
+                                            <p class="mb-0">Amercian Express Debito **** {{ transaccion.metodo_pago.tarjeta_numero|slice:"-4:" }}</p>
+                                            {% else %}
+                                            <p class="mb-0">Tarjeta Debito **** {{ transaccion.metodo_pago.tarjeta_numero|slice:"-4:" }}</p>
+                                            {% endif %}
+                                            <p class="mb-0">{{ transaccion.fecha|date:"d \d\e " }}{{ transaccion.fecha|date:"F Y"|capfirst }} | #{{ transaccion.id_transaccion }}</p>
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="mb-0 pago-estado">Pago
-                                            aprobado</p>
+                                        {% if transaccion.aprobado == 1 %}
+                                        <p class="mb-0 pago-estado">Pago aprobado</p>
+                                        {% else %}
+                                        <p class="mb-0 pago-estado" style="color: #e24646;">Pago Rechazado</p>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

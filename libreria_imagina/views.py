@@ -9,6 +9,7 @@ from django.db.models import Sum, Q
 from decimal import Decimal
 from django.http import JsonResponse
 from datetime import datetime, date, timedelta
+from django.db import connection
 
 # Integración servicio SOAP
 import zeep
@@ -195,12 +196,41 @@ def cart(request):
 
 @login_required(login_url="auth/login")
 def my_purchases(request):
-    
-    return render(request, "app/my_purchases.html")
+    cliente = request.user
+    pedidos = Pedido.objects.filter(cliente = cliente)
+    detalle_pedidos = DetallePedido.objects.all()
+    data = {
+        'pedidos' : pedidos,
+        'detalle_pedidos' : detalle_pedidos,
+    }
+    return render(request, "app/my_purchases.html", data)
+
+
 
 @login_required(login_url="auth/login")
-def purchase_detail(request):
-    return render(request, "app/purchase_detail.html")
+def purchase_detail(request, pedido_id):
+    cliente = request.user
+    pedido = Pedido.objects.get(cliente = cliente, id_pedido = pedido_id)
+    detalle_pedidos = DetallePedido.objects.filter(pedido = pedido)
+    envio = Envio.objects.filter(pedido = pedido)
+    transaccion = Transaccion.objects.get(pedido = pedido)
+    subtotal = 0
+    for detalle in detalle_pedidos:
+        subtotal += detalle.subtotal
+
+    envio = envio.first() 
+
+    transaccion.total_transaccion = format(transaccion.total_transaccion, ",.0f")
+    pedido.monto_total = format(pedido.monto_total, ",.0f")
+
+    data = {
+        'pedido' : pedido,
+        'detalle_pedidos' : detalle_pedidos,
+        'subtotal' : format(subtotal, ",.0f"),
+        'envio' : envio,
+        'transaccion' : transaccion
+    }
+    return render(request, "app/purchase_detail.html", data)
 
 @login_required(login_url="auth/login")
 def shipments(request):
