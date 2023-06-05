@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.contrib.auth import authenticate, login, logout
@@ -8,7 +8,7 @@ from django.utils.html import escapejs
 from django.db.models import Sum, Q
 from decimal import Decimal
 from django.http import JsonResponse
-from datetime import datetime
+from datetime import datetime, date, timedelta
 
 # Integración servicio SOAP
 import zeep
@@ -195,6 +195,7 @@ def cart(request):
 
 @login_required(login_url="auth/login")
 def my_purchases(request):
+    
     return render(request, "app/my_purchases.html")
 
 @login_required(login_url="auth/login")
@@ -457,7 +458,6 @@ def imaginaPay(request):
 
 @login_required(login_url="auth/login")
 def generar_pago(request):
-    url_anterior = request.META.get('HTTP_REFERER')
     usuario = request.user
     envio = 3200
     try:
@@ -480,6 +480,7 @@ def generar_pago(request):
                 pedido = Pedido()
                 pedido.cliente = usuario
                 pedido.fecha_pedido = datetime.now()
+                pedido.fecha_entrega_estimada = datetime.now() + timedelta(3)
                 pedido.estado_pedido = EstadoPedido.VALIDACION
                 pedido.monto_total = total
                 
@@ -497,14 +498,13 @@ def generar_pago(request):
                         detalle_pedido.subtotal = aux.precio_total
 
                         detalle_pedido.save()
-
-                    carrito.delete()
                     
                     try: 
                         logger.info("Comenzando llamado al servicio web ImaginaPay")
-                        print(f"Total: {total}, Pedido: {pedido.id_pedido},MDP: {metodo_pago.id}, Usuario: {usuario.pk}")
                         # Llamada al servicio SOAP y obtener la respuesta XML
                         response = cliente.service.CreatePayment(total,pedido.id_pedido,metodo_pago.id,usuario.pk)
+                        #Borrar Carrito
+                        carrito.delete()
                         # Parsear la respuesta XML
                         xml_response = ET.fromstring(response)
                         
@@ -527,7 +527,18 @@ def generar_pago(request):
             logger.warning("No coincide el número de tarjeta")
             
         # Redirigir al usuario después de procesar exitosamente el formulario POST
-        return redirect(url_anterior)
+        response = HttpResponse(
+            """
+            <script>
+                setTimeout(function() {
+                    window.opener.location.reload(); // Refrescar la página anterior
+                    window.close(); // Cerrar la ventana actual
+                }, 2000); // Retraso de 2 segundos (2000 milisegundos)
+            </script>
+            """
+        )
+    
+        return response
 
 
 # **********************
