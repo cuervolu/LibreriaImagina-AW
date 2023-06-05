@@ -81,29 +81,46 @@
             <ul class="pagination justify-content-center">
                 {% if libros.has_previous %}
                 <li class="page-item">
+                    {% if categoria_filtrada %}
+                    <a class="page-link" href="?pagina={{ libros.previous_page_number }}&categoria={{ categoria_filtrada }}" aria-label="Previous" style="color: #146E89; box-shadow: none;">&laquo;</a>
+                    {% else %}
                     <a class="page-link" href="?pagina={{ libros.previous_page_number }}" aria-label="Previous" style="color: #146E89; box-shadow: none;">&laquo;</a>
+                    {% endif %}
                 </li>
                 {% endif %}
         
                 {% for num in libros.paginator.page_range %}
                 {% if libros.number == num %}
                 <li class="page-item active" aria-current="page">
+                    {% if categoria_filtrada %}
+                    <a class="page-link" href="?pagina={{ num }}&categoria={{ categoria_filtrada }}" style="background-color: #146E89; border-color: #146E89; color: white; box-shadow: none;">{{ num }}</a>
+                    {% else %}
                     <a class="page-link" href="?pagina={{ num }}" style="background-color: #146E89; border-color: #146E89; color: white; box-shadow: none;">{{ num }}</a>
+                    {% endif %}
                 </li>
                 {% else %}
                 <li class="page-item">
+                    {% if categoria_filtrada %}
+                    <a class="page-link" href="?pagina={{ num }}&categoria={{ categoria_filtrada }}" style="color: #146E89; box-shadow: none;">{{ num }}</a>
+                    {% else %}
                     <a class="page-link" href="?pagina={{ num }}" style="color: #146E89; box-shadow: none;">{{ num }}</a>
+                    {% endif %}
                 </li>
                 {% endif %}
                 {% endfor %}
         
                 {% if libros.has_next %}
                 <li class="page-item">
+                    {% if categoria_filtrada %}
+                    <a class="page-link" href="?pagina={{ libros.next_page_number }}&categoria={{ categoria_filtrada }}" aria-label="Next" style="color: #146E89; box-shadow: none;">&raquo;</a>
+                    {% else %}
                     <a class="page-link" href="?pagina={{ libros.next_page_number }}" aria-label="Next" style="color: #146E89; box-shadow: none;">&raquo;</a>
+                    {% endif %}
                 </li>
                 {% endif %}
             </ul>
         </nav>
+        
         
     </div>
 </section>

@@ -94,38 +94,12 @@
         </div>
     </div>
     <div class="row justify-content-center">
+        {% for categoria in categorias|slice:":9"  %}
         <div class="col-auto col-md-auto">
-            <button class="btn-categoria"><span>Libro</span></button>
+            <button class="btn-categoria"><span>{{ categoria.0 }}</span></button>
         </div>
-        <div class="col-auto col-md-auto">
-            <button class="btn-categoria"><span>Libros electrónicos</span></button>
-        </div>
-        <div class="col-auto col-md-auto">
-            <button class="btn-categoria"><span>Audiolibros</span></button>
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-auto col-md-auto">
-            <button class="btn-categoria"><span>Juguetes, creatividad</span></button>
-        </div>
-        <div class="col-auto col-md-auto">
-            <button class="btn-categoria"><span>Accesorios para libros</span></button>
-        </div>
-        <div class="col-auto col-md-auto">
-            <button class="btn-categoria"><span>Cuadernos</span></button>
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-auto col-md-auto">
-            <button class="btn-categoria"><span>Juegos de mesa</span></button>
-        </div>
-        <div class="col-auto col-md-auto">
-            <button class="btn-categoria"><span>Regalos</span></button>
-        </div>
-        <div class="col-auto col-md-auto">
-            <button class="btn-categoria"><span>Acciones</span></button>
-        </div>
-    </div>
+        {% endfor %}
+  
 </div>
 
 <div class="container my-5 py-3">
@@ -142,7 +116,7 @@
             <span class="mx-3" style="font-size: 13px; font-weight: 400;">Sucursales en todo el país</span>
         </div>
         <div class="col-auto col-md-auto d-flex align-items-center">
-            <span style="font-size: 50px; font-weight: 900;">898</span>
+            <span style="font-size: 50px; font-weight: 900;">{{cantidad_libros}}</span>
             <span class="mx-3" style="font-size: 13px; font-weight: 400;">Productos del catálogo</span>
         </div>
         <div class="col-auto col-md-auto d-flex align-items-center">
