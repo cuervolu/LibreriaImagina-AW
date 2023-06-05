@@ -418,6 +418,7 @@ class LoginView(APIView):
                     TipoUsuario.ADMIN,
                     TipoUsuario.TECNICO,
                     TipoUsuario.ENCARGADO_BODEGA,
+                    TipoUsuario.REPARTIDOR
                 ]:
                     # Usuario no válido debido a falta de permisos
                     logger.warning(
