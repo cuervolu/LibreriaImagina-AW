@@ -418,6 +418,7 @@ class LoginView(APIView):
                     TipoUsuario.ADMIN,
                     TipoUsuario.TECNICO,
                     TipoUsuario.ENCARGADO_BODEGA,
+                    TipoUsuario.REPARTIDOR
                 ]:
                     # Usuario no válido debido a falta de permisos
                     logger.warning(
@@ -437,7 +438,7 @@ class LoginView(APIView):
 
                 # Devolver la respuesta con el token y los datos del usuario
                 user_serializer = UserSerializer(user)
-                return Response({"token": token.key, "user": user_serializer.data})
+                return Response({"token": token.key, "user": user.pk})
             else:
                 # Usuario no válido
                 logger.warning("Intento de inicio de sesión fallido")

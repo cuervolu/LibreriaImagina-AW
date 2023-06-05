@@ -159,7 +159,7 @@ class Mantenimiento(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="Cliente"
     )
     tecnico = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="Técnico"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="Técnico", null=True
     )
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
     fecha_solicitud = models.DateField(null=False)
@@ -172,6 +172,7 @@ class Mantenimiento(models.Model):
         max_length=50,
         choices=EstadoMantenimiento.choices,
         default=EstadoMantenimiento.EN_PROCESO,
+        null=True
     )
 
     class Meta:
