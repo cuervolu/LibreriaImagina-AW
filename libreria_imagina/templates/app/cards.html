@@ -228,17 +228,17 @@
                                 <div class="form-container pe-0">
                                     <div class="field-container">
                                         <label for="namecard">Nombre Tarjeta</label>
-                                        <input id="namecard" placeholder="Nombre Tarjeta" required maxlength="20"
+                                        <input id="namecard" placeholder="Nombre Tarjeta" required minlength="3" maxlength="20"
                                             type="text" name="nombre_tarjeta">
                                     </div>
                                     <div class="field-container">
                                         <label for="name">Nombre Titular</label>
-                                        <input id="name" placeholder="Nombre Apellido" required maxlength="20"
+                                        <input id="name" placeholder="Nombre Apellido" required minlength="3" maxlength="20"
                                             type="text" name="nombre_titular">
                                     </div>
                                     <div class="field-container">
                                         <label for="cardnumber">Numero Tarjeta</label><span id="generatecard"></span>
-                                        <input id="cardnumber" required placeholder="0123 4567 8910 1112" type="text"
+                                        <input id="cardnumber" required pattern=".{19}" placeholder="0123 4567 8910 1112" type="text"
                                             inputmode="numeric" name="numero_tarjeta">
                                         <svg id="ccicon" class="ccicon" width="750" height="471" viewBox="0 0 750 471"
                                             version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -247,12 +247,12 @@
                                     </div>
                                     <div class="field-container">
                                         <label for="expirationdate">Expiración (MM/YY)</label>
-                                        <input id="expirationdate" required placeholder="01/23" type="text"
+                                        <input id="expirationdate" required pattern=".{5}" placeholder="01/23" type="text"
                                             inputmode="numeric" name="fecha_vencimiento">
                                     </div>
                                     <div class="field-container">
                                         <label for="securitycode">CVV</label>
-                                        <input id="securitycode" required placeholder="123" type="text"
+                                        <input id="securitycode" required pattern="\d{3,4}" placeholder="123" type="text"
                                             inputmode="numeric" name="cvv">
                                     </div>
                                 </div>

@@ -42,7 +42,9 @@
                     </div>
                     <div class="ms-3 d-flex cantidad-compras text-nowrap">
                         <p class="mb-0 me-4">|</p>
-                        <p class="mb-0">3 Compras</p>
+                        {% with pedido_count=pedidos.count %}
+                            <p class="mb-0">{{ pedido_count }} Compras</p>
+                        {% endwith %}
                     </div>
                 </div>
             </div>

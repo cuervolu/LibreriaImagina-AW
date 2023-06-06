@@ -113,43 +113,42 @@
                                     {% if direcciones != None %}
                                     <div class="input-group mb-3">
                                         <select class="form-select" required id="regionSelect">
-                                            <option value="0" selected>{{ usuario.direccion.comuna.region.nombre }}
-                                            </option>
                                             {% for region in regiones %}
-                                            <option value="{{ region.id_region }}">{{ region.nombre }}</option>
+                                            <option value="{{ region.id_region }}" {% if region.nombre == usuario.direccion.comuna.region.nombre%} selected {% endif %}>{{ region.nombre }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <p style="font-weight: 600;">Comuna</p>
                                     <div class="input-group mb-3">
                                         <select class="form-select" required id="comunaSelect" name="idcomuna">
-                                            <option selected>{{ usuario.direccion.comuna.nombre_comuna }}</option>
+                                            <option value="{{ usuario.direccion.comuna.id_comuna }}" selected>{{ usuario.direccion.comuna.nombre_comuna }}</option>
                                         </select>
                                     </div>
                                     <p style="font-weight: 600;">Direccion</p>
                                     <div class="input-group mb-3">
-                                        <input type="text" class="form-control" name="direccion" required
+                                        <input type="text" class="form-control" name="direccion" required minlength="3" maxlength="80"
                                             aria-label="Sizing example input" placeholder="{{ usuario.direccion }}"
                                             aria-describedby="inputGroup-sizing-default">
                                     </div>
                                     {% else %}
                                     <div class="input-group mb-3">
-                                        <select class="form-select" required id="regionSelect">
-                                            <option value="0" selected>Seleccionar Región</option>
+                                        <select class="form-select" required id="regionSelect" name="region">
+                                            <option value="" selected disabled>Seleccionar Región</option>
                                             {% for region in regiones %}
-                                            <option value="{{ region.id_region }}">{{ region.nombre }}</option>
+                                                <option value="{{ region.id_region }}">{{ region.nombre }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <p style="font-weight: 600;">Comuna</p>
                                     <div class="input-group mb-3">
                                         <select class="form-select" required id="comunaSelect" name="idcomuna">
-                                            <option selected>Seleccionar Comuna</option>
+                                            <option value="" selected disabled>Seleccionar Comuna</option>
+                                            <!-- Opciones de comuna -->
                                         </select>
                                     </div>
                                     <p style="font-weight: 600;">Direccion</p>
                                     <div class="input-group mb-3">
-                                        <input type="text" class="form-control" name="direccion" required
+                                        <input type="text" class="form-control" name="direccion" required minlength="3" maxlength="80"
                                             aria-label="Sizing example input"
                                             aria-describedby="inputGroup-sizing-default">
                                     </div>

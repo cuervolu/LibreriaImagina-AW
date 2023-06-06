@@ -136,7 +136,8 @@
                                     <p>Numero de tarjeta:</p>
                                     <div class="input-icon justify-content-center">
                                         <i class="fas fa-credit-card" style="color: #828EA5;"></i>
-                                        <input type="text" id="cardInput" required name="cardInput" maxlength="19" placeholder="XXXX XXXX XXXX XXXX">
+                                        <input type="text" id="cardInput" required name="cardInput" pattern=".{19}" placeholder="XXXX XXXX XXXX XXXX"
+                                        title="La tarjeta debe tener 16 dígitos">
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-12 col-lg-10 col-xl-9 mt-4">
