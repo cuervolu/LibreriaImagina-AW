@@ -4,7 +4,7 @@ certifi==2023.5.7
 cffi==1.15.1
 charset-normalizer==3.1.0
 crispy-bootstrap5==0.7
-cryptography==40.0.2
+cryptography==41.0.1
 cx-Oracle==8.3.0
 Django==4.2.1
 django-admin==2.0.2
@@ -32,7 +32,7 @@ python-dotenv==1.0.0
 python-slugify==8.0.1
 pytz==2023.3
 pytz-deprecation-shim==0.1.0.post0
-requests==2.30.0
+requests==2.31.0
 requests-file==1.5.1
 requests-toolbelt==1.0.0
 screen==1.0.1
