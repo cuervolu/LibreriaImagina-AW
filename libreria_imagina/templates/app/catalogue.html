@@ -22,17 +22,22 @@
     <div class="row">
         <ul class="navbar-nav mb-3">
             <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle transparent-dropdown" data-bs-toggle="dropdown"
+                <div class="d-flex align-items-center">
+                    <button class="btn dropdown-toggle transparent-dropdown" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     <img src="{% static 'img/filtro.svg' %}" alt="Filtrar"> Filtrar
-                </button>
-                <ul class="dropdown-menu ">
-                    <li><a class="dropdown-item" href="{% url 'catalogue' %}">Todas</a></li>
-                    {% for categoria in categorias %}
-                    <li><a class="dropdown-item" href="{% url 'catalogue' %}?categoria={{ categoria }}">{{categoria}}</a>
-                    </li>
-                    {% endfor %}
-                </ul>
+                    </button>
+                    {% if categoria_filtrada or libro.categoria != None %}
+                    <p class="mb-0 ms-2">{{ categoria_filtrada }}</p>
+                    {% endif %}
+                    <ul class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
+                        <li><a class="dropdown-item" href="{% url 'catalogue' %}">Todas</a></li>
+                        {% for categoria in categorias %}
+                        <li><a class="dropdown-item" href="{% url 'catalogue' %}?categoria={{ categoria }}">{{categoria}}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </li>
         </ul>
         {% for libro in libros %}
@@ -75,8 +80,23 @@
             </div>
         </div>
         {% endif %}
+        {% empty %}
+        <div class="row mb-5 pb-5 align-items-center" style="justify-content: space-between;">
+            <div class="col-auto col-md-auto col-lg-auto d-none d-md-none d-lg-block">
+                <img class="img-fluid float-start" src="{% static 'img/nothingHere.png' %}" alt=""
+                    style="max-width: 500px;">
+            </div>
+            <div class="col-sm-auto col-md-auto col-lg-4 mt-5">
+                <h1 class="mb-3 fw-bolder text-start" style="color: #146E89;">Aquí no hay nada...</h1>
+                <div class="text-start">
+                    <p>No hemos encontrado ningún resultado para la categoría que has seleccionado...</p>
+                </div>
+                <a class="btn btn-custom btn-md fw-bold" href="/" role="button">Volver a la página principal</a>
+            </div>
+        </div>
         {% endfor %}
         <!-- Mostrar la paginación -->
+        {% if count > 12 %}
         <nav aria-label="Paginación">
             <ul class="pagination justify-content-center">
                 {% if libros.has_previous %}
@@ -120,7 +140,7 @@
                 {% endif %}
             </ul>
         </nav>
-        
+        {% endif %}
         
     </div>
 </section>

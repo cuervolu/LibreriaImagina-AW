@@ -68,6 +68,8 @@ def catalogue(request):
     categoria_filtrada = request.GET.get("categoria")
     if categoria_filtrada:
         libros = libros.filter(categoria=categoria_filtrada)
+    
+    count = libros.count()
 
     libros = format_book_prices(libros)  # Formatear los precios de los libros
 
@@ -87,6 +89,7 @@ def catalogue(request):
             "libros": pagina_libros,
             "categorias": categorias,
             "categoria_filtrada": categoria_filtrada,
+            'count': count,
         },
     )
 
