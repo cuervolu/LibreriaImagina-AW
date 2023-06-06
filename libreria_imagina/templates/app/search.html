@@ -62,7 +62,8 @@
         {% empty %}
         <div class="row mb-5 pb-5 align-items-center" style="justify-content: space-between;">
             <div class="col-auto col-md-auto col-lg-auto d-none d-md-none d-lg-block">
-                <img class="img-fluid float-start" src="{% static 'img/nothingHere.png' %}" alt="" style="max-width: 500px;">
+                <img class="img-fluid float-start" src="{% static 'img/nothingHere.png' %}" alt=""
+                    style="max-width: 500px;">
             </div>
             <div class="col-sm-auto col-md-auto col-lg-4 mt-5">
                 <h1 class="mb-3 fw-bolder text-start" style="color: #146E89;">Aquí no hay nada...</h1>
@@ -82,33 +83,37 @@
     <ul class="pagination justify-content-center">
         {% if entity.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?pagina={{ entity.previous_page_number }}" aria-label="Previous"
-                style="color: #146E89; box-shadow: none;">&laquo;</a>
+            <a class="page-link" href="?pagina={{ entity.previous_page_number }}&search={{ searched }}"
+                aria-label="Previous" style="color: #146E89; box-shadow: none;">&laquo;</a>
         </li>
         {% endif %}
 
         {% for num in entity.paginator.page_range %}
         {% if entity.number == num %}
         <li class="page-item active" aria-current="page">
-            <a class="page-link" href="?pagina={{ num }}"
+            <a class="page-link" href="?pagina={{ num }}&search={{ searched }}"
                 style="background-color: #146E89; border-color: #146E89; color: white; box-shadow: none;">{{ num }}</a>
         </li>
         {% else %}
         <li class="page-item">
-            <a class="page-link" href="?pagina={{ num }}" style="color: #146E89; box-shadow: none;">{{ num }}</a>
+            <a class="page-link" href="?pagina={{ num }}&search={{ searched }}"
+                style="color: #146E89; box-shadow: none;">{{ num }}</a>
         </li>
         {% endif %}
         {% endfor %}
 
         {% if entity.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?pagina={{ entity.next_page_number }}" aria-label="Next"
+            <a class="page-link" href="?pagina={{ entity.next_page_number }}&search={{ searched }}" aria-label="Next"
                 style="color: #146E89; box-shadow: none;">&raquo;</a>
         </li>
         {% endif %}
+
     </ul>
 </nav>
 {% endif %}
+
+
 
 {% else %}
 

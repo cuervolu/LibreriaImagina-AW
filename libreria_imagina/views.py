@@ -1,3 +1,4 @@
+from urllib.parse import urlencode
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.humanize.templatetags.humanize import intcomma
@@ -10,12 +11,15 @@ from decimal import Decimal
 from django.http import JsonResponse
 from datetime import datetime, date, timedelta
 from django.db import connection
+from django.db.models import Value
+from django.db.models.functions import Concat
 
 # Integración servicio SOAP
 import zeep
 from zeep import Client
 
 import xml.etree.ElementTree as ET
+
 # importar una librería decoradora , permite evitar el ingreso de usuarios a la página web
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -26,7 +30,7 @@ from libreria_imagina.utils import format_book_prices
 
 from .models import *
 
-#Se llama al helper de procedimientos
+# Se llama al helper de procedimientos
 from .helpers.procedures import *
 from .forms import SignupForm
 import logging
@@ -42,18 +46,22 @@ def index(request):
     # Se obtienen 10 libros aleatorios de la base de datos
     libros = list(Libro.objects.order_by("nombre_libro", "fecha_publicacion")[:10])
     libros = format_book_prices(libros)
-    
+
     # Se llama al procedimiento de obtener categorias
     categorias = get_categories()
     cantidad_libros = get_numbers_of_books()
     # Se crea un diccionario con los libros obtenidos para pasarlo al contexto
-    context = {"libros": libros, "categorias": categorias,"cantidad_libros": cantidad_libros}
+    context = {
+        "libros": libros,
+        "categorias": categorias,
+        "cantidad_libros": cantidad_libros,
+    }
     # Se renderiza la plantilla 'index.html' con el contexto creado
     return render(request, "app/index.html", context)
 
 
 def catalogue(request):
-    libros = Libro.objects.all().order_by('nombre_libro')
+    libros = Libro.objects.all().order_by("nombre_libro")
 
     categorias = Libro.objects.values_list("categoria", flat=True).distinct()
 
@@ -75,9 +83,12 @@ def catalogue(request):
     return render(
         request,
         "app/catalogue.html",
-        {"libros": pagina_libros, "categorias": categorias, "categoria_filtrada": categoria_filtrada},
+        {
+            "libros": pagina_libros,
+            "categorias": categorias,
+            "categoria_filtrada": categoria_filtrada,
+        },
     )
-
 
 
 # Detalle libro
@@ -96,33 +107,34 @@ def book_detail(request, slug):
         libro.save()
 
     libro = format_book_prices(libro)
-    
 
     return render(request, "app/book_detail.html", {"libro": libro})
 
 
-#Buscar Libro
+# Buscar Libro
 def search(request):
+    searched = request.GET.get("search", "")
+
     if request.method == "POST":
-        searched = request.POST['search']
-        # Buscar por título o autor
-        entity = Libro.objects.filter(Q(nombre_libro__icontains=searched) | Q(autor__icontains=searched))
-        
-        entity = format_book_prices(entity)
-        count = entity.count()
-            
-        # Crear un objeto Paginator con la lista de libros y el número de libros por página
-        paginator = Paginator(entity, 12)
+        searched = request.POST.get("search", "")
 
-        # Obtener el número de página solicitado de la consulta GET
-        pagina_num = request.GET.get("pagina")
+    entity = Libro.objects.filter(
+        Q(nombre_libro__icontains=searched) | Q(autor__icontains=searched)
+    )
+    entity = format_book_prices(entity)
+    count = entity.count()
+    paginator = Paginator(entity, 12)
+    pagina_num = request.GET.get("pagina")
+    pagina_libros = paginator.get_page(pagina_num)
 
-        # Obtener la página correspondiente al número de página solicitado
-        pagina_libros = paginator.get_page(pagina_num)
-        return render(request, "app/search.html", {"searched": searched, "entity": pagina_libros, "count": count})
-    else:
-        return render(request, "app/search.html")
+    query_params = {"search": searched}
+    query_string = urlencode(query_params)
 
+    return render(
+        request,
+        "app/search.html",
+        {"searched": searched, "entity": pagina_libros, "count": count, "query_string": query_string},
+    )
 
 
 
@@ -202,91 +214,98 @@ def cart(request):
 
     return render(request, "app/cart.html", context)
 
+
 @login_required(login_url="auth/login")
 def my_purchases(request):
     cliente = request.user
-    pedidos = Pedido.objects.filter(cliente = cliente)
+    pedidos = Pedido.objects.filter(cliente=cliente)
     detalle_pedidos = DetallePedido.objects.all()
     data = {
-        'pedidos' : pedidos,
-        'detalle_pedidos' : detalle_pedidos,
+        "pedidos": pedidos,
+        "detalle_pedidos": detalle_pedidos,
     }
     return render(request, "app/my_purchases.html", data)
-
 
 
 @login_required(login_url="auth/login")
 def purchase_detail(request, pedido_id):
     cliente = request.user
-    pedido = Pedido.objects.get(cliente = cliente, id_pedido = pedido_id)
-    detalle_pedidos = DetallePedido.objects.filter(pedido = pedido)
-    envio = Envio.objects.filter(pedido = pedido)
-    transaccion = Transaccion.objects.get(pedido = pedido)
+    pedido = Pedido.objects.get(cliente=cliente, id_pedido=pedido_id)
+    detalle_pedidos = DetallePedido.objects.filter(pedido=pedido)
+    envio = Envio.objects.filter(pedido=pedido)
+    transaccion = Transaccion.objects.get(pedido=pedido)
     subtotal = 0
     for detalle in detalle_pedidos:
         subtotal += detalle.subtotal
 
-    envio = envio.first() 
+    envio = envio.first()
 
     transaccion.total_transaccion = format(transaccion.total_transaccion, ",.0f")
     pedido.monto_total = format(pedido.monto_total, ",.0f")
 
     data = {
-        'pedido' : pedido,
-        'detalle_pedidos' : detalle_pedidos,
-        'subtotal' : format(subtotal, ",.0f"),
-        'envio' : envio,
-        'transaccion' : transaccion
+        "pedido": pedido,
+        "detalle_pedidos": detalle_pedidos,
+        "subtotal": format(subtotal, ",.0f"),
+        "envio": envio,
+        "transaccion": transaccion,
     }
     return render(request, "app/purchase_detail.html", data)
+
 
 @login_required(login_url="auth/login")
 def shipments(request):
     return render(request, "app/shipments.html")
 
+
 @login_required(login_url="auth/login")
 def profile(request):
     usuario = request.user
-    
-    datos = {
-        'usuario' : usuario
-    }
+
+    datos = {"usuario": usuario}
     return render(request, "app/profile.html", datos)
+
 
 @login_required(login_url="auth/login")
 def my_data(request):
     usuario = request.user
     regiones = Region.objects.all()
-    selected_region_id = request.GET.get('region_id')  # Obtener el ID de la región seleccionada en el formulario
+    selected_region_id = request.GET.get(
+        "region_id"
+    )  # Obtener el ID de la región seleccionada en el formulario
     direcciones = None
 
     if usuario.direccion:
-        direcciones = Direccion.objects.filter(id_direccion=usuario.direccion.id_direccion)
+        direcciones = Direccion.objects.filter(
+            id_direccion=usuario.direccion.id_direccion
+        )
 
     if selected_region_id:
         comunas = Comuna.objects.filter(region_id=selected_region_id)
     else:
         comunas = Comuna.objects.all()
-    
+
     tarjetas = MetodoPago.objects.filter(usuario=usuario)
-    
+
     datos = {
-        'usuario' : usuario,
-        'regiones' : regiones,
-        'comunas' : comunas,
-        'direcciones' : direcciones,
-        'tarjetas' : tarjetas,
+        "usuario": usuario,
+        "regiones": regiones,
+        "comunas": comunas,
+        "direcciones": direcciones,
+        "tarjetas": tarjetas,
     }
     return render(request, "app/my_data.html", datos)
 
 
 def obtener_comunas(request):
-    selected_region_id = request.GET.get('region_id')
+    selected_region_id = request.GET.get("region_id")
     if selected_region_id:
-        comunas = Comuna.objects.filter(region_id=selected_region_id).values('nombre_comuna', 'id_comuna')
-        return JsonResponse({'comunas': list(comunas)})
+        comunas = Comuna.objects.filter(region_id=selected_region_id).values(
+            "nombre_comuna", "id_comuna"
+        )
+        return JsonResponse({"comunas": list(comunas)})
     else:
-        return JsonResponse({'comunas': []})
+        return JsonResponse({"comunas": []})
 
 
 @login_required(login_url="auth/login")
@@ -294,46 +313,54 @@ def cards(request):
     usuario = request.user
     tarjetas = MetodoPago.objects.filter(usuario=usuario)
     datos = {
-        'usuario' : usuario,
-        'tarjetas' : tarjetas,
+        "usuario": usuario,
+        "tarjetas": tarjetas,
     }
     return render(request, "app/cards.html", datos)
+
 
 @login_required(login_url="auth/login")
 def addresses(request):
     usuario = request.user
     regiones = Region.objects.all()
-    selected_region_id = request.GET.get('region_id')  # Obtener el ID de la región seleccionada en el formulario
+    selected_region_id = request.GET.get(
+        "region_id"
+    )  # Obtener el ID de la región seleccionada en el formulario
     direcciones = None
 
     if usuario.direccion:
-        direcciones = Direccion.objects.filter(id_direccion=usuario.direccion.id_direccion)
-    
+        direcciones = Direccion.objects.filter(
+            id_direccion=usuario.direccion.id_direccion
+        )
+
     if selected_region_id:
         comunas = Comuna.objects.filter(region_id=selected_region_id)
     else:
         comunas = Comuna.objects.all()
 
     datos = {
-        'usuario' : usuario,
-        'regiones' : regiones,
-        'comunas' : comunas,
-        'direcciones' : direcciones
+        "usuario": usuario,
+        "regiones": regiones,
+        "comunas": comunas,
+        "direcciones": direcciones,
     }
     return render(request, "app/addresses.html", datos)
+
 
 @login_required(login_url="auth/login")
 def agregar_metodo_pago(request):
     usuario = request.user
-    url_anterior = request.META.get('HTTP_REFERER')
+    url_anterior = request.META.get("HTTP_REFERER")
 
-    if request.method == 'POST':
-        nombre_tarjeta = request.POST['nombre_tarjeta']
-        nombre_titular = request.POST['nombre_titular']
-        numero_tarjeta = request.POST['numero_tarjeta']
-        fecha_vencimiento = request.POST['fecha_vencimiento']
+    if request.method == "POST":
+        nombre_tarjeta = request.POST["nombre_tarjeta"]
+        nombre_titular = request.POST["nombre_titular"]
+        numero_tarjeta = request.POST["numero_tarjeta"]
+        fecha_vencimiento = request.POST["fecha_vencimiento"]
 
-        fecha_vencimiento = datetime.strptime(fecha_vencimiento, '%m/%y').strftime('%Y-%m-%d')
+        fecha_vencimiento = datetime.strptime(fecha_vencimiento, "%m/%y").strftime(
+            "%Y-%m-%d"
+        )
 
         metodo_pago = MetodoPago()
 
@@ -344,30 +371,32 @@ def agregar_metodo_pago(request):
         metodo_pago.fecha_vencimiento = fecha_vencimiento
 
         metodo_pago.save()
-            
+
         # Redirigir al usuario después de procesar exitosamente el formulario POST
         return redirect(url_anterior)
-    
+
+
 @login_required(login_url="auth/login")
 def eliminar_metodo_pago(request, metodo_pago_id):
-    url_anterior = request.META.get('HTTP_REFERER')
+    url_anterior = request.META.get("HTTP_REFERER")
 
-    if request.method == 'POST':
-        metodo_pago = MetodoPago.objects.get(id = metodo_pago_id)
+    if request.method == "POST":
+        metodo_pago = MetodoPago.objects.get(id=metodo_pago_id)
         metodo_pago.delete()
-            
+
         # Redirigir al usuario después de procesar exitosamente el formulario POST
         return redirect(url_anterior)
+
 
 @login_required(login_url="auth/login")
 def agregar_domicilio(request):
     usuario = request.user
-    url_anterior = request.META.get('HTTP_REFERER')
+    url_anterior = request.META.get("HTTP_REFERER")
 
-    if request.method == 'POST':
+    if request.method == "POST":
         direccion = Direccion()
-        direccion.direccion = request.POST['direccion']
-        idcomuna = request.POST['idcomuna']
+        direccion.direccion = request.POST["direccion"]
+        idcomuna = request.POST["idcomuna"]
         comuna = Comuna.objects.get(id_comuna=idcomuna)
         direccion.comuna = comuna
 
@@ -378,18 +407,19 @@ def agregar_domicilio(request):
         else:
             usuario.direccion = direccion
             usuario.save()
-            
+
         # Redirigir al usuario después de procesar exitosamente el formulario POST
         return redirect(url_anterior)
 
+
 @login_required(login_url="auth/login")
 def eliminar_domicilio(request, id_direccion):
-    url_anterior = request.META.get('HTTP_REFERER')
+    url_anterior = request.META.get("HTTP_REFERER")
 
-    if request.method == 'POST':
-        direccion = Direccion.objects.get(id_direccion = id_direccion)
+    if request.method == "POST":
+        direccion = Direccion.objects.get(id_direccion=id_direccion)
         direccion.delete()
-            
+
         # Redirigir al usuario después de procesar exitosamente el formulario POST
         return redirect(url_anterior)
 
@@ -470,6 +500,7 @@ def disminuir_cantidad(request, detalle_carrito_id):
 
     return redirect("cart")
 
+
 @login_required(login_url="auth/login")
 def imaginaPay(request):
     usuario = request.user
@@ -480,19 +511,19 @@ def imaginaPay(request):
         carrito = Carrito.objects.get(usuario=request.user)
     except Carrito.DoesNotExist:
         carrito = Carrito.objects.create(usuario=request.user)
-    
+
     total = carrito.total_pagar + envio
 
     carrito.total_pagar = format(carrito.total_pagar, ",.0f")
-    
 
     datos = {
-        'usuario' : usuario,
-        'tarjetas' : tarjetas,
-        'carrito' : carrito,
-        'total': format(total, ",.0f")
+        "usuario": usuario,
+        "tarjetas": tarjetas,
+        "carrito": carrito,
+        "total": format(total, ",.0f"),
     }
     return render(request, "app/imaginaPay.html", datos)
+
 
 @login_required(login_url="auth/login")
 def generar_pago(request):
@@ -502,17 +533,17 @@ def generar_pago(request):
         carrito = Carrito.objects.get(usuario=request.user)
     except Carrito.DoesNotExist:
         carrito = Carrito.objects.create(usuario=request.user)
-    
+
     total = carrito.total_pagar + envio
     carrito.total_pagar = format(carrito.total_pagar, ",.0f")
-    
+
     cliente = Client("http://localhost:54585/ImaginaPay.asmx?WSDL")
 
-    if request.method == 'POST':
-        metodo_pago_id = request.POST['flexRadioDefault']
-        numero_tarjeta = request.POST['cardInput']
-        metodo_pago = MetodoPago.objects.get(id = metodo_pago_id)
-        
+    if request.method == "POST":
+        metodo_pago_id = request.POST["flexRadioDefault"]
+        numero_tarjeta = request.POST["cardInput"]
+        metodo_pago = MetodoPago.objects.get(id=metodo_pago_id)
+
         if metodo_pago.tarjeta_numero == numero_tarjeta:
             try:
                 pedido = Pedido()
@@ -521,12 +552,13 @@ def generar_pago(request):
                 pedido.fecha_entrega_estimada = datetime.now() + timedelta(3)
                 pedido.estado_pedido = EstadoPedido.VALIDACION
                 pedido.monto_total = total
-                
+
                 pedido.save()
 
                 if pedido:
-                    
-                    detalle_carrito = DetalleCarrito.objects.filter(carrito = carrito.id_carrito)
+                    detalle_carrito = DetalleCarrito.objects.filter(
+                        carrito=carrito.id_carrito
+                    )
                     for aux in detalle_carrito:
                         detalle_pedido = DetallePedido()
                         detalle_pedido.pedido = pedido
@@ -536,34 +568,42 @@ def generar_pago(request):
                         detalle_pedido.subtotal = aux.precio_total
 
                         detalle_pedido.save()
-                    
-                    try: 
+
+                    try:
                         logger.info("Comenzando llamado al servicio web ImaginaPay")
                         # Llamada al servicio SOAP y obtener la respuesta XML
-                        response = cliente.service.CreatePayment(total,pedido.id_pedido,metodo_pago.id,usuario.pk)
-                        #Borrar Carrito
+                        response = cliente.service.CreatePayment(
+                            total, pedido.id_pedido, metodo_pago.id, usuario.pk
+                        )
+                        # Borrar Carrito
                         carrito.delete()
                         # Parsear la respuesta XML
                         xml_response = ET.fromstring(response)
-                        
-                         # Verificar si la respuesta indica un error
+
+                        # Verificar si la respuesta indica un error
                         if xml_response.tag == "ErrorDetails":
                             # Extraer los elementos de error del XML
                             status_code = xml_response.find("StatusCode").text
                             message = xml_response.find("Message").text
                             stackTrace = xml_response.find("StackTrace").text
-                            logger.error(f"Error al llamar al servicio web SOAP: {status_code} - {message}")
-                            logger.exception(f"Error al llamar al servicio web SOAP: {stackTrace}")
-                    except Exception as e: 
+                            logger.error(
+                                f"Error al llamar al servicio web SOAP: {status_code} - {message}"
+                            )
+                            logger.exception(
+                                f"Error al llamar al servicio web SOAP: {stackTrace}"
+                            )
+                    except Exception as e:
                         # Manejar cualquier excepción que pueda ocurrir durante la llamada al servicio SOAP
-                        logger.exception("Error al llamar al servicio web SOAP: %s", str(e))
+                        logger.exception(
+                            "Error al llamar al servicio web SOAP: %s", str(e)
+                        )
                 else:
                     logger.warning("No se pudo crear el pedido")
             except Exception as e:
                 logger.exception("Error al crear el Pedido: %s", str(e))
         else:
             logger.warning("No coincide el número de tarjeta")
-            
+
         # Redirigir al usuario después de procesar exitosamente el formulario POST
         response = HttpResponse(
             """
@@ -575,7 +615,7 @@ def generar_pago(request):
             </script>
             """
         )
-    
+
         return response
 
 
