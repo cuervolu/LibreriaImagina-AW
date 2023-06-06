@@ -62,7 +62,9 @@
                 <div>
                     <div class="mt-3">
                         <p class="ms-5 compra-pedido">Pedido # {{ pedido.id_pedido }}</p>
-                        <p class="ms-5 compra-fecha">Entregado: {{ pedido.fecha_pedido|date:"d \d\e " }} {{ pedido.fecha_pedido|date:"F"|capfirst }}.</p>
+                        {% if pedido.estado_pedido == 'Entregado' %}
+                        <p class="ms-5 compra-fecha">Entregado: {{ pedido.fecha_entrega_estimada|date:"d \d\e " }} {{ pedido.fecha_entrega_estimada|date:"F"|capfirst }}.</p>
+                        {% endif %}
                     </div>
                     <div class="ms-5 my-3 d-flex align-items-center">
                         {% for detalle_pedido in pedido.detallepedido_set.all|slice:"1" %}
