@@ -84,21 +84,22 @@
                         {% elif pedido.estado_pedido == 'En Preparación' %}
                         <p class="mb-2" style="color: #cfcd6f; font-weight: 500;">{{ pedido.estado_pedido }}</p>
                         <p style="font-weight: 500; font-size: 25px;">Preparación para el envío</p>
-                        <p style="font-weight: 300; font-size: 20px;">El repartidor Juanito está preparando tu pedido para entregarlo</p>
+                        <p style="font-weight: 300; font-size: 20px;">El repartidor {{ envio.repartidor.nombre }} está preparando tu pedido para entregarlo</p>
                         {% elif pedido.estado_pedido == 'En Ruta' %}
                         <p class="mb-2" style="color: #a7c245; font-weight: 500;">En Camino</p>
                         <p style="font-weight: 500; font-size: 25px;">Tu pedido está en camino</p>
-                        <p style="font-weight: 300; font-size: 20px;">El repartidor Juanito se encuentra en camino a tu domicilio</p>
+                        <p style="font-weight: 300; font-size: 20px;">El repartidor {{ envio.repartidor.nombre }} se encuentra en camino a tu domicilio</p>
                         {% elif pedido.estado_pedido == 'Entregado' %}
                         <p class="mb-2" style="color: #6FCF97; font-weight: 500;">{{ pedido.estado_pedido }}</p>
-                        <p style="font-weight: 500; font-size: 25px;">Llegó el 11 de Abril</p>
-                        <p style="font-weight: 300; font-size: 20px;">Entregamos tu pedido a las 17:33 hs en El Trovador
-                            4280 of. 611, Las Condes, RM (Metropolitana)</p>
+                        <p style="font-weight: 500; font-size: 25px;">Llegó el {{ envio.pedido.fecha_entrega_estimada|date:"d \d\e " }} {{ envio.pedido.fecha_entrega_estimada|date:"F"|capfirst }}</p>
+                        <p style="font-weight: 300; font-size: 20px;">Entregamos tu pedido a las 17:33 hs en {{ envio.direccion }}, {{ envio.direccion.comuna }}, {{ envio.direccion.comuna.region }}</p>
                         {% elif pedido.estado_pedido == 'Cancelado' %}
                         <p class="mb-2" style="color: #e24646; font-weight: 500;">{{ pedido.estado_pedido }}</p>
                         <p style="font-weight: 500; font-size: 25px;">Tu pedido fue cancelado</p>
                         {% endif %}
-                        <a style="color: #527EFF; font-weight: 300; font-size: 18px;" href="/shipments">Ver detalle envío</a>
+                        {% if envio %}
+                        <a style="color: #527EFF; font-weight: 300; font-size: 18px;" href="{% url 'shipments' envio.id_envio %}">Ver detalle envío</a>
+                        {% endif %}
                     </div>
                     <hr class="mt-4">
                     <div>
@@ -127,6 +128,7 @@
                             <p>${{ pedido.monto_total }}</p>
                         </div>
                     </div>
+                    <!-- Seccion Pago -->
                     <div class="seccion-pago d-flex flex-column mt-3">
                         <p style="font-size: 23px; font-weight: bold;">Pago</p>
                         <div class="ms-3 cartas-pago-envio">
@@ -169,6 +171,9 @@
                             </div>
                         </div>
                     </div>
+                    <!-- End Seccion Pago -->
+                    <!-- Seccion Envio -->
+                    {% if envio %}
                     <div class="seccion-envio d-flex flex-column mt-3">
                         <p style="font-size: 23px; font-weight: bold;">Envío</p>
                         <div class="ms-3 cartas-pago-envio">
@@ -178,15 +183,15 @@
                                 </div>
                                 <div class="ms-4" style="color: #686868;">
                                     <div>
-                                        <p class="mb-0 envio-direccion">El Trovador 4280 of.
-                                            611</p>
-                                        <p class="mb-0 envio-comuna-region">Las Condes, RM
-                                            (Metropolitana)</p>
+                                        <p class="mb-0 envio-direccion">{{ envio.direccion }}</p>
+                                        <p class="mb-0 envio-comuna-region">{{ envio.direccion.comuna }}, {{ envio.direccion.comuna.region }}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {% endif %}
+                    <!-- End Seccion Envio -->
                 </div>
             </div>
         </div>

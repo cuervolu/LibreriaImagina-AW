@@ -9,7 +9,7 @@
 {% block title %}Detalle Envío{% endblock title %}
 
 {% block content %}
-<a href="/purchase_detail" class="text-decoration-none text-black">
+<a href="{% url 'purchase_detail' envio.pedido.id_pedido %}" class="text-decoration-none text-black">
     <div class="d-flex align-items-center">
         <i class="fa-solid fa-chevron-left fa-md"></i>
         <p style="font-size: 18px; font-weight: 600; margin-bottom: 0px; margin-left: 10px;">Detalle pedido</p>
@@ -28,38 +28,76 @@
             style="width: 100%; border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
             <div class="row justify-content-between mx-3 my-5">
                 <div class="col-sm-12 col-md-12 col-lg-8">
-                    <h2 class="mb-4" style="font-weight: 500; font-size: 34px;">Entregado el 11 de Abril</h2>
+                    {% if envio.pedido.estado_pedido == 'En Preparación' %}
+                    <h2 class="mb-4" style="font-weight: 500; font-size: 34px;">Preparación para el envío</h2>
+                    {% elif envio.pedido.estado_pedido == 'En Ruta' %}
+                    <h2 class="mb-4" style="font-weight: 500; font-size: 34px;">Tu pedido está en camino</h2>
+                    {% elif envio.pedido.estado_pedido == 'Entregado' %}
+                    <h2 class="mb-4" style="font-weight: 500; font-size: 34px;">Entregado el {{ envio.pedido.fecha_entrega_estimada|date:"d \d\e " }} {{ envio.pedido.fecha_entrega_estimada|date:"F"|capfirst }}</h2>
+                    {% elif envio.pedido.estado_pedido == 'Cancelado' %}
+                    <h2 class="mb-4" style="font-weight: 500; font-size: 34px;">Tu pedido fue cancelado</h2>
+                    {% endif %}
                     <hr>
                     <div class="row">
                         <div class="col-1" style="display: flex; flex-direction: column; align-items: center;">
+                            {% if envio.pedido.estado_pedido == 'En Preparación' or envio.pedido.estado_pedido == 'En Ruta' %}
+                            <div class="circulo" style="width: 10px; height: 10px; margin-top: 10px; margin-bottom: 5px;"></div>
+                            <div class="linea linea3"></div>
+                            <div class="circulo" style="width: 15px; height: 15px; margin-top: 5px; margin-bottom: 10px;"></div>
+                            {% elif envio.pedido.estado_pedido == 'Cancelado' %}
+                            <div class="circulo" style="width: 10px; height: 10px; margin-top: 10px; margin-bottom: 5px; background-color: #e24646;"></div>
+                            <div class="linea linea3" style="border-left: 2px solid #e24646;"></div>
+                            <div class="circulo" style="width: 15px; height: 15px; margin-top: 5px; margin-bottom: 10px; background-color: #e24646;"></div>
+                            {% else %}
                             <div class="circulo" style="width: 10px; height: 10px; margin-top: 10px; margin-bottom: 5px;"></div>
                             <div class="linea linea1"></div>
                             <div class="circulo" style="width: 10px; height: 10px; margin-top: 5px; margin-bottom: 5px;"></div>
                             <div class="linea linea2"></div>
                             <div class="circulo" style="width: 15px; height: 15px; margin-top: 5px; margin-bottom: 10px;"></div>
+                            {% endif %}
                         </div>
                         <div class="col-10">
+                            {% if envio.pedido.estado_pedido == 'En Preparación' %}
+                            <p class="mb-2" style="color: #6FCF97;; font-weight: 300; font-size: 18px;">En Preparación</p>
+                            {% else %}
                             <p class="mb-2" style="color: rgba(104, 104, 104, 0.7); font-weight: 300; font-size: 18px;">En Preparación</p>
+                            {% endif %}
                             <div class="collapse multi-collapse" id="multiCollapseExample1">
                                 <div class="card card-body py-0" style="border: none; font-size: 14px;">
-                                    <p class="mb-1">7 abril, 23:52 | El vendedor está preparando tu paquete.</p>
+                                    <p class="mb-1">{{ envio.pedido.fecha_pedido|date:"d \ F" }}, 23:52 | El repartidor está preparando tu pedido.</p>
                                 </div>
                             </div>
-                            <p class="pt-3 mb-2" style="color: rgba(104, 104, 104, 0.7); font-weight: 300; font-size: 18px;">En Camino</p>
+                            {% if envio.pedido.estado_pedido == 'En Ruta' %}
+                            <p class="pt-3 mb-2" style="color: #6FCF97; font-weight: 300; font-size: 18px;">En Camino</p>
                             <div class="collapse multi-collapse" id="multiCollapseExample2">
                                 <div class="card card-body py-0" style="border: none; font-size: 14px;">
-                                    <p class="mb-1">9 abril, 23:52 | El vendedor despachó tu paquete.</p>
-                                    <p class="mb-1">10 abril, 23:52 | Ingresó al centro de distribución de Renca.</p>
-                                    <p class="mb-1">11 abril, 23:52 | Tu paquete está en el último tramo del recorrido.</p>
+                                    <p class="mb-1">{{ despacho|date:"d \ F" }}, 23:52 | El repartidor despachó tu pedido.</p>
+                                    <p class="mb-1">{{ ingreso|date:"d \ F" }}, 23:52 | Ingresó al centro de distribución de {{ envio.direccion.comuna }}.</p>
+                                    <p class="mb-1">{{ envio.pedido.fecha_entrega_estimada|date:"d \ F" }}, 23:52 | Tu pedido está en el último tramo del recorrido.</p>
+                                </div>
+                            </div>
+                            {% else %}
+                            <p class="pt-3 mb-2" style="color: rgba(104, 104, 104, 0.7); font-weight: 300; font-size: 18px;">En Camino</p>
+                            {% endif %}
+                            {% if envio.pedido.estado_pedido == 'Entregado' %}
+                            <div class="collapse multi-collapse" id="multiCollapseExample2">
+                                <div class="card card-body py-0" style="border: none; font-size: 14px;">
+                                    <p class="mb-1">{{ despacho|date:"d \ F" }}, 23:52 | El repartidor despachó tu pedido.</p>
+                                    <p class="mb-1">{{ ingreso|date:"d \ F" }}, 23:52 | Ingresó al centro de distribución de {{ envio.direccion.comuna }}.</p>
+                                    <p class="mb-1">{{ envio.pedido.fecha_entrega_estimada|date:"d \ F" }}, 23:52 | Tu pedido está en el último tramo del recorrido.</p>
                                 </div>
                             </div>
                             <p class="pt-3 mb-2" style="color: #6FCF97; font-weight: 500; font-size: 18px;">Entregado</p>
-                            <p>11 abril, 17:33 | Entregamos el pedido.</p>
+                            <p>{{ envio.pedido.fecha_entrega_estimada|date:"d \ F" }}, 17:33 | Entregamos el pedido.</p>
+                            {% else %}
+                            {% endif %}                            
                         </div>
                     </div>
+                    {% if envio.pedido.estado_pedido != 'Cancelado' %}
                     <a style="border: none; color: #527EFF;" class="btn" type="button" data-bs-toggle="collapse"
                         data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Ver
                         detalle<i class="fa-solid fa-caret-down rotate-icon ms-2"></i></a>
+                    {% endif %}
                     <hr>
                     <div>
                         <p style="font-weight: 500; font-size: 25px;">Informacion de la Entrega</p>
@@ -72,9 +110,9 @@
                                     <div class="ms-5" style="color: #686868;">
                                         <div>
                                             <p class="mb-0" style="color: black; font-size: 20px;">Dirección de entrega</p>
-                                            <p class="mb-0">El Trovador 4280 of. 611</p>
-                                            <p class="mb-0">Las Condes, RM (Metropolitana)</p>
-                                            <p class="mb-0">Recibe Martin Cooper 8847 3678</p>
+                                            <p class="mb-0">{{ envio.direccion }}</p>
+                                            <p class="mb-0">{{ envio.direccion.comuna }}, {{ envio.direccion.comuna.region}}</p>
+                                            <p class="mb-0">Recibe {{ envio.pedido.cliente }} {{ envio.pedido.cliente.telefono }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -98,12 +136,14 @@
             // Agregar clase "active" a las líneas 1 y 2
             document.querySelector('.linea1').classList.add('active');
             document.querySelector('.linea2').classList.add('active');
+            document.querySelector('.linea3').classList.add('active');
         })
 
         collapseEl.addEventListener('hide.bs.collapse', function () {
             // Remover clase "active" de las líneas 1 y 2
             document.querySelector('.linea1').classList.remove('active');
             document.querySelector('.linea2').classList.remove('active');
+            document.querySelector('.linea3').classList.remove('active');
         })
     })
 </script>

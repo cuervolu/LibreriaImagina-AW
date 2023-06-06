@@ -22,8 +22,14 @@
     flex: 0.28;
 }
 
+.linea3{
+    flex: 0.9;
+}
+
+
 .linea1,
-.linea2 {
+.linea2,
+.linea3 {
     transition: flex 0.3s ease;
 }
 

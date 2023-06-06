@@ -257,8 +257,17 @@ def purchase_detail(request, pedido_id):
 
 
 @login_required(login_url="auth/login")
-def shipments(request):
-    return render(request, "app/shipments.html")
+def shipments(request, id_envio):
+    envio = Envio.objects.get(id_envio = id_envio)
+    despacho = envio.pedido.fecha_pedido + timedelta(1)
+    ingreso = envio.pedido.fecha_pedido + timedelta(2)
+
+    data = {
+        'envio' : envio,
+        'despacho': despacho,
+        'ingreso': ingreso,
+    }
+    return render(request, "app/shipments.html", data)
 
 
 @login_required(login_url="auth/login")
