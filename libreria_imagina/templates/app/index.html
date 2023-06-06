@@ -95,12 +95,11 @@
     </div>
     <div class="row justify-content-center">
         {% for categoria in categorias|slice:":9"  %}
-        <div class="col-auto col-md-auto">
+        <div class="col-12 col-sm-6 col-lg-4 d-flex justify-content-center">
             <a class="btn-categoria text-decoration-none" href="/catalogue?categoria={{ categoria.0 }}"><span>{{ categoria.0 }}</span></a>
         </div>
         {% endfor %}
-        </div>
-  
+    </div>
 </div>
 
 <div class="container my-5 py-3">
