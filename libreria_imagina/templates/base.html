@@ -46,7 +46,7 @@
   <nav class="navbar navbar-expand-lg mt-4">
     <div class="container d-flex align-items-center" style="font-size: 14px;">
       <!-- Brand -->
-      <a class="navbar-brand" href="#"><img src="{% static 'img/brand.png' %}" alt="Librería Imagina"
+      <a class="navbar-brand" href="/"><img src="{% static 'img/brand.png' %}" alt="Librería Imagina"
           style="max-width: 210px; height: auto;"></a>
       <!-- Toggler -->
       <ul class="navbar-nav gap-3 d-lg-flex d-none">
@@ -73,7 +73,7 @@
           <a class="nav-link" href="/auth/logout">Cerrar Sesión</a>
         </li>
         {% else %}
-        <!-- Navbar para usuarios logueados -->
+        <!-- Navbar para usuarios no logueados -->
         <li class="nav-item">
           <a class="nav-link" href="/auth/login">Iniciar Sesión</a>
         </li>
@@ -181,16 +181,16 @@
         <!-- Grid column -->
         <div class="col-md-auto col-lg-auto col-xl-auto mb-5 d-flex align-items-center">
           <!-- Brand -->
-          <a class="navbar-brand me-5" href="#"><img src="{% static 'img/white-brand.png' %}" alt="Librería Imagina"
+          <a class="navbar-brand me-5" href="/"><img src="{% static 'img/white-brand.png' %}" alt="Librería Imagina"
               style="max-width: 210px; height: auto;"></a>
         </div>
         <div class="d-block d-sm-none">
           <div class="gap-3 d-flex align-items-center justify-content-center">
-            <p>Inicio</p>
-            <p>Catálogo</p>
-            <p>Mis Compras</p>
-            <p>Soporte</p>
-            <p>Perfil</p>
+            <a href="/" class="text-decoration-none text-white"><p>Inicio</p></a>
+            <a href="/catalogue" class="text-decoration-none text-white"><p>Catálogo</p></a>
+            <a href="/my_purchases" class="text-decoration-none text-white"><p>Mis Compras</p></a>
+            <a href="#" class="text-decoration-none text-white"><p>Soporte</p></a>
+            <a href="/profile" class="text-decoration-none text-white"><p>Perfil</p></a>
           </div>
         </div>
         <!-- Links -->
