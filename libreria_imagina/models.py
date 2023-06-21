@@ -163,6 +163,7 @@ class Mantenimiento(models.Model):
     )
     libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
     fecha_solicitud = models.DateField(null=False)
+    comentario = models.TextField(max_length=800, null=False, blank=False)
     tipo_mantenimiento = models.CharField(
         max_length=50,
         choices=TipoMantenimiento.choices,
