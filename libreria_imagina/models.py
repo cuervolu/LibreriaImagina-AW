@@ -249,11 +249,8 @@ class TipoUsuario(models.TextChoices):
     REPARTIDOR = "Repartidor"
     TECNICO = "Técnico"
     CLIENTE = "Cliente"
+    EMPLEADO = "Empleado"
     ENCARGADO_BODEGA = "Encargado de Bodega"
-
-
-
-
 
 class UsuarioManager(BaseUserManager):
     def create_user(
