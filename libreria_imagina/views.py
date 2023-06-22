@@ -694,3 +694,6 @@ def logout_view(request):
     return redirect(
         "index"
     )  # Redireccionar a la página principal si se accede a la vista por GET
+
+def error_404(request, exception):
+    return render(request, '404.html', status=404,)

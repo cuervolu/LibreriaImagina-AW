@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block title %}Eror 404{% endblock title %}
+
+{% block content %}
+<div class="row my-5 py-5 align-items-center" style="justify-content: space-between;">
+    <div class="col-auto col-md-auto col-lg-auto d-none d-md-none d-lg-block">
+        <img class="img-fluid float-start" src="{% static 'img/404_Error.png' %}" alt="" style="max-width: 500px;">
+    </div>
+    <div class="col-sm-auto col-md-auto col-lg-4 my-auto">
+        <h1 class="mb-3 fw-bolder text-start" style="color: #146E89;">Error 404</h1>
+        <div class="text-start">
+            <p>Lo sentimos, no hemos encontrado esta pagina.</p>
+        </div>
+        <a class="btn btn-custom btn-md fw-bold" href="/" role="button">Volver a la página principal</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_final%}
+
+{% endblock %}

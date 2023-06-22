@@ -36,5 +36,8 @@ urlpatterns = [
     path('eliminar_domicilio/<int:id_direccion>/', eliminar_domicilio, name='eliminar_domicilio'),
     path("agregar_metodo_pago", agregar_metodo_pago, name="agregar_metodo_pago"),
     path('eliminar_metodo_pago/<int:metodo_pago_id>/', eliminar_metodo_pago, name='eliminar_metodo_pago'),
-    
+    path('<str:exception>', error_404, name='404')
+
 ]
+
+handler404 = error_404

@@ -46,7 +46,7 @@
             <div id="product" class="single-product card mb-3"
                 style="border-radius: 0%; border: none ; box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);">
                 <div class="part-1 card-img-top"
-                    style="background: url('{{ libro.thumbnail  }}') no-repeat center;object-fit: cover;">
+                    style="background: url('{{ libro.thumbnail  }}') no-repeat center;object-fit: cover;  ">
                     <form class="agregar-carrito-form" action="{% url 'agregar_al_carrito' libro.id_libro %}"
                         method="POST">
                         {% csrf_token %}
