@@ -2,8 +2,6 @@ import inspect
 import requests
 import json
 
-from django.urls import get_resolver
-
 from rest_framework.response import Response
 from rest_framework import viewsets, pagination, status
 from rest_framework.decorators import action
@@ -21,9 +19,9 @@ from .serializers import LibroSerializer, LoginSerializer, UserSerializer
 
 from decouple import config
 import traceback
+from .utils import setup_logger, create_libro_from_data
 
 # Create your views here.
-logger = setup_logger()
 logger = setup_logger()
 
 
@@ -195,7 +193,6 @@ class LibroViewSet(viewsets.ModelViewSet):
                 libros_creados = []
                 for item in data.get("items", []):
                     libro = create_libro_from_data(item)
-                    libro = create_libro_from_data(item)
                     if libro:
                         libros_creados.append(libro)
                 print(libros_creados)
@@ -295,7 +292,6 @@ class LoginView(APIView):
                     TipoUsuario.ADMIN,
                     TipoUsuario.TECNICO,
                     TipoUsuario.ENCARGADO_BODEGA,
-                    TipoUsuario.REPARTIDOR,
                     TipoUsuario.REPARTIDOR,
                 ]:
                     # Usuario no válido debido a falta de permisos
