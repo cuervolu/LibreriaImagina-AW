@@ -19,7 +19,13 @@ from .serializers import LibroSerializer, LoginSerializer, UserSerializer
 
 from decouple import config
 import traceback
-from .utils import setup_logger, create_libro_from_data
+from .utils import (
+    create_libro,
+    delete_libro,
+    setup_logger,
+    create_libro_from_data,
+    update_libro,
+)
 
 # Create your views here.
 logger = setup_logger()
@@ -134,13 +140,15 @@ class LibroViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-    @action(detail=False, methods=["get"])
+    @action(detail=False, methods=["get", "patch", "post"])
     def libros(self, request):
         if request.method == "GET":
             libros = Libro.objects.all()
             serializer = LibroSerializer(libros, many=True)
             return Response(serializer.data)
-
+        if request.method == "POST":
+            serializer = LibroSerializer(data=request.data)
+            return create_libro(request, serializer)
         return Response(
             {"error": "Método HTTP no permitido."},
             status=status.HTTP_405_METHOD_NOT_ALLOWED,
@@ -242,10 +250,10 @@ class LibroViewSet(viewsets.ModelViewSet):
 
     """
 
-    @action(detail=True, methods=["get", "put"])
+    @action(detail=True, methods=["get", "patch", "delete"])
     def libro_detail(self, request, pk=None):
         try:
-            libro = Libro.objects.get(pk=pk)
+            libro = Libro.objects.get(id_libro=pk)
         except Libro.DoesNotExist:
             return Response(
                 {"error": "El libro no existe."}, status=status.HTTP_404_NOT_FOUND
@@ -254,12 +262,11 @@ class LibroViewSet(viewsets.ModelViewSet):
         if request.method == "GET":
             serializer = LibroSerializer(libro)
             return Response(serializer.data)
-        elif request.method == "PUT":
-            serializer = LibroSerializer(libro, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        elif request.method == "PATCH":
+            return update_libro(request, libro)
+        elif request.method == "DELETE":
+            delete_libro(libro)
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # **********************

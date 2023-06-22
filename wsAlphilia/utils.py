@@ -3,8 +3,11 @@ import logging
 import random
 from decouple import config
 import requests
-
-from libreria_imagina.models import Libro
+from rest_framework import status
+from rest_framework.response import Response
+from wsAlphilia.models import Libro
+from django.db.models import Q
+from wsAlphilia.serializers import LibroSerializer
 
 
 def setup_logger():
@@ -137,3 +140,44 @@ def create_libro_from_data(data):
             f"Ocurrió un error al crear un libro desde los datos de la API: {e}"
         )
         return None
+
+
+def create_libro(request, serializer):
+    logger = setup_logger()
+    if serializer.is_valid():
+        # Validar si el libro ya existe por ISBN o nombre
+        isbn = serializer.validated_data.get("isbn")
+        nombre_libro = serializer.validated_data.get("nombre_libro")
+        existing_libro = Libro.objects.filter(
+            Q(isbn=isbn) | Q(nombre_libro=nombre_libro)
+        ).exists()
+
+        if existing_libro:
+            logger.error("El libro ya existe.")
+            return Response(
+                {"error": "El libro ya existe."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        libro = serializer.save()
+        return Response(LibroSerializer(libro).data, status=status.HTTP_201_CREATED)
+    else:
+        logger.error(f"Datos de libro no válidos: {serializer.errors}")
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def update_libro(request, libro):
+    logger = setup_logger()
+    serializer = LibroSerializer(libro, data=request.data, partial=True)
+
+    if serializer.is_valid():
+        libro = serializer.save()
+        return Response(LibroSerializer(libro).data, status=status.HTTP_200_OK)
+    else:
+        logger.error(f"Ocurrió un error al actualizar el libro: {serializer.errors}")
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def delete_libro(libro):
+    logger = setup_logger()
+    libro.delete()
+    logger.info(f"Libro eliminado: {libro.id_libro}")
