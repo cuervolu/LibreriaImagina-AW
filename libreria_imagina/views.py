@@ -17,6 +17,7 @@ from django.db.models.functions import Concat
 # Integración servicio SOAP
 import zeep
 from zeep import Client
+from zeep.exceptions import Fault
 
 import xml.etree.ElementTree as ET
 
@@ -27,6 +28,7 @@ from django.core.paginator import Paginator
 
 
 from libreria_imagina.utils import format_book_prices
+from wsAlphilia.utils import setup_logger
 
 from .models import *
 
@@ -35,7 +37,7 @@ from .helpers.procedures import *
 from .forms import SignupForm
 import logging
 
-logger = logging.getLogger(__name__)
+logger = setup_logger()
 # **********************
 # *       APP          *
 # **********************
@@ -589,26 +591,17 @@ def generar_pago(request):
                         )
                         # Borrar Carrito
                         carrito.delete()
-                        # Parsear la respuesta XML
-                        xml_response = ET.fromstring(response)
-
                         # Verificar si la respuesta indica un error
-                        if xml_response.tag == "ErrorDetails":
-                            # Extraer los elementos de error del XML
-                            status_code = xml_response.find("StatusCode").text
-                            message = xml_response.find("Message").text
-                            stackTrace = xml_response.find("StackTrace").text
-                            logger.error(
-                                f"Error al llamar al servicio web SOAP: {status_code} - {message}"
-                            )
-                            logger.exception(
-                                f"Error al llamar al servicio web SOAP: {stackTrace}"
-                            )
-                    except Exception as e:
+                        if response != 1:
+                            error_message = "Error al llamar al servicio web SOAP: la operación no se completó correctamente."
+                            logger.error(error_message)
+                    except Fault as e:
                         # Manejar cualquier excepción que pueda ocurrir durante la llamada al servicio SOAP
                         logger.exception(
                             "Error al llamar al servicio web SOAP: %s", str(e)
                         )
+                        error_message = str(e)
+                         # Mostrar el error_message en el frontend
                 else:
                     logger.warning("No se pudo crear el pedido")
             except Exception as e:
