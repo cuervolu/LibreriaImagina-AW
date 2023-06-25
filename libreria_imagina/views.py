@@ -19,8 +19,6 @@ import zeep
 from zeep import Client
 from zeep.exceptions import Fault
 
-import xml.etree.ElementTree as ET
-
 # importar una librería decoradora , permite evitar el ingreso de usuarios a la página web
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -35,7 +33,6 @@ from .models import *
 # Se llama al helper de procedimientos
 from .helpers.procedures import *
 from .forms import SignupForm
-import logging
 
 logger = setup_logger()
 # **********************
