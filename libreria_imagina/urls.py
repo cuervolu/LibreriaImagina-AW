@@ -18,6 +18,7 @@ urlpatterns = [
     path("books/<slug:slug>/", book_detail, name="book_detail"),
     path("search/", search, name="search"),
     path("profile", profile, name="profile"),
+    path("support", support, name="support"),
     path("my_data", my_data, name="my_data"),
     path('obtener_comunas/', obtener_comunas, name='obtener_comunas'),
     path("cards", cards, name="cards"),

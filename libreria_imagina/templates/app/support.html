@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/support.css' %}" />
+{% endblock %}
+{% load humanize %}
+{% block title %}Soporte{% endblock title %}
+
+{% block content %}
+<div class="container my-5 py-3" style="max-width: 963px;">
+    <div class="row justify-content-start mb-4">
+        <div class="col-12 col-md-12 col-lg-12 ps-0">
+            <p style="font-size: 36px; font-weight: 600;">¿En qué podemos ayudate?</p>
+            <div class="d-flex">
+                <div class="col-8 col-md-10 col-lg-10 mb-md-0 mt-2"
+                    style="background-color: #FFFF; max-width: 100%; height: 60px; box-shadow: 0px 20px 88px rgba(0, 0, 0, 0.1); border-radius: 10px;">
+                    <div class="input-group align-items-center">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-transparent border-0 mt-2" style="margin-right: -15px;"><i
+                                    class="fa fa-search" style="color: gray;"></i></span>
+                        </div>
+                        <input class="form-control bg-transparent border-0 mt-2"
+                            style="box-shadow: none; color: gray; font-weight: 500; font-size: 20px;" type="search"
+                            value="" placeholder="Buscar en Soporte">
+                    </div>
+                </div>
+                <div class="col-auto col-md-auto col-lg-auto mt-2 ms-auto">
+                    <button disabled class="btn btn-gradient">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <!-- Card -->
+        <p style="font-size: 26px; font-weight: 600;">Compras</p>
+        <div class="card mb-5 d-flex"
+            style="border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 px-0">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-0 border-bottom" style="border-bottom-width: 10px;">
+                            <a href="/my_data" style="text-decoration: none;">
+                                <div class="d-flex align-items-center mx-5 my-3 pt-2">
+                                    <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
+                                        <img src="{% static 'img/purchases_bag.png' %}" alt="" class="img-fluid" style="width: 35px;">
+                                    </div>
+                                    <div>
+                                        <h5 style="color: black;">Administrar y cancelar compras</h5>
+                                        <h6 style="color: rgba(0, 0, 0, 0.582);">Pagar, seguir envios, modificar, reclamar o cancelar compras.</h6>
+                                    </div>
+                                    <div class="ms-auto" style="color: black;">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="mb-0 border-bottom">
+                            <a href="/cards" style="text-decoration: none;">
+                                <div class="d-flex align-items-center mx-5 my-3">
+                                    <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
+                                        <img src="{% static 'img/refunds.png' %}" alt="" class="img-fluid" style="width: 47px; left: 10px;">
+                                    </div>
+                                    <div>
+                                        <h5 style="color: black;">Devoluciones y reembolsos</h5>
+                                        <h6 style="color: rgba(0, 0, 0, 0.582);">Devolver un producto o consultar por reintegros de dinero de una compra.</h6>
+                                    </div>
+                                    <div class="ms-auto" style="color: black;">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/addresses" style="text-decoration: none;">
+                                <div class="d-flex align-items-center mx-5 my-3">
+                                    <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
+                                        <img src="{% static 'img/questions.png' %}" alt="" class="img-fluid" style="width: 35px;">
+                                    </div>
+                                    <div>
+                                        <h5 style="color: black;">Preguntas frecuentes sobre compras</h5>
+                                    </div>
+                                    <div class="ms-auto" style="color: black;">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- End Card -->
+        <!-- Card -->
+        <p style="font-size: 26px; font-weight: 600;">Mantenimiento</p>
+        <div class="card mb-5 d-flex"
+            style="border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 px-0">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-0 border-bottom" style="border-bottom-width: 10px;">
+                            <a href="/my_data" style="text-decoration: none;">
+                                <div class="d-flex align-items-center mx-5 my-3 pt-2">
+                                    <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
+                                        <img src="{% static 'img/maintenance.png' %}" alt="" class="img-fluid" style="width: 35px;">
+                                    </div>
+                                    <div>
+                                        <h5 style="color: black;">Solicitar Mantenimiento</h5>
+                                        <h6 style="color: rgba(0, 0, 0, 0.582);">Mantenimiento físico, contenido o preventivo.</h6>
+                                    </div>
+                                    <div class="ms-auto" style="color: black;">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="mb-0 border-bottom">
+                            <a href="/cards" style="text-decoration: none;">
+                                <div class="d-flex align-items-center mx-5 my-3">
+                                    <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
+                                        <img src="{% static 'img/follow-up_requests.png' %}" alt="" class="img-fluid" style="width: 35px;">
+                                    </div>
+                                    <div>
+                                        <h5 style="color: black;">Seguimiento de solicitudes</h5>
+                                        <h6 style="color: rgba(0, 0, 0, 0.582);">Ver progreso y estado de las solicitudes de mantenimiento.</h6>
+                                    </div>
+                                    <div class="ms-auto" style="color: black;">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/addresses" style="text-decoration: none;">
+                                <div class="d-flex align-items-center mx-5 my-3">
+                                    <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
+                                        <img src="{% static 'img/questions.png' %}" alt="" class="img-fluid" style="width: 35px;">
+                                    </div>
+                                    <div>
+                                        <h5 style="color: black;">Preguntas frecuentes sobre mantenimiento</h5>
+                                    </div>
+                                    <div class="ms-auto" style="color: black;">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- End Card -->
+        <!-- Card -->
+        <p style="font-size: 26px; font-weight: 600;">Sobre tu cuenta</p>
+        <div class="card mb-5 d-flex"
+            style="border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 px-0">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-0 border-bottom">
+                            <a href="/cards" style="text-decoration: none;">
+                                <div class="d-flex align-items-center mx-5 my-3">
+                                    <div style="height: 55px; color: black; font-size: 25px;"></div>
+                                    <div>
+                                        <h5 style="color: black;">Configuración de mi cuenta</h5>
+                                    </div>
+                                    <div class="ms-auto" style="color: black;">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/addresses" style="text-decoration: none;">
+                                <div class="d-flex align-items-center mx-5 my-3">
+                                    <div style="height: 55px; color: black; font-size: 25px;"></div>
+                                    <div>
+                                        <h5 style="color: black;">Seguridad</h5>
+                                    </div>
+                                    <div class="ms-auto" style="color: black;">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- End Card -->
+        <!-- Card -->
+        <p style="font-size: 26px; font-weight: 600;">¿Necesitas más ayuda?</p>
+        <div class="card mb-5 d-flex"
+            style="border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 px-0">
+                    <ul class="list-unstyled mb-0">
+                        <li>
+                            <a href="/addresses" style="text-decoration: none;">
+                                <div class="d-flex align-items-center mx-5 my-3">
+                                    <div style="height: 55px; color: black; font-size: 25px;"></div>
+                                    <div>
+                                        <h5 style="color: black;">Contáctanos</h5>
+                                    </div>
+                                    <div class="ms-auto" style="color: black;">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- End Card -->
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Título del modal</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary">Guardar cambios</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</div>
+
+
+{% endblock %}
+
+
+{% block script_final %}
+{% endblock script_final %}

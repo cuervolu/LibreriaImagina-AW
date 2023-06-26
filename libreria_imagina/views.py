@@ -278,6 +278,13 @@ def profile(request):
     return render(request, "app/profile.html", datos)
 
 
+def support(request):
+    usuario = request.user
+
+    datos = {"usuario": usuario}
+    return render(request, "app/support.html", datos)
+
+
 @login_required(login_url="auth/login")
 def my_data(request):
     usuario = request.user
