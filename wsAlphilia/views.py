@@ -14,7 +14,7 @@ from django.db.models import Q
 from libreria_imagina.models import TipoUsuario
 
 from .models import Libro
-from .serializers import LibroSerializer, LoginSerializer, UserSerializer
+from .serializers import LibroSerializer, LoginSerializer, UserSerializer, CreateUserSerializer
 
 from decouple import config
 import traceback
@@ -298,6 +298,7 @@ class LoginView(APIView):
                     TipoUsuario.ADMIN,
                     TipoUsuario.TECNICO,
                     TipoUsuario.ENCARGADO_BODEGA,
+                    TipoUsuario.EMPLEADO,
                     TipoUsuario.REPARTIDOR,
                 ]:
                     # Usuario no válido debido a falta de permisos
@@ -352,3 +353,36 @@ class LogoutView(APIView):
             logger.info(f"Cierre de sesión exitoso para el usuario")
 
         return Response({"detail": "Cierre de sesión exitoso."})
+
+
+class CreateUserView(APIView):
+    def post(self, request, format=None):
+        serializer = CreateUserSerializer(data=request.data)
+        if serializer.is_valid():
+            tipo_usuario = request.data.get('tipo_usuario')
+            
+            if tipo_usuario in TipoUsuario.values:
+                # Obtén la contraseña en texto plano del serializer
+                password = serializer.validated_data['password']
+
+                # Crea una instancia de Usuario sin guardarla aún
+                usuario = serializer.save(tipo_usuario=tipo_usuario)
+
+                # Establece la contraseña en su forma encriptada
+                usuario.set_password(password)
+                
+                # Establece el atributo is_staff si corresponde
+                if tipo_usuario != TipoUsuario.CLIENTE:
+                    usuario.is_staff = True
+
+                # Guarda el usuario en la base de datos
+                usuario.save()
+
+                return Response({'message': 'Usuario creado exitosamente', 'id': usuario.id}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'message': 'Tipo de usuario inválido'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            error_message = "Error al crear el usuario."
+            if serializer.errors:
+                error_message += f" Detalles: {serializer.errors}"
+            return Response({'message': error_message}, status=status.HTTP_400_BAD_REQUEST)

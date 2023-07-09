@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import LibroViewSet, LoginView, LogoutView
+from .views import LibroViewSet, LoginView, LogoutView, CreateUserView
 
 urlpatterns = [
     path(
@@ -27,4 +27,5 @@ urlpatterns = [
     # Otras rutas
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path("createUser/", CreateUserView.as_view(), name="createUser"),
 ]
