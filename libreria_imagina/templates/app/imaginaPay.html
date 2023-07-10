@@ -49,16 +49,16 @@
             </div>
             <div class="card card-general mt-5">
                 <div class="">
-                    <form method="POST" action="{% url 'generar_pago' %}" class="row m-5 p-3">
+                    <form method="POST" action="{% url 'generar_pago' %}" class="row m-5 p-3 formulario-pago">
                         {% csrf_token %}
                         <div class="col-sm-12 col-md-12 col-lg-6">
                             <div class="row">
                                 <div class="d-flex justify-content-between">
-                                    <p>Estas pagando en:</p>
-                                    <p>Monto a pagar:</p>
+                                    <p class="pagando-monto">Estas pagando en:</p>
+                                    <p class="pagando-monto">Monto a pagar:</p>
                                 </div>
                                 <div class="d-flex justify-content-between mt-3">
-                                    <img src="{% static 'img/logo.png' %}" alt="" class="img-fluid"
+                                    <img src="{% static 'img/logo.png' %}" alt="" class="img-fluid libreria-brand"
                                         style="width: auto; height: 35px;">
                                     <h3 style="font-weight: bolder;">${{ total }}</h3>
                                 </div>
@@ -84,17 +84,17 @@
                                         </div>
                                         <div class="d-flex my-3">
                                             <div class="ms-4">
-                                                <h6>Terminada en {{ metodo_pago.tarjeta_numero|slice:"-4:" }}</h6>
+                                                <h6 class="terminada_en">Terminada en {{ metodo_pago.tarjeta_numero|slice:"-4:" }}</h6>
                                                 {% if metodo_pago.tarjeta_numero|slice:"0:1" == '4' %}
-                                                <h6 style="font-size: 14px; font-weight: 300;">Visa</h6>
+                                                <h6 class="tipo_tarjeta">Visa</h6>
                                                 {% elif metodo_pago.tarjeta_numero|slice:"0:2" == '51' or metodo_pago.tarjeta_numero|slice:"0:2" == '52' or metodo_pago.tarjeta_numero|slice:"0:2" == '53' or metodo_pago.tarjeta_numero|slice:"0:2" == '54' or metodo_pago.tarjeta_numero|slice:"0:2" == '55' %}
-                                                <h6 style="font-size: 14px; font-weight: 300;">Mastercard</h6>
+                                                <h6 class="tipo_tarjeta">Mastercard</h6>
                                                 {% elif metodo_pago.tarjeta_numero|slice:"0:2" == '34' or metodo_pago.tarjeta_numero|slice:"0:2" == '37' %}
-                                                <h6 style="font-size: 14px; font-weight: 300;">American Express</h6>
+                                                <h6 class="tipo_tarjeta">American Express</h6>
                                                 {% else %}
-                                                <h6 style="font-size: 14px; font-weight: 300;">Otro tipo de tarjeta</h6>
+                                                <h6 class="tipo_tarjeta">Otro tipo de tarjeta</h6>
                                                 {% endif %}
-                                                <h6 style="font-size: 14px; font-weight: 300;">Nombre Tarjeta: {{ metodo_pago.metodo_nombre }}</h6>
+                                                <h6 class="nombre_tarjeta">Nombre Tarjeta: {{ metodo_pago.metodo_nombre }}</h6>
                                             </div>
                                         </div>
                                         <div class="ms-auto">
@@ -136,7 +136,7 @@
                                     <p>Numero de tarjeta:</p>
                                     <div class="input-icon justify-content-center">
                                         <i class="fas fa-credit-card" style="color: #828EA5;"></i>
-                                        <input type="text" id="cardInput" required name="cardInput" pattern=".{19}" placeholder="XXXX XXXX XXXX XXXX"
+                                        <input type="text" class="cardInput" id="cardInput" required name="cardInput" pattern=".{19}" placeholder="XXXX XXXX XXXX XXXX"
                                         title="La tarjeta debe tener 16 dígitos">
                                     </div>
                                 </div>
@@ -146,13 +146,13 @@
                             </div>
                             <div class="row justify-content-center mt-3">
                                 <div class="col-sm-12 col-md-12 col-lg-10 col-xl-9 d-flex justify-content-center">
-                                    <div class="gap-3">
-                                        <img src="{% static 'img/Visa.png' %}" alt="" class="img-fluid mx-2" style="width: 30px;">
-                                        <img src="{% static 'img/Mastercard.png' %}" alt="" class="img-fluid mx-2" style="width: 30px;">
-                                        <img src="{% static 'img/AmericanExpress.png' %}" alt="" class="img-fluid mx-2" style="width: 35px;">
-                                        <img src="{% static 'img/DinersClub.png' %}" alt="" class="img-fluid mx-2" style="width: 40px;">
-                                        <img src="{% static 'img/Magna.png' %}" alt="" class="img-fluid mx-2" style="width: 40px;">
-                                        <img src="{% static 'img/Redcompra.png' %}" alt="" class="img-fluid mx-2" style="width: 70px;">
+                                    <div class="logos text-center">
+                                        <img src="{% static 'img/Visa.png' %}" alt="">
+                                        <img src="{% static 'img/Mastercard.png' %}" alt="">
+                                        <img src="{% static 'img/AmericanExpress.png' %}" alt="">
+                                        <img src="{% static 'img/DinersClub.png' %}" alt="">
+                                        <img src="{% static 'img/Magna.png' %}" alt="">
+                                        <img src="{% static 'img/Redcompra.png' %}" alt="">
                                     </div>
                                 </div>
                             </div>

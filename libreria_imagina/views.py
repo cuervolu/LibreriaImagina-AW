@@ -13,7 +13,9 @@ from datetime import datetime, date, timedelta
 from django.db import connection
 from django.db.models import Value
 from django.db.models.functions import Concat
+from django.contrib import messages
 
+import json
 # Integración servicio SOAP
 import zeep
 from zeep import Client
@@ -189,10 +191,11 @@ def agregar_al_carrito(request, id_libro):
 @login_required(login_url="auth/login")
 def cart(request):
     envio = 3200
+    usuario = request.user
     try:
-        carrito = Carrito.objects.get(usuario=request.user)
+        carrito = Carrito.objects.get(usuario=usuario)
     except Carrito.DoesNotExist:
-        carrito = Carrito.objects.create(usuario=request.user)
+        carrito = Carrito.objects.create(usuario=usuario)
 
     detalle_carrito = carrito.detallecarrito_set.all()
 
@@ -207,12 +210,21 @@ def cart(request):
 
     carrito.total_pagar = format(carrito.total_pagar, ",.0f")
 
+    # Verificar si el usuario tiene una dirección agregada
+    tiene_direccion = usuario.direccion_id is not None
+
+    # Verificar si el usuario tiene una tarjeta de crédito registrada
+    tiene_tarjeta = MetodoPago.objects.filter(usuario=usuario).exists()
+
     context = {
+        "usuario": usuario,
         "carrito": carrito,
         "detalle_carrito": detalle_carrito,
         "libros_filtrados": libros_filtrados,
         "total": format(total, ",.0f"),
         "envio": format(envio, ",.0f"),
+        "tiene_direccion": tiene_direccion,
+        "tiene_tarjeta": tiene_tarjeta,
     }
 
     return render(request, "app/cart.html", context)
@@ -281,8 +293,56 @@ def profile(request):
 def support(request):
     usuario = request.user
 
-    datos = {"usuario": usuario}
+    tipos_mantenimiento = [tipo[1] for tipo in TipoMantenimiento.choices]
+
+    if usuario.is_authenticated:
+        pedidos = Pedido.objects.filter(cliente=usuario)
+    else:
+        pedidos = None
+
+    messages.get_messages(request)  # Configurar la variable 'messages' en el contexto
+    message_list = [str(message) for message in messages.get_messages(request)]
+    message_json = json.dumps(message_list)
+
+    datos = {
+        "usuario": usuario,
+        "tipos_mantenimiento": tipos_mantenimiento,
+        "pedidos" : pedidos,
+        'messages_json': message_json
+    }
     return render(request, "app/support.html", datos)
+
+@login_required(login_url="auth/login")
+def generar_mantenimiento(request):
+    url_anterior = request.META.get("HTTP_REFERER")
+    usuario = request.user
+
+    if request.method == "POST":
+        email = request.POST["email"]
+        tipoMantenimiento = request.POST["tipoMantenimiento"]
+        libro_id = request.POST["libro"]
+        libro = Libro.objects.get(id_libro = libro_id)
+        comentario = request.POST["comentario"]
+
+        if email != usuario.correo:
+            messages.error(request, "El correo proporcionado no coincide con el correo del usuario.")
+        else:
+            mantenimiento = Mantenimiento()
+
+            mantenimiento.fecha_solicitud = datetime.now()
+            mantenimiento.tipo_mantenimiento = tipoMantenimiento
+            mantenimiento.estado_mantenimiento = EstadoMantenimiento.EN_PROCESO
+            mantenimiento.cliente = usuario
+            mantenimiento.libro = libro
+            mantenimiento.comentario = comentario
+
+            mantenimiento.save()
+            messages.success(request, "Solicitud de mantenimiento exitosa.")
+
+        # Redirigir al usuario después de procesar exitosamente el formulario POST
+
+    return redirect(url_anterior)
+
 
 
 @login_required(login_url="auth/login")
@@ -325,6 +385,16 @@ def obtener_comunas(request):
         return JsonResponse({"comunas": list(comunas)})
     else:
         return JsonResponse({"comunas": []})
+    
+def obtener_libros(request):
+    selected_pedido_id = request.GET.get("pedido_id")
+    if selected_pedido_id:
+        libros = Libro.objects.filter(detallepedido__pedido_id=selected_pedido_id).values(
+            "id_libro", "nombre_libro", "thumbnail"
+        )
+        return JsonResponse({"libros": list(libros)})
+    else:
+        return JsonResponse({"libros": []})
 
 
 @login_required(login_url="auth/login")

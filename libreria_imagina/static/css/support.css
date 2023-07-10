@@ -32,3 +32,50 @@
     font-weight: 700;
     font-size: 18px;
 }
+
+.alert-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.alert {
+    display: inline-block;
+    padding: 10px;
+    background-color: #3581a7;
+    border-radius: 12px;
+    color: white;
+    font-size: 18px;
+    word-wrap: break-word;
+    animation: slide-in 0.3s ease-out forwards;
+    max-width: 500px;
+}
+
+
+.alert.hide {
+    animation: slide-out 0.3s ease-out forwards;
+}
+
+
+@keyframes slide-in {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-out {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}

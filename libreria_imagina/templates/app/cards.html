@@ -48,10 +48,10 @@
                     {% endif %}
                     <h6 style="font-size: 14px; font-weight: 300;">Vencimiento: {{ metodo_pago.fecha_vencimiento|date:"m/Y" }}</h6>
                 </div>
-                <form method="POST" action="{% url 'eliminar_metodo_pago' metodo_pago.id %}" class="ms-auto text-end">
+                <form method="POST" action="{% url 'eliminar_metodo_pago' metodo_pago.id %}" id="formDeleteCard" class="ms-auto text-end">
                     {% csrf_token %}
                     <div>
-                        <button class="btn border-0" type="submit" style="color: #207198;">Eliminar</button>
+                        <button class="btn border-0" onclick="confirmDeleteCreditCard(event)" style="color: #207198;">Eliminar</button>
                     </div>
                 </form>
             </div>
@@ -83,7 +83,7 @@
         aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
-                <form method="POST" action="{% url 'agregar_metodo_pago' %}">
+                <form method="POST" action="{% url 'agregar_metodo_pago' %}" id="myFormCards">
                     {% csrf_token %}
                     <div class="modal-header border-bottom-0">
                         <h4 class="modal-title ms-3 mt-3" style="font-weight: 600;" id="agregarTarjetaModalLabel">
@@ -260,7 +260,7 @@
                         </div>
                     </div>
                     <div class="modal-footer border-0">
-                        <button type="submit" class="btn btn-lg ms-3"
+                        <button onclick="confirmAddCreditCard(event)" class="btn btn-lg ms-3"
                             style="color: white; background-color: #82C2CB; border-radius: 0;">Agregar Tarjeta</button>
                     </div>
                 </form>

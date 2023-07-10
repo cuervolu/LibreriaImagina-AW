@@ -21,10 +21,12 @@ urlpatterns = [
     path("support", support, name="support"),
     path("my_data", my_data, name="my_data"),
     path('obtener_comunas/', obtener_comunas, name='obtener_comunas'),
+    path("obtener_libros/", obtener_libros, name="obtener_libros"),
     path("cards", cards, name="cards"),
     path("addresses", addresses, name="addresses"),
     path("imaginaPay", imaginaPay, name="imaginaPay"),
     path("generar_pago", generar_pago, name="generar_pago"),
+    path("generar_mantenimiento", generar_mantenimiento, name="generar_mantenimiento"),
     # Incluir las URLs de autenticación desde auth.urls
     path("auth/", include(auth_urls, namespace="auth")),
     # Páginas Legales

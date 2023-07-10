@@ -64,11 +64,8 @@
                     <p>${{ detalle_carrito.precio_total }}</p>
                 </div>
                 <div class="mx-2">
-                    <form method="post" action="{% url 'eliminar_producto_carrito' detalle_carrito.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-link"><img class="img-basurero"
-                                src="{% static 'img/basurero.svg' %}" alt=""></button>
-                    </form>
+                    <button onclick="confirmDeleteCartProduct({{ detalle_carrito.id }})" class="btn btn-link"><img class="img-basurero"
+                        src="{% static 'img/basurero.svg' %}" alt=""></button>
                 </div>
             </div>
             {% endfor %}
@@ -93,7 +90,7 @@
                     <p class="text-start" style="font-size: 14px; font-weight: 500; color: white;">${{total}}</p>
                 </div>
                 <div>
-                    <button class="btn-pago" onclick="openPopup()">
+                    <button class="btn-pago" {% if not tiene_direccion or not tiene_tarjeta %} onclick="faltanDatos()" {% else %} onclick="openPopup()" {% endif %}>
                         <div class="d-flex mx-2 btn-pago-content">
                             <div class="mx-3">
                                 <p class="text-start"
@@ -157,6 +154,25 @@
             // Si se bloquea la apertura de ventanas emergentes, muestra un mensaje de error al usuario
             alert('La ventana emergente ha sido bloqueada por el navegador. Por favor, habilite las ventanas emergentes para este sitio web.');
         }
+    }
+
+    function faltanDatos(){
+        Swal.fire({
+            title: 'Requisitos incompletos',
+            text: 'Por favor, completa tu dirección y registra una tarjeta de crédito para continuar.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Agregar dirección',
+            cancelButtonText: 'Registrar tarjeta',
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                window.location.href = 'addresses'; // Redirigir a la página de agregar dirección
+            } else {
+                window.location.href = 'cards'; // Redirigir a la página de registrar tarjeta
+            }
+        });
     }
 </script>
 {% endblock script_final %}

@@ -43,9 +43,9 @@
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                             <li><button class="dropdown-item" data-bs-toggle="modal"
                                     data-bs-target="#agregarDomicilioModal">Editar</button></li>
-                            <form method="POST" action="{% url 'eliminar_domicilio' usuario.direccion.id_direccion %}">
+                            <form method="POST" id="formDeleteAddress" action="{% url 'eliminar_domicilio' usuario.direccion.id_direccion %}">
                                 {% csrf_token %}
-                                <li><button class="dropdown-item" type="submit">Eliminar</button></li>
+                                <li><button class="dropdown-item" onclick="confirmDeleteAddress(event)">Eliminar</button></li>
                             </form>
                             
                         </ul>
@@ -97,7 +97,7 @@
                     <button type="button" class="btn-close me-3" style="box-shadow: none;" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-                <form method="POST" action="{% url 'agregar_domicilio' %}">
+                <form method="POST" action="{% url 'agregar_domicilio' %}" id="myFormAdrresses">
                     {% csrf_token %}
                     <div class="modal-body">
                         <div class="row d-flex align-items-center">
@@ -158,7 +158,7 @@
                         </div>
                     </div>
                     <div class="modal-footer border-0">
-                        <button type="submit" class="btn btn-lg ms-3"
+                        <button onclick="confirmAddNewAddress(event)" class="btn btn-lg ms-3"
                             style="color: white; background-color: #82C2CB; border-radius: 0;">Agregar
                             Domicilio</button>
                     </div>

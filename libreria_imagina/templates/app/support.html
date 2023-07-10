@@ -41,14 +41,16 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 px-0">
                     <ul class="list-unstyled mb-0">
                         <li class="mb-0 border-bottom" style="border-bottom-width: 10px;">
-                            <a href="/my_data" style="text-decoration: none;">
+                            <a {% if user.is_authenticated %} href="/my_purchases" {% else %} href="/auth/login" {% endif %} style="text-decoration: none;">
                                 <div class="d-flex align-items-center mx-5 my-3 pt-2">
                                     <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
-                                        <img src="{% static 'img/purchases_bag.png' %}" alt="" class="img-fluid" style="width: 35px;">
+                                        <img src="{% static 'img/purchases_bag.png' %}" alt="" class="img-fluid"
+                                            style="width: 35px;">
                                     </div>
                                     <div>
                                         <h5 style="color: black;">Administrar y cancelar compras</h5>
-                                        <h6 style="color: rgba(0, 0, 0, 0.582);">Pagar, seguir envios, modificar, reclamar o cancelar compras.</h6>
+                                        <h6 style="color: rgba(0, 0, 0, 0.582);">Pagar, seguir envios, modificar,
+                                            reclamar o cancelar compras.</h6>
                                     </div>
                                     <div class="ms-auto" style="color: black;">
                                         <i class="fa-solid fa-chevron-right"></i>
@@ -57,14 +59,16 @@
                             </a>
                         </li>
                         <li class="mb-0 border-bottom">
-                            <a href="/cards" style="text-decoration: none;">
+                            <a href="#" style="text-decoration: none;">
                                 <div class="d-flex align-items-center mx-5 my-3">
                                     <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
-                                        <img src="{% static 'img/refunds.png' %}" alt="" class="img-fluid" style="width: 47px; left: 10px;">
+                                        <img src="{% static 'img/refunds.png' %}" alt="" class="img-fluid"
+                                            style="width: 47px; left: 10px;">
                                     </div>
                                     <div>
                                         <h5 style="color: black;">Devoluciones y reembolsos</h5>
-                                        <h6 style="color: rgba(0, 0, 0, 0.582);">Devolver un producto o consultar por reintegros de dinero de una compra.</h6>
+                                        <h6 style="color: rgba(0, 0, 0, 0.582);">Devolver un producto o consultar por
+                                            reintegros de dinero de una compra.</h6>
                                     </div>
                                     <div class="ms-auto" style="color: black;">
                                         <i class="fa-solid fa-chevron-right"></i>
@@ -73,10 +77,11 @@
                             </a>
                         </li>
                         <li>
-                            <a href="/addresses" style="text-decoration: none;">
+                            <a href="#" style="text-decoration: none;">
                                 <div class="d-flex align-items-center mx-5 my-3">
                                     <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
-                                        <img src="{% static 'img/questions.png' %}" alt="" class="img-fluid" style="width: 35px;">
+                                        <img src="{% static 'img/questions.png' %}" alt="" class="img-fluid"
+                                            style="width: 35px;">
                                     </div>
                                     <div>
                                         <h5 style="color: black;">Preguntas frecuentes sobre compras</h5>
@@ -100,14 +105,21 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 px-0">
                     <ul class="list-unstyled mb-0">
                         <li class="mb-0 border-bottom" style="border-bottom-width: 10px;">
-                            <a href="/my_data" style="text-decoration: none;">
+                            {% if user.is_authenticated %}
+                            <a data-bs-toggle="offcanvas" data-bs-target="#solicitarMantenimiento" style="text-decoration: none;">
+                            {% else %} 
+                            <a href="/auth/login" style="text-decoration: none;">
+                            {% endif %}
                                 <div class="d-flex align-items-center mx-5 my-3 pt-2">
-                                    <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
-                                        <img src="{% static 'img/maintenance.png' %}" alt="" class="img-fluid" style="width: 35px;">
+                                    <div class="me-4"
+                                        style="width: 55px; height: 55px; color: black; font-size: 25px;">
+                                        <img src="{% static 'img/maintenance.png' %}" alt="" class="img-fluid"
+                                            style="width: 35px;">
                                     </div>
                                     <div>
                                         <h5 style="color: black;">Solicitar Mantenimiento</h5>
-                                        <h6 style="color: rgba(0, 0, 0, 0.582);">Mantenimiento físico, contenido o preventivo.</h6>
+                                        <h6 style="color: rgba(0, 0, 0, 0.582);">Mantenimiento físico, contenido o
+                                            preventivo.</h6>
                                     </div>
                                     <div class="ms-auto" style="color: black;">
                                         <i class="fa-solid fa-chevron-right"></i>
@@ -116,14 +128,16 @@
                             </a>
                         </li>
                         <li class="mb-0 border-bottom">
-                            <a href="/cards" style="text-decoration: none;">
+                            <a href="#" style="text-decoration: none;">
                                 <div class="d-flex align-items-center mx-5 my-3">
                                     <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
-                                        <img src="{% static 'img/follow-up_requests.png' %}" alt="" class="img-fluid" style="width: 35px;">
+                                        <img src="{% static 'img/follow-up_requests.png' %}" alt="" class="img-fluid"
+                                            style="width: 35px;">
                                     </div>
                                     <div>
                                         <h5 style="color: black;">Seguimiento de solicitudes</h5>
-                                        <h6 style="color: rgba(0, 0, 0, 0.582);">Ver progreso y estado de las solicitudes de mantenimiento.</h6>
+                                        <h6 style="color: rgba(0, 0, 0, 0.582);">Ver progreso y estado de las
+                                            solicitudes de mantenimiento.</h6>
                                     </div>
                                     <div class="ms-auto" style="color: black;">
                                         <i class="fa-solid fa-chevron-right"></i>
@@ -132,10 +146,11 @@
                             </a>
                         </li>
                         <li>
-                            <a href="/addresses" style="text-decoration: none;">
+                            <a href="#" style="text-decoration: none;">
                                 <div class="d-flex align-items-center mx-5 my-3">
                                     <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
-                                        <img src="{% static 'img/questions.png' %}" alt="" class="img-fluid" style="width: 35px;">
+                                        <img src="{% static 'img/questions.png' %}" alt="" class="img-fluid"
+                                            style="width: 35px;">
                                     </div>
                                     <div>
                                         <h5 style="color: black;">Preguntas frecuentes sobre mantenimiento</h5>
@@ -159,7 +174,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 px-0">
                     <ul class="list-unstyled mb-0">
                         <li class="mb-0 border-bottom">
-                            <a href="/cards" style="text-decoration: none;">
+                            <a {% if user.is_authenticated %} href="/my_data" {% else %} href="/auth/login" {% endif %} style="text-decoration: none;">
                                 <div class="d-flex align-items-center mx-5 my-3">
                                     <div style="height: 55px; color: black; font-size: 25px;"></div>
                                     <div>
@@ -172,7 +187,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="/addresses" style="text-decoration: none;">
+                            <a href="#" style="text-decoration: none;">
                                 <div class="d-flex align-items-center mx-5 my-3">
                                     <div style="height: 55px; color: black; font-size: 25px;"></div>
                                     <div>
@@ -197,7 +212,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 px-0">
                     <ul class="list-unstyled mb-0">
                         <li>
-                            <a href="/addresses" style="text-decoration: none;">
+                            <a href="#" style="text-decoration: none;">
                                 <div class="d-flex align-items-center mx-5 my-3">
                                     <div style="height: 55px; color: black; font-size: 25px;"></div>
                                     <div>
@@ -217,29 +232,91 @@
     </div>
 
     <!-- Modals -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Título del modal</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              ...
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="button" class="btn btn-primary">Guardar cambios</button>
-            </div>
-          </div>
-        </div>
-      </div>
 
+
+    <!-- Modal Lateral -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="solicitarMantenimiento"
+        style="border-top-left-radius: 15px; border-bottom-left-radius: 15px;">
+        <div class="offcanvas-header mt-3">
+            <h4 class="offcanvas-title fw-bold">Solicitar Mantenimiento</h4>
+            <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas"
+                aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form method="POST" action="{% url 'generar_mantenimiento' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="correoSolicitante" class="form-label">Correo del Solicitante</label>
+                    <input type="email" id="email" name="email" class="form-control shadow-none" id="correoSolicitante"
+                        placeholder="Ingrese su correo electrónico" required>
+                </div>
+                <div class="mb-3">
+                    <label for="tipoMantenimiento" class="form-label">Tipo de Mantenimiento</label>
+                    <select class="form-select shadow-none" id="tipoMantenimiento" name="tipoMantenimiento" required>
+                        <option value="">Seleccione un tipo de mantenimiento</option>
+                        {% for tipo in tipos_mantenimiento %}
+                        <option value="{{ tipo }}">Mantenimiento {{ tipo }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="misPedidos" class="form-label">Pedido</label>
+                    <select class="form-select shadow-none" id="misPedidos" name="misPedidos" required>
+                        <option value="">Seleccione un pedido</option>
+                        {% for pedido in pedidos %}
+                        <option value="{{ pedido.id_pedido }}">Pedido #{{ pedido }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="libro" class="form-label">Libro</label>
+                    <select class="form-select shadow-none" id="libro" name="libro" required>
+                        <option value="">Seleccione un libro</option>
+                    </select>
+                </div>
+                <div id="imagenLibroContainer" style="display: none; text-align: center;">
+                    <img id="imagenLibro" class="img-fluid" style="width: 80px;" src="" alt="Imagen del libro">
+                </div>
+                <div class="mb-3">
+                    <label for="comentario" class="form-label">Comentario</label>
+                    <textarea class="form-control shadow-none" id="comentario" name="comentario" rows="3"
+                        placeholder="Ingrese un comentario" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-gradient btn-block w-100">Enviar solicitud</button>
+            </form>
+        </div>
+    </div>
 </div>
 
+<div id="alert-container" class="alert-container"></div>
+
+{% if messages_json %}
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var alertContainer = document.getElementById('alert-container');
+      var messages = JSON.parse('{{ messages_json|escapejs }}');
+      
+      if (messages.length > 0) {
+        var message = messages[0];
+        var alertElement = document.createElement('div');
+        alertElement.className = 'alert';
+        alertElement.innerText = message;
+        alertContainer.appendChild(alertElement);
+        
+        setTimeout(function() {
+          alertElement.classList.add('hide');
+          setTimeout(function() {
+            alertElement.remove();
+          }, 300);
+        }, 5000);
+      }
+    });
+  </script>
+{% endif %}
 
 {% endblock %}
-
+<script src='https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js'></script>
 
 {% block script_final %}
+<script src="{% static 'js/libros_pedido.js' %}"></script>
 {% endblock script_final %}
