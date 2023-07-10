@@ -13,6 +13,10 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = '__all__'
+class CreateUserSerializer(serializers.ModelSerializer):
+     class Meta:
+        model = Usuario
+        fields = ['rut', 'nombre', 'apellido', 'username', 'correo', 'telefono', 'tipo_usuario', 'password']
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=False)

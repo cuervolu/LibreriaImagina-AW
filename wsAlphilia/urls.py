@@ -1,15 +1,17 @@
 from django.urls import path
-from .views import LibroViewSet, LoginView, LogoutView
+from .views import LibroViewSet, LoginView, LogoutView, CreateUserView
 
 urlpatterns = [
     path(
         "libros/",
-        LibroViewSet.as_view({"get": "libros"}),
+        LibroViewSet.as_view({"get": "libros", "post": "libros"}),
         name="libro-list",
     ),
     path(
         "libros/<int:pk>/",
-        LibroViewSet.as_view({"get": "retrieve", "put": "update"}),
+        LibroViewSet.as_view(
+            {"get": "retrieve", "patch": "libro_detail", "delete": "libro_detail"}
+        ),
         name="libro-detail",
     ),
     path(
@@ -25,4 +27,5 @@ urlpatterns = [
     # Otras rutas
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path("createUser/", CreateUserView.as_view(), name="createUser"),
 ]
