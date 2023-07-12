@@ -14,7 +14,7 @@ from django.db.models import Q
 from libreria_imagina.models import TipoUsuario
 
 from .models import Libro
-from .serializers import LibroSerializer, LoginSerializer, UserSerializer, CreateUserSerializer
+from .serializers import CreateLibroSerializer, LibroSerializer, LoginSerializer, UserSerializer, CreateUserSerializer
 
 from decouple import config
 import traceback
@@ -147,7 +147,7 @@ class LibroViewSet(viewsets.ModelViewSet):
             serializer = LibroSerializer(libros, many=True)
             return Response(serializer.data)
         if request.method == "POST":
-            serializer = LibroSerializer(data=request.data)
+            serializer = CreateLibroSerializer(data=request.data)
             return create_libro(request, serializer)
         return Response(
             {"error": "Método HTTP no permitido."},
