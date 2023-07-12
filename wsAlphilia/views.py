@@ -105,7 +105,8 @@ class LibroViewSet(viewsets.ModelViewSet):
 
             # Crear un objeto paginador y paginar los libros creados
             paginator = LibroPagination()
-            paginated_libros = paginator.paginate_queryset(libros_creados, request)
+            paginated_libros = paginator.paginate_queryset(
+                libros_creados, request)
 
             # Serializar los libros paginados
             serializer = LibroSerializer(paginated_libros, many=True)
@@ -290,7 +291,8 @@ class LoginView(APIView):
             if email:
                 user = authenticate(request, email=email, password=password)
             elif username:
-                user = authenticate(request, username=username, password=password)
+                user = authenticate(
+                    request, username=username, password=password)
 
             if user:
                 # Validar el rol del usuario
@@ -356,21 +358,42 @@ class LogoutView(APIView):
 
 
 class CreateUserView(APIView):
+
+    def formatear_rut(self, rut):
+        rut = rut.replace(".", "").replace(
+            "-", "")  # Eliminar puntos y guiones
+        dv = rut[-1]  # Extraer el dígito verificador
+        rut = rut[:-1]  # Quitar el dígito verificador del RUT
+        rut = rut[::-1]  # Invertir el RUT
+        # Agrupar el RUT en bloques de tres dígitos separados por puntos
+        rut = ".".join([rut[i:i+3] for i in range(0, len(rut), 3)])
+        rut = rut[::-1]  # Invertir nuevamente el RUT
+        # Agregar el dígito verificador separado por un guion
+        rut = f"{rut}-{dv}"
+        return rut
+
     def post(self, request, format=None):
         serializer = CreateUserSerializer(data=request.data)
         if serializer.is_valid():
             tipo_usuario = request.data.get('tipo_usuario')
-            
+
             if tipo_usuario in TipoUsuario.values:
                 # Obtén la contraseña en texto plano del serializer
                 password = serializer.validated_data['password']
+                rut = serializer.validated_data['rut']
 
                 # Crea una instancia de Usuario sin guardarla aún
                 usuario = serializer.save(tipo_usuario=tipo_usuario)
 
+                # Formatear el RUT
+                rut_formateado = self.formatear_rut(rut)
+
+                # Asignar el RUT formateado al usuario
+                usuario.rut = rut_formateado
+
                 # Establece la contraseña en su forma encriptada
                 usuario.set_password(password)
-                
+
                 # Establece el atributo is_staff si corresponde
                 if tipo_usuario != TipoUsuario.CLIENTE:
                     usuario.is_staff = True
