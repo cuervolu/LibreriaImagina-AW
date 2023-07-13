@@ -4,7 +4,7 @@ function confirmDeleteCartProduct(detalle_carrito_id){
         text: "No podrás deshacer la acción!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#3581a7',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Si, borralo!',
         cancelButtonText: "Cancelar"
@@ -35,7 +35,7 @@ function confirmAddNewAddress(event) {
             text: "¡No podrás deshacer esta acción!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
+            confirmButtonColor: '#3581a7',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Sí, agregar domicilio!',
             cancelButtonText: 'Cancelar'
@@ -65,7 +65,7 @@ function confirmDeleteAddress(event){
         text: "No podrás deshacer la acción!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#3581a7',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Si, borralo!',
         cancelButtonText: "Cancelar"
@@ -95,7 +95,7 @@ function confirmAddCreditCard(event) {
             text: "¡Agregarás una nueva tarjeta!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
+            confirmButtonColor: '#3581a7',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Sí, agregar tarjeta!',
             cancelButtonText: 'Cancelar'
@@ -125,7 +125,7 @@ function confirmDeleteCreditCard(event){
         text: "No podrás deshacer la acción!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#3581a7',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Si, borralo!',
         cancelButtonText: "Cancelar"
@@ -140,5 +140,24 @@ function confirmDeleteCreditCard(event){
         });
         }
       })
+}
+
+function showLogoutAlert(event) {
+  event.preventDefault();
+
+  Swal.fire({
+      title: 'Cerrar Sesión',
+      text: '¿Estás seguro de que deseas cerrar sesión?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3581a7',
+      confirmButtonText: 'Sí, cerrar sesión',
+      cancelButtonText: 'Cancelar'
+  }).then((result) => {
+      if (result.isConfirmed) {
+          // Aquí puedes redirigir al enlace de cierre de sesión después de confirmar
+          window.location.href = event.target.href;
+      }
+  });
 }
 

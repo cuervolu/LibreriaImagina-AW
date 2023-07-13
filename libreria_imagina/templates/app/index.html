@@ -176,6 +176,25 @@
     </div>
 </div>
 
+{% if messages_json %}
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var messages = JSON.parse('{{ messages_json|escapejs }}');
+      
+      if (messages.length > 0) {
+        var message = messages[0];
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 5000,
+          icon: 'success',  // Puedes ajustar el icono según el tipo de mensaje (success, error, warning, etc.)
+          title: message
+        });
+      }
+    });
+  </script>
+{% endif %}
 
 {% endblock %}
 {% block script_final%}

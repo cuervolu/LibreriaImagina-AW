@@ -77,7 +77,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" style="text-decoration: none;">
+                            <a data-bs-toggle="offcanvas" data-bs-target="#preguntasCompras" style="text-decoration: none;">
                                 <div class="d-flex align-items-center mx-5 my-3">
                                     <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
                                         <img src="{% static 'img/questions.png' %}" alt="" class="img-fluid"
@@ -128,7 +128,11 @@
                             </a>
                         </li>
                         <li class="mb-0 border-bottom">
-                            <a href="#" style="text-decoration: none;">
+                            {% if user.is_authenticated %}
+                            <a data-bs-toggle="offcanvas" data-bs-target="#misMantenimientos" style="text-decoration: none;">
+                            {% else %} 
+                            <a href="/auth/login" style="text-decoration: none;">
+                            {% endif %}
                                 <div class="d-flex align-items-center mx-5 my-3">
                                     <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
                                         <img src="{% static 'img/follow-up_requests.png' %}" alt="" class="img-fluid"
@@ -146,7 +150,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" style="text-decoration: none;">
+                            <a data-bs-toggle="offcanvas" data-bs-target="#preguntasMantenimiento" style="text-decoration: none;">
                                 <div class="d-flex align-items-center mx-5 my-3">
                                     <div class="me-4" style="width: 55px; height: 55px; color: black; font-size: 25px;">
                                         <img src="{% static 'img/questions.png' %}" alt="" class="img-fluid"
@@ -187,7 +191,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" style="text-decoration: none;">
+                            <a data-bs-toggle="offcanvas" data-bs-target="#seguridadCuenta" style="text-decoration: none;">
                                 <div class="d-flex align-items-center mx-5 my-3">
                                     <div style="height: 55px; color: black; font-size: 25px;"></div>
                                     <div>
@@ -212,7 +216,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 px-0">
                     <ul class="list-unstyled mb-0">
                         <li>
-                            <a href="#" style="text-decoration: none;">
+                            <a data-bs-toggle="offcanvas" data-bs-target="#contactanos" style="text-decoration: none;">
                                 <div class="d-flex align-items-center mx-5 my-3">
                                     <div style="height: 55px; color: black; font-size: 25px;"></div>
                                     <div>
@@ -231,10 +235,10 @@
         <!-- End Card -->
     </div>
 
-    <!-- Modals -->
 
+    <!-- Offcanvas -->
 
-    <!-- Modal Lateral -->
+    <!-- Offcanvas Lateral -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="solicitarMantenimiento"
         style="border-top-left-radius: 15px; border-bottom-left-radius: 15px;">
         <div class="offcanvas-header mt-3">
@@ -261,8 +265,12 @@
                 </div>
                 <div class="mb-3">
                     <label for="misPedidos" class="form-label">Pedido</label>
-                    <select class="form-select shadow-none" id="misPedidos" name="misPedidos" required>
+                    <select class="form-select shadow-none" id="misPedidos" name="misPedidos" {% if not pedidos %} disabled {% endif %} required>
+                        {% if pedidos %}
                         <option value="">Seleccione un pedido</option>
+                        {% else %}
+                        <option value="">No posees pedidos aún</option>
+                        {% endif %}
                         {% for pedido in pedidos %}
                         <option value="{{ pedido.id_pedido }}">Pedido #{{ pedido }}</option>
                         {% endfor %}
@@ -282,33 +290,196 @@
                     <textarea class="form-control shadow-none" id="comentario" name="comentario" rows="3"
                         placeholder="Ingrese un comentario" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-gradient btn-block w-100">Enviar solicitud</button>
+                <button type="submit" {% if not pedidos %} disabled {% endif %} class="btn btn-gradient btn-block w-100">Enviar solicitud</button>
+                {% if not pedidos %}
+                <p style="font-size: 13px; color: #e24646;">Necesitas un pedido para realizar una solicitud.</p>
+                {% endif %} 
             </form>
         </div>
     </div>
+
+    <!-- Offcanvas Lateral -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="misMantenimientos" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; width: 500px">
+        <div class="offcanvas-header mt-3">
+            <h4 class="offcanvas-title fw-bold">Mis Mantenimientos</h4>
+            <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas"
+                aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body">
+            {% for mantenimiento in mantenimientos %}
+            <div class="card mb-3 border-0">
+                <div class="row g-0">
+                    <div class="col-md-4 d-flex align-items-center justify-content-center">
+                        <img src="{{ mantenimiento.libro.thumbnail }}" class="img-fluid" width="90px" alt="Imagen Libro">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h5 class="card-text" {% if mantenimiento.estado_mantenimiento == 'En Proceso' %} style="color: #eec146"
+                                {% elif mantenimiento.estado_mantenimiento == 'Completado' %} style="color: #6FCF97"
+                                {% elif mantenimiento.estado_mantenimiento == 'Cancelado' %} style="color: #e24646"
+                                {% endif %}>{{ mantenimiento.estado_mantenimiento }}</h5>
+                                <h6 class="card-text">N° solicitud: #{{ mantenimiento.id_mantenimiento }}</h6>
+                            </div>
+                            <p class="card-text" style="font-size: 14px;">Fecha de solicitud: {{ mantenimiento.fecha_solicitud|date:"d/m/y" }}</p></p>
+                            <p class="card-text" style="font-size: 14px;">Tipo Mantenimiento: {{ mantenimiento.tipo_mantenimiento }}</p>
+                            {% if mantenimiento.respuesta %}
+                            <a href="#" class="card-text" style="font-size: 14px;">Ver respuesta</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="{% url 'maintenance' mantenimiento.id_mantenimiento %}" class="btn btn-gradient btn-block w-100 h-50">Ver solicitud</a>
+                </div>
+            </div>
+            <hr>
+            {% empty %}
+            <div class="d-flex flex-column align-items-center justify-content-center">
+                <h4 class="text-center">No posees solicitudes de mantenimientos.</h4>
+                <img class="img-fluid" src="{% static 'img/nothingHere.png' %}" alt="">
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <!-- Offcanvas Lateral -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="preguntasCompras" style="border-top-right-radius: 15px; border-bottom-right-radius: 15px;">
+        <div class="offcanvas-header mt-3">
+            <h4 class="offcanvas-title fw-bold">Preguntas Frecuentes sobre compras</h4>
+            <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body">
+            <h5>¿Cuánto tiempo tardan en llegar los pedidos de libros?</h5>
+            <p>Los pedidos de libros suelen llegar aproximadamente en 3 días hábiles.</p>
+            
+            <h5>¿Cuál es el costo de envío para los libros?</h5>
+            <p>El costo de envío para los libros es de 3200 pesos chilenos.</p>
+            
+            <h5>¿Puedo hacer seguimiento de mi pedido de libros?</h5>
+            <p>Sí, una vez que tu pedido de libros sea despachado, recibirás un número de seguimiento para que puedas rastrear tu paquete.</p>
+            
+            <h5>¿Qué métodos de pago aceptan?</h5>
+            <p>Aceptamos diversas formas de pago, como tarjetas de crédito, débito y transferencias bancarias.</p>
+            
+            <h5>¿Ofrecen devoluciones o cambios?</h5>
+            <p>Sí, si por alguna razón deseas devolver o cambiar un libro, contáctanos dentro de los 7 días hábiles siguientes a la entrega para que podamos brindarte asistencia.</p>
+        </div>
+    </div>
+    
+    <!-- Offcanvas Lateral -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="preguntasMantenimiento" style="border-top-right-radius: 15px; border-bottom-right-radius: 15px;">
+        <div class="offcanvas-header mt-3">
+            <h4 class="offcanvas-title fw-bold">Preguntas Frecuentes sobre mantenimiento de libros</h4>
+            <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body">
+            <h5>¿Cuántos tipos de mantenimiento ofrecen para los libros?</h5>
+            <p>Ofrecemos tres tipos de mantenimiento para los libros: físico, contenido y preventivo.</p>
+            
+            <h5>¿En qué consiste el mantenimiento físico de un libro?</h5>
+            <p>El mantenimiento físico de un libro implica acciones como limpieza, reparación de páginas o cubiertas dañadas, encuadernación, entre otros cuidados físicos para preservar la calidad del libro.</p>
+            
+            <h5>¿En qué consiste el mantenimiento de contenido de un libro?</h5>
+            <p>El mantenimiento de contenido de un libro incluye la actualización de información, corrección de errores o erratas, adición de material complementario, como anexos o apéndices, y cualquier mejora relacionada con el contenido del libro.</p>
+            
+            <h5>¿En qué consiste el mantenimiento preventivo de un libro?</h5>
+            <p>El mantenimiento preventivo de un libro se realiza para evitar daños o deterioro a largo plazo. Incluye recomendaciones de almacenamiento, manejo adecuado, consejos de cuidado y prevención de problemas comunes.</p>
+        </div>
+    </div>
+
+    <!-- Offcanvas Lateral -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="seguridadCuenta" style="border-top-right-radius: 15px; border-bottom-right-radius: 15px;">
+        <div class="offcanvas-header mt-3">
+            <h4 class="offcanvas-title fw-bold">Seguridad de tu cuenta</h4>
+            <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body">
+            <h5>¿Cómo puedo proteger mi cuenta?</h5>
+            <p>Para proteger tu cuenta, te recomendamos seguir estas buenas prácticas:</p>
+            <ul>
+                <li>Utiliza contraseñas seguras, que contengan una combinación de letras, números y caracteres especiales.</li>
+                <li>No compartas tu contraseña con nadie y evita usarla en otros sitios o servicios.</li>
+                <li>Mantén tu software y aplicaciones actualizados para protegerte de posibles vulnerabilidades.</li>
+                <li>Evita hacer clic en enlaces sospechosos o proporcionar información confidencial en sitios no confiables.</li>
+            </ul>
+            
+            <h5>¿Qué medidas toman para proteger mi información personal?</h5>
+            <p>Tomamos la protección de tu información personal muy en serio. Aquí están algunas de las medidas que implementamos:</p>
+            <ul>
+                <li>Utilizamos protocolos de seguridad, como el cifrado de datos, para proteger tu información durante su transmisión.</li>
+                <li>Implementamos medidas de seguridad tecnológica y física para proteger nuestros sistemas contra accesos no autorizados.</li>
+                <li>Realizamos auditorías y revisiones periódicas para garantizar el cumplimiento de las normas de seguridad y privacidad.</li>
+                <li>Limitamos el acceso a tu información personal solo a los empleados autorizados que la necesitan para brindarte servicios.</li>
+            </ul>
+            
+            <h5>¿Qué debo hacer si sospecho que mi cuenta ha sido comprometida?</h5>
+            <p>Si sospechas que tu cuenta ha sido comprometida, te recomendamos que tomes las siguientes medidas de inmediato:</p>
+            <ol>
+                <li>Cambia tu contraseña de inmediato.</li>
+                <li>Verifica tus transacciones recientes y notifica a nuestro equipo de soporte sobre cualquier actividad sospechosa.</li>
+                <li>Revisa la configuración de seguridad de tu cuenta y asegúrate de que no haya cambios no autorizados.</li>
+                <li>Escanea tu dispositivo en busca de posibles virus o malware.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Offcanvas Lateral -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="contactanos" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px;">
+        <div class="offcanvas-header mt-3">
+            <h4 class="offcanvas-title fw-bold">Contáctanos</h4>
+            <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form>
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input type="text" class="form-control shadow-none" id="nombre" placeholder="Ingrese su nombre" required>
+                </div>
+                <div class="mb-3">
+                    <label for="correo" class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control shadow-none" id="correo" placeholder="Ingrese su correo electrónico" required>
+                </div>
+                <div class="mb-3">
+                    <label for="telefono" class="form-label">Teléfono</label>
+                    <input type="tel" class="form-control shadow-none" id="telefono" placeholder="Ingrese su número de teléfono" required>
+                </div>
+                <div class="mb-3">
+                    <label for="asunto" class="form-label">Asunto</label>
+                    <input type="text" class="form-control shadow-none" id="asunto" placeholder="Ingrese el asunto del mensaje" required>
+                </div>
+                <div class="mb-3">
+                    <label for="mensaje" class="form-label">Mensaje</label>
+                    <textarea class="form-control shadow-none" id="mensaje" rows="3" placeholder="Ingrese su mensaje" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-gradient btn-block w-100">Enviar mensaje</button>
+            </form>
+        </div>
+    </div>
+
+    
+    
+    
+
 </div>
 
-<div id="alert-container" class="alert-container"></div>
 
 {% if messages_json %}
   <script>
     window.addEventListener('DOMContentLoaded', function() {
-      var alertContainer = document.getElementById('alert-container');
       var messages = JSON.parse('{{ messages_json|escapejs }}');
       
       if (messages.length > 0) {
         var message = messages[0];
-        var alertElement = document.createElement('div');
-        alertElement.className = 'alert';
-        alertElement.innerText = message;
-        alertContainer.appendChild(alertElement);
-        
-        setTimeout(function() {
-          alertElement.classList.add('hide');
-          setTimeout(function() {
-            alertElement.remove();
-          }, 300);
-        }, 5000);
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 5000,
+          icon: 'success',  // Puedes ajustar el icono según el tipo de mensaje (success, error, warning, etc.)
+          title: message
+        });
       }
     });
   </script>

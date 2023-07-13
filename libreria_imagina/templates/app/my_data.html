@@ -50,12 +50,14 @@
                                     <div class="col-sm-12 col-md-4 col-lg-4">
                                         <h6 class="datos-info">Nuevo Username</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 d-flex">
-                                        <input type="text" name="username" autofocus autocapitalize="none"
+                                    <div class="col-sm-12 col-md-8 col-lg-8">
+                                        <form method="POST" action="{% url 'cambiar_username' %}" class="d-flex">
+                                            {% csrf_token %}
+                                            <input type="text" name="username" autofocus autocapitalize="none"
                                             autocomplete="username" maxlength="30" class="text-input form-control"
                                             required style="box-shadow: none;">
-                                        <button class="btn ms-3"
-                                            style="color: white; background-color: #82C2CB; border-radius: 0;">Cambiar</button>
+                                            <button class="btn ms-3" type="submit" style="color: white; background-color: #82C2CB; border-radius: 0;">Cambiar</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -93,12 +95,14 @@
                                     <div class="col-sm-12 col-md-4 col-lg-4">
                                         <h6 class="datos-info">Nuevo Correo</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8 col-lg-8 d-flex">
-                                        <input type="text" name="email" autofocus autocapitalize="none"
+                                    <div class="col-sm-12 col-md-8 col-lg-8">
+                                        <form method="POST" action="{% url 'cambiar_correo' %}" class="d-flex">
+                                            {% csrf_token %}
+                                            <input type="email" name="correo" autofocus autocapitalize="none"
                                             autocomplete="email" maxlength="150" class="text-input form-control"
                                             required style="box-shadow: none;">
-                                        <button class="btn ms-3"
-                                            style="color: white; background-color: #82C2CB; border-radius: 0;">Cambiar</button>
+                                            <button class="btn ms-3" type="submit" style="color: white; background-color: #82C2CB; border-radius: 0;">Cambiar</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -133,38 +137,40 @@
                             <h6>Cambiar contraseña:</h6>
                             <div>
                                 <div>
-                                    <div class="row align-items-center justify-content-between mb-2">
-                                        <div class="col-sm-12 col-md-4 col-lg-4">
-                                            <h6 class="datos-info">Contraseña Actual</h6>
+                                    <form method="POST" action="{% url 'change_password' %}">
+                                        {% csrf_token %}
+                                        <div class="row align-items-center justify-content-between mb-2">
+                                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                                <h6 class="datos-info">Contraseña Actual</h6>
+                                            </div>
+                                            <div class="col-sm-12 col-md-8 col-lg-8 d-flex">
+                                                <input type="password" name="currentPassword" autofocus autocapitalize="none"
+                                                    maxlength="150" class="text-input form-control" required
+                                                    style="box-shadow: none;">
+                                            </div>
                                         </div>
-                                        <div class="col-sm-12 col-md-8 col-lg-8 d-flex">
-                                            <input type="password" name="password" autofocus autocapitalize="none"
-                                                maxlength="150" class="text-input form-control" required
-                                                style="box-shadow: none;">
+                                        <div class="row align-items-center justify-content-between mb-2">
+                                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                                <h6 class="datos-info">Nueva Contraseña</h6>
+                                            </div>
+                                            <div class="col-sm-12 col-md-8 col-lg-8 d-flex">
+                                                <input type="password" name="newPassword" autofocus autocapitalize="none"
+                                                    maxlength="150" class="text-input form-control" required
+                                                    style="box-shadow: none;">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row align-items-center justify-content-between mb-2">
-                                        <div class="col-sm-12 col-md-4 col-lg-4">
-                                            <h6 class="datos-info">Nueva Contraseña</h6>
+                                        <div class="row align-items-center justify-content-between">
+                                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                                <h6 class="datos-info">Confirmar Contraseña</h6>
+                                            </div>
+                                            <div class="col-sm-12 col-md-8 col-lg-8 d-flex">
+                                                <input type="password" name="passwordConfirm" autofocus autocapitalize="none"
+                                                    maxlength="150" class="text-input form-control" required
+                                                    style="box-shadow: none;">
+                                                <button class="btn ms-3" type="submit" style="color: white; background-color: #82C2CB; border-radius: 0;">Cambiar</button>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-12 col-md-8 col-lg-8 d-flex">
-                                            <input type="password" name="password" autofocus autocapitalize="none"
-                                                maxlength="150" class="text-input form-control" required
-                                                style="box-shadow: none;">
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center justify-content-between">
-                                        <div class="col-sm-12 col-md-4 col-lg-4">
-                                            <h6 class="datos-info">Confirmar Contraseña</h6>
-                                        </div>
-                                        <div class="col-sm-12 col-md-8 col-lg-8 d-flex">
-                                            <input type="password" name="password" autofocus autocapitalize="none"
-                                                maxlength="150" class="text-input form-control" required
-                                                style="box-shadow: none;">
-                                            <button class="btn ms-3"
-                                                style="color: white; background-color: #82C2CB; border-radius: 0;">Cambiar</button>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -203,8 +209,7 @@
                     </button>
                     <div class="collapse" id="collapseNombreApellido">
                         <div class="card card-body border-0">
-                            Some placeholder content for the collapse component. This panel is hidden by default but
-                            revealed when the user activates the relevant trigger.
+                            Este panel muestra el nombre y apellido del usuario. Estos datos son utilizados para identificar al usuario en el sistema.
                         </div>
                     </div>
                 </div>
@@ -232,8 +237,7 @@
                     </button>
                     <div class="collapse" id="collapseRut">
                         <div class="card card-body border-0">
-                            Some placeholder content for the collapse component. This panel is hidden by default but
-                            revealed when the user activates the relevant trigger.
+                            Este panel muestra el RUT del usuario. El RUT es un identificador único utilizado para fines de identificación y seguimiento del usuario en el sistema.
                         </div>
                     </div>
                 </div>
@@ -316,10 +320,10 @@
                     {% endif %}
                     <h6 style="font-size: 14px; font-weight: 300;">Vencimiento: {{ metodo_pago.fecha_vencimiento|date:"m/Y" }}</h6>
                 </div>
-                <form method="POST" action="{% url 'eliminar_metodo_pago' metodo_pago.id %}" class="ms-auto text-end">
+                <form method="POST" action="{% url 'eliminar_metodo_pago' metodo_pago.id %}" id="formDeleteCard" class="ms-auto text-end">
                     {% csrf_token %}
                     <div>
-                        <button class="btn border-0" type="submit" style="color: #207198;">Eliminar</button>
+                        <button class="btn border-0" onclick="confirmDeleteCreditCard(event)" style="color: #207198;">Eliminar</button>
                     </div>
                 </form>
             </div>
@@ -371,9 +375,9 @@
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                             <li><button class="dropdown-item" data-bs-toggle="modal"
                                     data-bs-target="#agregarDomicilioModal">Editar</button></li>
-                            <form method="POST" action="{% url 'eliminar_domicilio' usuario.direccion.id_direccion %}">
+                            <form method="POST" id="formDeleteAddress" action="{% url 'eliminar_domicilio' usuario.direccion.id_direccion %}">
                                 {% csrf_token %}
-                                <li><button class="dropdown-item" type="submit">Eliminar</button></li>
+                                <li><button class="dropdown-item" onclick="confirmDeleteAddress(event)">Eliminar</button></li>
                             </form>
                             
                         </ul>
@@ -416,7 +420,7 @@
         aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
-                <form method="POST" action="{% url 'agregar_metodo_pago' %}">
+                <form method="POST" action="{% url 'agregar_metodo_pago' %}" id="myFormCards">
                     {% csrf_token %}
                     <div class="modal-header border-bottom-0">
                         <h4 class="modal-title ms-3 mt-3" style="font-weight: 600;" id="agregarTarjetaModalLabel">
@@ -593,7 +597,7 @@
                         </div>
                     </div>
                     <div class="modal-footer border-0">
-                        <button type="submit" class="btn btn-lg ms-3"
+                        <button onclick="confirmAddCreditCard(event)" class="btn btn-lg ms-3"
                             style="color: white; background-color: #82C2CB; border-radius: 0;">Agregar Tarjeta</button>
                     </div>
                 </form>
@@ -618,7 +622,7 @@
                     <button type="button" class="btn-close me-3" style="box-shadow: none;" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-                <form method="POST" action="{% url 'agregar_domicilio' %}">
+                <form method="POST" action="{% url 'agregar_domicilio' %}" id="myFormAdrresses">
                     {% csrf_token %}
                     <div class="modal-body">
                         <div class="row d-flex align-items-center">
@@ -679,7 +683,7 @@
                         </div>
                     </div>
                     <div class="modal-footer border-0">
-                        <button type="submit" class="btn btn-lg ms-3"
+                        <button onclick="confirmAddNewAddress(event)" class="btn btn-lg ms-3"
                             style="color: white; background-color: #82C2CB; border-radius: 0;">Agregar
                             Domicilio</button>
                     </div>
@@ -697,7 +701,25 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js'></script>
 <script src="{% static 'js/credit-card.js' %}"></script>
 
-
+{% if messages_json %}
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var messages = JSON.parse('{{ messages_json|escapejs }}');
+      
+      if (messages.length > 0) {
+        var message = messages[0];
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 5000,
+          icon: 'success',  // Puedes ajustar el icono según el tipo de mensaje (success, error, warning, etc.)
+          title: message
+        });
+      }
+    });
+  </script>
+{% endif %}
 
 {% endblock %}
 

@@ -14,6 +14,8 @@ from django.db import connection
 from django.db.models import Value
 from django.db.models.functions import Concat
 from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import update_session_auth_hash
 
 import json
 # Integración servicio SOAP
@@ -52,10 +54,16 @@ def index(request):
     categorias = get_categories()
     cantidad_libros = get_numbers_of_books()
     # Se crea un diccionario con los libros obtenidos para pasarlo al contexto
+
+    messages.get_messages(request)  # Configurar la variable 'messages' en el contexto
+    message_list = [str(message) for message in messages.get_messages(request)]
+    message_json = json.dumps(message_list)
+
     context = {
         "libros": libros,
         "categorias": categorias,
         "cantidad_libros": cantidad_libros,
+        'messages_json': message_json,
     }
     # Se renderiza la plantilla 'index.html' con el contexto creado
     return render(request, "app/index.html", context)
@@ -296,8 +304,10 @@ def support(request):
 
     if usuario.is_authenticated:
         pedidos = Pedido.objects.filter(cliente=usuario)
+        mantenimientos = Mantenimiento.objects.filter(cliente=usuario)
     else:
         pedidos = None
+        mantenimientos = None
 
     messages.get_messages(request)  # Configurar la variable 'messages' en el contexto
     message_list = [str(message) for message in messages.get_messages(request)]
@@ -307,9 +317,22 @@ def support(request):
         "usuario": usuario,
         "tipos_mantenimiento": tipos_mantenimiento,
         "pedidos" : pedidos,
+        "mantenimientos" : mantenimientos,
         'messages_json': message_json
     }
     return render(request, "app/support.html", datos)
+
+@login_required(login_url="auth/login")
+def maintenance(request, id_mantenimiento):
+    usuario = request.user
+
+    mantenimiento = Mantenimiento.objects.get(id_mantenimiento=id_mantenimiento)
+
+    datos = {
+        "usuario": usuario,
+        "mantenimiento" : mantenimiento,
+    }
+    return render(request, "app/maintenance.html", datos)
 
 @login_required(login_url="auth/login")
 def generar_mantenimiento(request):
@@ -365,14 +388,74 @@ def my_data(request):
 
     tarjetas = MetodoPago.objects.filter(usuario=usuario)
 
+    messages.get_messages(request)  # Configurar la variable 'messages' en el contexto
+    message_list = [str(message) for message in messages.get_messages(request)]
+    message_json = json.dumps(message_list)
+
     datos = {
         "usuario": usuario,
         "regiones": regiones,
         "comunas": comunas,
         "direcciones": direcciones,
         "tarjetas": tarjetas,
+        'messages_json': message_json,
     }
+
     return render(request, "app/my_data.html", datos)
+
+@login_required(login_url="auth/login")
+def cambiarUsername(request):
+    usuario = request.user
+    url_anterior = request.META.get("HTTP_REFERER")
+    if request.method == "POST":
+        username = request.POST["username"]
+
+        usuario.username = username
+
+        usuario.save()
+
+    return redirect(url_anterior)
+
+@login_required(login_url="auth/login")
+def cambiarCorreo(request):
+    usuario = request.user
+    url_anterior = request.META.get("HTTP_REFERER")
+    if request.method == "POST":
+        correo = request.POST["correo"]
+
+        usuario.correo = correo
+
+        usuario.save()
+
+    return redirect(url_anterior)
+
+@login_required(login_url="auth/login")
+def changePassword(request):
+    usuario = request.user
+    url_anterior = request.META.get("HTTP_REFERER")
+    if request.method == "POST":
+        currentPassword = request.POST["currentPassword"]
+        newPassword = request.POST["newPassword"]
+        passwordConfirm = request.POST["passwordConfirm"]
+
+        if newPassword != currentPassword:
+            if newPassword == passwordConfirm:
+                usuario.set_password(newPassword)
+                usuario.save()
+
+                # Actualizar la sesión del usuario con la nueva contraseña encriptada
+                update_session_auth_hash(request, usuario)
+
+                print("¡La contraseña ha sido cambiada exitosamente!")
+                messages.success(request, "¡La contraseña ha sido cambiada exitosamente!")
+            else:
+                print("La confirmación de contraseña no coincide")
+                messages.error(request, "La confirmación de contraseña no coincide")
+        else:
+            print("La nueva contraseña no puede ser la misma que la actual")
+            messages.error(request, "La nueva contraseña no puede ser la misma que la actual")
+
+    return redirect(url_anterior)
 
 
 def obtener_comunas(request):
@@ -725,6 +808,7 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
+                messages.success(request, f"¡Bienvenido {user.nombre} {user.apellido}!")
                 return HttpResponseRedirect(reverse("index"))
         else:
             errors = form.errors.get("__all__", None)

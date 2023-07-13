@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/maintenance.css' %}" />
+{% endblock %}
+{% load humanize %}
+{% block title %}Detalle Compra{% endblock title %}
+
+{% block content %}
+<a href="/support" class="text-decoration-none text-black">
+    <div class="d-flex align-items-center">
+        <i class="fa-solid fa-chevron-left fa-md"></i>
+        <p style="font-size: 18px; font-weight: 600; margin-bottom: 0px; margin-left: 10px;">Soporte</p>
+    </div>
+</a>
+<hr>
+<div class="container mt-3 mb-5 py-3">
+    <div class="row justify-content-start mb-4">
+        <div class="col-auto col-md-auto col-lg-auto">
+            <p style="font-size: 36px; font-weight: 600;">Detalle Solicitud</p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <!-- Card -->
+        <div class="card mb-5 compra-info d-flex"
+            style="width: 100%; border-radius: 15px; filter: drop-shadow(0px 20px 88px rgba(0, 0, 0, 0.1)); border: none;">
+            <div class="ms-4" style="background-color: #FFFF;">
+                <p class="my-3 ms-4 compra-realizacion">{{ mantenimiento.fecha_solicitud|date:"d \d\e " }}{{ mantenimiento.fecha_solicitud|date:"F Y"|capfirst }}</p>
+            </div>
+            <hr class="my-0">
+            <div class="row d-flex justify-content-between mx-5 mt-3 row-contenido">
+                <div class="col-12 col-ms-12 col-md-6 col-lg-6">
+                    <div class="">
+                        <p class="compra-pedido">Mantenimiento # {{ mantenimiento.id_mantenimiento }}</p>
+                    </div>
+                    <div class="my-3 d-flex align-items-center">
+                        <img src="{{ mantenimiento.libro.thumbnail }}" alt="{{ mantenimiento.libro.nombre_libro }}" class="img-fluid me-5 compra-img"
+                            style="max-width: 72px;">
+                        <div>
+                            <p class="compra-estado">Estado: <u>{{ mantenimiento.estado_mantenimiento }}</u></p>
+                            <div class="d-flex align-items-center">
+                                <div style="font-weight: 500;">
+                                    <p class="compra-nombre">{{ mantenimiento.libro.nombre_libro|truncatechars:25 }}</p>
+                                    <p class="compra-autor">{{ mantenimiento.libro.autor }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-ms-12 col-md-6 col-lg-6">
+                    <p>Tipo mantenimiento: {{ mantenimiento.tipo_mantenimiento }}</p>
+                    <p>Técnico: {% if mantenimiento.tecnico %}{{ mantenimiento.tecnico }}{% else %}No asignado{% endif %}</p>
+                </div>
+            </div>
+            <hr>
+            <div class="row d-flex mx-5 mt-3 justify-content-between row-contenido">
+                <div class="col-12 col-ms-12 col-md-6 col-lg-6">
+                    <h6>({{ usuario }})</h6>
+                    <h4>Comentario:</h4>
+                    <textarea class="shadow-none w-100" style="max-height: 200px; overflow: auto; background-color: #fcfaf9; border-color: #207198; border-radius: 12px;" name="comentario" id="comentario" rows="5" readonly>{{ mantenimiento.comentario }}</textarea>
+                </div>
+                <div class="col-12 col-ms-12 col-md-6 col-lg-6">
+                    {% if mantenimiento.respuesta %}
+                    <h6>({% if mantenimiento.tecnico %}{{ mantenimiento.tecnico }}{% else %}No asignado{% endif %})</h6>
+                    <h4>Respuesta</h4>
+                    <textarea class="shadow-none w-100" style="max-height: 200px; overflow: auto; background-color: #fcfaf9; border-color: #207198; border-radius: 12px;" name="respuesta" id="respuesta" rows="5" readonly>{{ mantenimiento.respuesta }}</textarea>
+                    {% else %}
+                    <h4>Esperando respuesta...</h4>
+                    <div class="d-flex justify-content-center">
+                        <img src="{% static 'img/reloj.png' %}" alt="" class="img-fluid" style="max-width: 260px;">
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- End Card -->
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+
+{% block script_final %}
+{% endblock script_final %}
