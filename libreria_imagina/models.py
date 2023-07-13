@@ -122,7 +122,6 @@ class Libro(models.Model):
     fecha_publicacion = models.DateField(null=True)
     categoria = models.CharField(
         max_length=200,
-        choices=Categoria.choices,
         default=Categoria.GENERAL,
     )
     isbn = models.CharField(max_length=20, null=True)
