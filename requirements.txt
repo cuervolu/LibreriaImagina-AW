@@ -6,7 +6,7 @@ charset-normalizer==3.1.0
 crispy-bootstrap5==0.7
 cryptography==41.0.1
 cx-Oracle==8.3.0
-Django==4.2.1
+Django==4.2.3
 django-admin==2.0.2
 django-admin-interface==0.25.0
 django-autoslug==1.9.9
